@@ -1,0 +1,37 @@
+#
+# Put this in /lib/systemd/system/ssgberk.service.
+#
+# Useful commands:
+#
+#   sudo service ssgberk start
+#   sudo service ssgberk stop
+#   sudo service ssgberk restart
+#   sudo journalctl -u ssgberk -f
+#
+
+[Service]
+Environment=TFB_SERVER_HOST=127.0.0.1
+Environment=TFB_CLIENT_HOST=127.0.0.1
+Environment=TFB_DATABASE_HOST=127.0.0.1
+Environment=TFB_REPOPARENT=/home/matheusrv
+Environment=TFB_REPONAME=FrameworkBenchmarks
+Environment=TFB_REPOURI=https://github.com/TechEmpower/FrameworkBenchmarks.git
+Environment=TFB_REPOBRANCH=master
+Environment=TFB_UPLOAD_URI=http://localhost/changeme
+Environment=TFB_ENVIRONMENT=ChangeMe
+Environment="TFB_RUN_NAME=Continuous Benchmarking Run %%Y-%%m-%%d %%H:%%M:%%S"
+Environment=HOME=/home/matheusrv
+Environment=LANG=en_US.UTF-8
+User=matheusrv
+Group=matheusrv
+WorkingDirectory=/home/matheusrv
+LimitNOFILE=1048576
+LimitNPROC=1048576
+UMask=0002
+ExecStart=/home/matheusrv/ssgberk-startup.sh
+ExecStopPost=/home/matheusrv/ssgberk-shutdown.sh
+Restart=on-success
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

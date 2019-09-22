@@ -1,0 +1,21 @@
+{
+  "name": "staticsitegeneratorbenchmarks",
+  "version": "0.0.8",
+  "main": "ssgberk",
+  "repository": "https://github.com/TechEmpower/FrameworkBenchmarks.git",
+  "author": "Matheus Rocha Vieira <matheusrv@email.com>",
+  "license": "MIT",
+  "scripts": {
+    "clean": "./ssgberk --clean",
+    "start": "./ssgberk"
+  },
+  "dependencies": {
+    "cuttlebelle-sample": "file:./frameworks/JavaScript/cuttlebelle",
+    "gatsby-sample": "file:./frameworks/JavaScript/gatsby",
+    "harp-ejs-sample": "file:./frameworks/JavaScript/harp-ejs",
+    "harp-jade-sample": "file:./frameworks/JavaScript/harp-jade",
+    "metalsmith-handlebars-sample": "file:./frameworks/JavaScript/metalsmith-handlebars",
+    "metalsmith-nunjunks-sample": "file:./frameworks/JavaScript/metalsmith-nunjucks",
+    "phenomic-react-sample": "file:./frameworks/JavaScript/phenomic-react"
+  }
+}

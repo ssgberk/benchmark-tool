@@ -1,0 +1,29 @@
+{
+  "framework": "$NAME",
+  "tests": [
+    {
+      "default": {
+        "approach": "$APPROACH",
+        "classification": "$CLASSIFICATION",
+        "framework": "$FRAMEWORK",
+        "language": "$LANGUAGE",
+        "display_name": "$DISPLAY_NAME",
+        "notes": "",
+        "versus": "$VERSUS"
+      }
+    }
+  ],
+  "content": [
+    {
+      "folder": "$FOLDER",
+      "type": "$CONTENT_TYPE",
+      "extension": "$CONTENT_EXTENSION"
+    }
+  ],
+  "config": [
+    {
+      "build_command": "$BUILD_COMMAND",
+      "build_verbose": "$BUILD_VERBOSE"
+    }
+  ]
+}

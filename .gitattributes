@@ -1,0 +1,5 @@
+# Docker relies on lf in bash scripts - force it
+*.sh text eol=lf
+
+# treat ssgberk as if shell script
+ssgberk text eol=lf
