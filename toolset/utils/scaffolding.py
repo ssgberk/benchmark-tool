@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import os, re
 from shutil import copytree
-from toolset.utils.metadata import Metadata
 
 
 class Scaffolding:

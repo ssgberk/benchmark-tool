@@ -1,20 +1,17 @@
-from toolset.utils.output_helper import log, FNULL
-from toolset.utils.docker_helper import DockerHelper
-from toolset.utils.time_logger import TimeLogger
-from toolset.utils.metadata import Metadata
-from toolset.utils.results import Results
-from toolset.utils.audit import Audit
-
 import os
 import subprocess
 import traceback
 import sys
 import time
 import shlex
-from pprint import pprint
-
-from colorama import Fore
 import numbers
+
+from toolset.utils.output_helper import log, FNULL
+from toolset.utils.docker_helper import DockerHelper
+from toolset.utils.time_logger import TimeLogger
+from toolset.utils.metadata import Metadata
+from toolset.utils.results import Results
+from toolset.utils.audit import Audit
 
 
 class Benchmarker:

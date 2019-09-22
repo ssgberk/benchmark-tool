@@ -1,5 +1,3 @@
-from toolset.utils.output_helper import log
-
 import os
 import subprocess
 import uuid
@@ -10,12 +8,9 @@ import threading
 import re
 import math
 import csv
-import traceback
 from datetime import datetime
 
-# Cross-platform colored text
-from colorama import Fore, Style
-
+from toolset.utils.output_helper import log
 
 class Results:
     def __init__(self, benchmarker):
@@ -132,7 +127,7 @@ class Results:
                         if "Non-2xx" in line:
                             m = re.search("Non-2xx or 3xx responses: ([0-9]+)",
                                           line)
-                            if m != None:
+                            if m is not None:
                                 rawData['5xx'] = int(m.group(1))
                         if "STARTTIME" in line:
                             m = re.search("[0-9]+", line)
@@ -361,7 +356,7 @@ class Results:
         Get the git commit id for this benchmark
         '''
         return subprocess.check_output(
-            ["git", "rev-parse", "HEAD"], cwd=self.config.fw_root).strip()
+            ["git", "rev-parse", "HEAD"], cwd=self.config.fw_root).decode('utf-8').strip()
 
     def __get_git_repository_url(self):
         '''
@@ -369,7 +364,7 @@ class Results:
         '''
         return subprocess.check_output(
             ["git", "config", "--get", "remote.origin.url"],
-            cwd=self.config.fw_root).strip()
+            cwd=self.config.fw_root).decode('utf-8').strip()
 
     def __get_git_branch_name(self):
         '''
@@ -378,7 +373,7 @@ class Results:
         return subprocess.check_output(
             'git rev-parse --abbrev-ref HEAD',
             shell=True,
-            cwd=self.config.fw_root).strip()
+            cwd=self.config.fw_root).decode('utf-8').strip()
 
     def __parse_stats(self, framework_test, test_type, start_time, end_time,
                       interval):
@@ -479,9 +474,7 @@ class Results:
         display_stat_collection = dict()
         for header, values in raw_stat_collection.items():
             display_stat = None
-            if 'cpu' in header:
-                display_stat = sizeof_fmt(math.fsum(values) / len(values))
-            elif main_header == 'memory usage':
+            if ('cpu' in header) or (main_header == 'memory usage'):
                 display_stat = sizeof_fmt(math.fsum(values) / len(values))
             elif 'net' in main_header:
                 receive, send = zip(*values)  # unzip

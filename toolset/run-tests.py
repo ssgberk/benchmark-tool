@@ -38,7 +38,7 @@ class StoreSeqAction(argparse.Action):
                 log("  Requires start:step:end, e.g. 1:2:10", color=Fore.RED)
                 raise
             result.remove(sequence)
-            result = result + range(int(start), int(end), int(step))
+            result = result + list(range(int(start), int(end), int(step)))
         return [abs(int(item)) for item in result]
 
 

@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import os, sys, re
 
-from colorama import Style
 from contextlib import contextmanager
+from colorama import Style
+
 
 # RegExp for stripping color codes
 seq = re.compile(r'\x1B\[\d+m')

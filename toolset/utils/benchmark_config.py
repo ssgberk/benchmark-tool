@@ -1,8 +1,8 @@
-from toolset.benchmark.test_types import *
-from toolset.utils.output_helper import QuietOutputStream
-
 import os
 import time
+
+from toolset.benchmark.test_types import *
+from toolset.utils.output_helper import QuietOutputStream
 
 
 class BenchmarkConfig:

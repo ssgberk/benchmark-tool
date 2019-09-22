@@ -1,5 +1,4 @@
 from toolset.benchmark.test_types.framework_test_type import FrameworkTestType
-from time import sleep
 
 
 class DatarateTestType(FrameworkTestType):

@@ -1,10 +1,4 @@
 import os
-import traceback
-
-from toolset.utils.output_helper import log
-
-# Cross-platform colored text
-from colorama import Fore, Style
 
 
 class FrameworkTest:

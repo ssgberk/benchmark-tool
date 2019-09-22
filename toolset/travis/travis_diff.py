@@ -53,7 +53,7 @@ def quit_diffing():
         print("travis-run-tests {!s}".format(" ".join(set(run_tests))))
     else:
         print("No tests to run.")
-    exit(0)
+    sys.exit(0)
 
 
 curr_branch = ""

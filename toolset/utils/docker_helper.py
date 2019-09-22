@@ -1,10 +1,11 @@
 import os
 import socket
 import json
-import docker
 import time
 import re
 import traceback
+import docker
+
 from threading import Thread
 from colorama import Fore, Style
 
