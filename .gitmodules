@@ -1,3 +1,4 @@
 [submodule "frameworks"]
 	path = frameworks
 	url = https://github.com/ssgberk/ssg-frameworks
+	branch = master
