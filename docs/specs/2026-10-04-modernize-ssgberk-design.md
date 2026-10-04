@@ -72,7 +72,7 @@ Bugs corrigidos durante o port:
 
 - `metadata.py`: chave `"versus"` duplicada no dict de metadata (versão do monorepo); manter a do `benchmark-tool`, que já está correta.
 - `run-tests.py`: textos de `help` de `-nf`, `-cs`, `-mr` copiados de `--duration`; corrigir.
-- `run-tests.py`: `-cs` aceita `0.500 500 1000 5000 10000` mas `build.sh` compara com `"[500]"`; o argumento passa a ser um valor único (`choices=['500','1000','5000','10000','100000']`, default `500`) e o `build.sh` compara com o número sem colchetes. `0.500` é aceito como alias de `500` para manter o `benchmark_test.sh` funcionando.
+- `run-tests.py`: `-cs` tem `nargs='+'` (vira lista) e não aceita `100000`, que o `benchmark_test.sh` usa; o `build.sh` compara com `"[500]"`. Passa a ser um valor único, `choices=['0.500','500','1000','5000','10000','100000']`, default `0.500`. A unidade é KB por post: `0.500` = 1 parágrafo (~0,5 KB), `500` = 1000 parágrafos (~550 KB), e assim por diante (mesma tabela do `build.sh` atual). O `build.sh` compara com o número sem colchetes e ainda aceita `[N]` por compatibilidade.
 - `-v/--verbose` hoje é `default=False` sem `action`, então qualquer valor vira string verdadeira; passa a `action='store_true'`.
 
 ### 4.3 Resultados (correção funcional)
@@ -120,17 +120,19 @@ Contrato entre `build.sh` e o toolset:
 
 ### 5.2 Dockerfiles
 
-- `FROM ubuntu:24.04`, `ARG DEBIAN_FRONTEND=noninteractive`, `ARG TARGETARCH`.
+- `FROM ubuntu:24.04`, `ARG DEBIAN_FRONTEND=noninteractive`.
+- Arquitetura detectada com `dpkg --print-architecture` (`amd64` | `arm64`) dentro do `RUN`. **Não usar `TARGETARCH`:** o toolset constrói via `docker.APIClient.build` (builder legado), que no Docker 29 funciona mas deixa `TARGETARCH` vazio (verificado em 2026-10-04).
 - Pacotes comuns: `build-essential git curl wget jq ca-certificates moreutils tree`.
-- hyperfine 1.20.0: `.deb` `hyperfine_1.20.0_${TARGETARCH}.deb`.
+- hyperfine 1.20.0: `.deb` `hyperfine_1.20.0_${ARCH}.deb`.
 - Runtimes:
   - Node 24 LTS via tarball oficial `node-v24.x-linux-${arch}` (`arch` = `x64` | `arm64`); `npm ci`.
   - Ruby do apt (3.2) + `bundler`; `bundle install` com `Gemfile.lock`.
   - Python 3.12 do apt + `python3 -m venv /opt/venv`; `PATH=/opt/venv/bin:$PATH`; `pip install -r requirements.txt`.
   - PHP 8.4 via `ppa:ondrej/php` + Composer.
-  - Go/Rust: binário oficial do gerador (`hugo_extended_<v>_linux-${TARGETARCH}.deb`, `zola-v<v>-<arch>-unknown-linux-gnu.tar.gz`).
+  - Go/Rust: binário oficial do gerador (`hugo_extended_<v>_linux-${ARCH}.deb`, `zola-v<v>-<arch>-unknown-linux-gnu.tar.gz`).
 - Versão de cada gerador em `ARG <NOME>_VERSION` no topo do dockerfile; para npm/gem/pip/composer, a versão exata também fica no manifesto + lockfile.
-- Remover `node_modules/` versionado em `JavaScript/gatsby`.
+- Remover `node_modules/` versionado em `JavaScript/gatsby` (558 arquivos).
+- `Go/hugo/src/config.toml` tem `disableKinds = ["page", ...]`: o Hugo nunca gerou HTML de posts. Remover `"page"` dessa lista; a verificação de saída (5.4) passa a impedir esse tipo de regressão.
 
 ### 5.3 Lista de geradores
 
@@ -192,13 +194,14 @@ O CI do `ssg-frameworks` falha se algum `*/*/build.sh` diferir do canônico (com
 
 ### 6.1 Unitários (`benchmark-tool`, `pytest`)
 
+- `DockerHelper.benchmark` grava a saída do container no `raw.txt` byte a byte (sem `log()`), porque os chunks de `logs(stream=True)` não respeitam limites de linha e o `log()` insere quebras que corromperiam o JSON.
 - `Results.parse_test`:
   - `raw.txt` com marcadores e JSON válido → 1 resultado com `mean`, `stddev`, `min`, `max`, `times`.
   - Sem marcadores → `[]`.
   - JSON inválido entre marcadores → `[]`.
   - Contém `SSGBERK_VERIFY_FAIL` → `[]`.
 - `Results.__parse_stats` com um CSV real do `dool` gravado como fixture.
-- `run-tests.py`: `-cs 0.500` → `500`; `-cs 7` rejeitado; `-v` sem valor → `True`.
+- `run-tests.py`: `-cs 100000` aceito como string única; `-cs 7` rejeitado; default `0.500`; `-v` sem valor → `True`.
 - `python3 -m compileall -q toolset` sem erros.
 
 ### 6.2 Smoke test por gerador
