@@ -44,7 +44,7 @@ def log(log_text=None, **kwargs):
     try:
         new_log_text = border or ''
         for line in log_text.splitlines():
-            if line.strip() is not '':
+            if line.strip() != '':
                 if prefix:
                     new_log_text += Style.DIM + prefix + Style.RESET_ALL
                 new_log_text += color + line + color_reset + os.linesep

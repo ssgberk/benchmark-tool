@@ -41,16 +41,14 @@ class DockerHelper:
                     forcerm=True,
                     timeout=3600,
                     pull=True,
-                    buildargs=buildargs
+                    buildargs=buildargs,
+                    decode=True
                 )
                 buffer = ""
                 for token in output:
-                    if token.startswith('{"stream":'):
-                        token = json.loads(token)
-                        token = token[token.keys()[0]].encode('utf-8')
-                        buffer += token
-                    elif token.startswith('{"errorDetail":'):
-                        token = json.loads(token)
+                    if 'stream' in token:
+                        buffer += token['stream']
+                    elif 'errorDetail' in token:
                         raise Exception(token['errorDetail']['message'])
                     while "\n" in buffer:
                         index = buffer.index("\n")
@@ -154,7 +152,7 @@ class DockerHelper:
                             run_log_dir, "%s.log" % docker_file.replace(
                                 ".dockerfile", "").lower()), 'w') as run_log:
                     for line in docker_container.logs(stream=True):
-                        log(line, prefix=log_prefix, file=run_log)
+                        log(line.decode('utf-8', 'replace'), prefix=log_prefix, file=run_log)
 
             extra_hosts = None
             name = "ssgberk-server"

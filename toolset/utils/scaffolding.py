@@ -41,7 +41,7 @@ class Scaffolding:
         self.name = self.display_name.lower()
 
     def __prompt_display_name(self):
-        self.display_name = raw_input("Name: ").strip()
+        self.display_name = input("Name: ").strip()
 
         found = False
         for framework in self.benchmarker.metadata.gather_frameworks():
@@ -66,7 +66,7 @@ class Scaffolding:
             self.__prompt_language()
 
     def __prompt_language(self):
-        self.language = raw_input("Language: ").strip()
+        self.language = input("Language: ").strip()
 
         known_languages = self.benchmarker.metadata.gather_languages()
         language = None
@@ -103,7 +103,7 @@ class Scaffolding:
         return self.language
 
     def __prompt_confirm_new_language(self):
-        self.confirm_new_lang = raw_input("Create New Language '%s' (y/n): " %
+        self.confirm_new_lang = input("Create New Language '%s' (y/n): " %
                                           self.language).strip().lower()
         return self.confirm_new_lang == 'y' or self.confirm_new_lang == 'n'
 
@@ -128,7 +128,7 @@ class Scaffolding:
             valid = self.__prompt_approach()
 
     def __prompt_approach(self):
-        self.approach = raw_input("Approach [1/2]: ").strip()
+        self.approach = input("Approach [1/2]: ").strip()
         if self.approach == '1':
             self.approach = 'Realistic'
         if self.approach == '2':
@@ -161,7 +161,7 @@ class Scaffolding:
             self.__gather_platform()
 
     def __prompt_classification(self):
-        self.classification = raw_input("Classification [1/2/3]: ").strip()
+        self.classification = input("Classification [1/2/3]: ").strip()
         if self.classification == '1':
             self.classification = 'Fullstack'
         if self.classification == '2':
@@ -186,7 +186,7 @@ class Scaffolding:
         self.__prompt_versus()
 
     def __prompt_versus(self):
-        self.versus = raw_input("Versus (optional): ").strip()
+        self.versus = input("Versus (optional): ").strip()
         if self.versus == '':
             self.versus = 'None'
 
@@ -214,7 +214,7 @@ class Scaffolding:
             print('Aborting')
 
     def __prompt_confirmation(self):
-        self.confirmation = raw_input("Initialize [y/n]: ").strip().lower()
+        self.confirmation = input("Initialize [y/n]: ").strip().lower()
         return self.confirmation == 'y' or self.confirmation == 'n'
 
     def __build_scaffolding(self):
@@ -239,22 +239,22 @@ class Scaffolding:
     def __edit_scaffold_files(self):
         for file in os.listdir(os.path.join(self.test_dir)):
             self.__replace_text(
-                os.path.join(self.test_dir, file), "\$NAME", self.name)
+                os.path.join(self.test_dir, file), r"\$NAME", self.name)
             self.__replace_text(
-                os.path.join(self.test_dir, file), "\$DISPLAY_NAME",
+                os.path.join(self.test_dir, file), r"\$DISPLAY_NAME",
                 self.display_name)
             self.__replace_text(
-                os.path.join(self.test_dir, file), "\$APPROACH", self.approach)
+                os.path.join(self.test_dir, file), r"\$APPROACH", self.approach)
             self.__replace_text(
-                os.path.join(self.test_dir, file), "\$CLASSIFICATION",
+                os.path.join(self.test_dir, file), r"\$CLASSIFICATION",
                 self.classification)
             self.__replace_text(
-                os.path.join(self.test_dir, file), "\$FRAMEWORK",
+                os.path.join(self.test_dir, file), r"\$FRAMEWORK",
                 self.framework)
             self.__replace_text(
-                os.path.join(self.test_dir, file), "\$LANGUAGE", self.language)
+                os.path.join(self.test_dir, file), r"\$LANGUAGE", self.language)
             self.__replace_text(
-                os.path.join(self.test_dir, file), "\$VERSUS", self.versus)
+                os.path.join(self.test_dir, file), r"\$VERSUS", self.versus)
 
     def __print_success(self):
         print("""
