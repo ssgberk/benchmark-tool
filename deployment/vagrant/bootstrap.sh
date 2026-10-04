@@ -10,10 +10,11 @@ if [ ! -e "~/.firstboot" ]; then
 
   # Install prerequisite tools
   echo "Installing docker"
-  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-  sudo apt update -yqq
-  sudo apt install -yqq docker-ce
+  sudo install -m 0755 -d /etc/apt/keyrings
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  sudo apt-get update -yqq
+  sudo apt-get install -yqq docker-ce docker-ce-cli containerd.io
   sudo usermod -aG docker vagrant
 
   # Setting up passwordless sudo
@@ -34,7 +35,7 @@ Welcome to the FrameworkBenchmarks project!
     $ ssgberk --help
 
   You can run a test like:
-    $ ssgberk --mode verify --test gemini
+    $ ssgberk --test hugo -nf 10
 
   This Vagrant environment is already setup and ready to go.
 EOF

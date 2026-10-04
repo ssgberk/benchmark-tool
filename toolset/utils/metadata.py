@@ -194,7 +194,7 @@ class Metadata:
                         runTests[type_name] = type_obj.copy().parse(test_keys)
                     except AttributeError:
                         # This is quite common - most tests don't support all types
-                        # Quitely log it and move on (debug logging is on in travis and this causes
+                        # Quitely log it and move on (debug logging is on in CI and this causes
                         # ~1500 lines of debug, so I'm totally ignoring it for now
                         # log("Missing arguments for test type %s for framework test %s" % (type_name, test_name))
                         pass

@@ -1,4 +1,4 @@
-<p align="center"><img src=".github/ssgberk-logo.png" alt="SSGBerk Logo"><br/><a href="README.md#english">English</a> | <a href="README.md#português-do-brasil">Português do Brasil</a><br/><br/><a href="https://github.com/MatheusRV/StaticSiteGeneratorBenchmarks/pull/new/master"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" alt="PRs Welcome" /></a> <img src="https://img.shields.io/maintenance/yes/2018.svg?style=flat-square" alt="Maintenance" /> <img src="https://img.shields.io/badge/SemVer-0.8.0-green.svg?style=flat-square" alt="SemVer 0.8.0" /> <a href="https://github.com/MatheusRV/StaticSiteGeneratorBenchmarks/issues"><img src="https://img.shields.io/github/issues/detail/last-update/MatheusRV/StaticSiteGeneratorBenchmarks/979.svg?style=flat-square" alt="GitHub issue last update" /></a><br/><a href="https://github.com/MatheusRV/StaticSiteGeneratorBenchmarks/graphs/contributors"><img src="https://img.shields.io/github/contributors/MatheusRV/StaticSiteGeneratorBenchmarks.svg?style=flat-square" alt="GitHub contributors" /></a> <img src="https://img.shields.io/github/languages/count/MatheusRV/StaticSiteGeneratorBenchmarks.svg?style=flat-square" alt="GitHub language count" /> <img src="https://img.shields.io/github/repo-size/MatheusRV/StaticSiteGeneratorBenchmarks.svg?style=flat-square" alt="GitHub repo size in bytes" /><br/><a href="https://github.com/MatheusRV/StaticSiteGeneratorBenchmarks/issues"><img src="https://img.shields.io/github/issues-raw/MatheusRV/StaticSiteGeneratorBenchmarks.svg?style=flat-square" alt="GitHub issues" /></a> <img src="https://img.shields.io/github/last-commit/MatheusRV/StaticSiteGeneratorBenchmarks.svg?style=flat-square" alt="GitHub last commit" /> <img src="https://img.shields.io/github/commit-activity/y/MatheusRV/StaticSiteGeneratorBenchmarks.svg?style=flat-square" alt="GitHub commit activity the past week, 4 weeks, year" /><br/><a href="https://travis-ci.org/MatheusRV/StaticSiteGeneratorBenchmarks"><img src="https://img.shields.io/travis/MatheusRV/StaticSiteGeneratorBenchmarks.svg?style=flat-square" alt="Travis - Build Status" /></a> <a href="https://hub.docker.com/r/matheusrv/ssgberk/"><img src="https://img.shields.io/docker/build/matheusrv/ssgberk.svg?style=flat-square" alt="Docker Build Status" /></a> <a href="https://scrutinizer-ci.com/g/MatheusRV/StaticSiteGeneratorBenchmarks"><img src="https://img.shields.io/scrutinizer/g/MatheusRV/StaticSiteGeneratorBenchmarks.svg?style=flat-square" alt="Scrutinizer" /></a></p>
+<p align="center"><img src=".github/ssgberk-logo.png" alt="SSGBerk Logo"><br/><a href="README.md#english">English</a> | <a href="README.md#português-do-brasil">Português do Brasil</a><br/><br/><a href="https://github.com/ssgberk/benchmark-tool/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" alt="PRs Welcome" /></a> <a href="https://github.com/ssgberk/benchmark-tool/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/ssgberk/benchmark-tool/ci.yml?branch=master&style=flat-square" alt="CI" /></a> <img src="https://img.shields.io/github/last-commit/ssgberk/benchmark-tool.svg?style=flat-square" alt="GitHub last commit" /></p>
 
 # English:
 # Welcome to [Static Site Generator Benchmarks (SSGBerk)]
@@ -10,9 +10,9 @@ A static web page (sometimes called a flat page/stationary page) is a web page t
 ## What SSGBerk is?
 A project Forked from TechEmpower/FrameworkBenchmarks that provides representative performance measures across a wide field of static site generators. Since the build time between the different SSGs can vary, we are trying to understand the behavior in different situations. The project presently includes generators on many languages including `Go`, `Python`, `Java`, `Ruby`, `PHP`, `JavaScript` and others.
 
-If you're new to the project, welcome! Please feel free to ask questions [here](https://github.com/matheusrv/StaticSiteGeneratorBenchmarks/issues/). We encourage new generators and contributors to ask questions. We're here to help!
+If you're new to the project, welcome! Please feel free to ask questions [here](https://github.com/ssgberk/benchmark-tool/issues/). We encourage new generators and contributors to ask questions. We're here to help!
 
-If you find yourself in a directory or file that you're not sure what the purpose is, checkout our [file structure](https://github.com/MatheusRV/StaticSiteGeneratorBenchmarks/wiki/File-Structure) in our documenation, which will briefly explain the use of relevant directories and files.
+If you find yourself in a directory or file that you're not sure what the purpose is, checkout our [file structure](https://github.com/ssgberk/benchmark-tool/wiki/File-Structure) in our documenation, which will briefly explain the use of relevant directories and files.
 
 ## Quick Start Guide
 
@@ -20,24 +20,24 @@ To get started developing you'll need to install [docker](https://docs.docker.co
 
 1. Clone SSGBERK.
 
-        $ git clone https://github.com/matheusrv/StaticSiteGeneratorBenchmarks.git
+        $ git clone --recurse-submodules https://github.com/ssgberk/benchmark-tool.git
 
 2. Run a test.
 
-        $ ./ssgberk --mode verify --test gemini
+        $ ./ssgberk --test hugo -nf 10
 
 ### Explanation of the `./ssgberk` script
 
 The run script is pretty wordy, but each and every flag is required. If you are using windows, either adapt the docker command at the end of the `./ssgberk` shell script (replacing `${SCRIPT_ROOT}` with `/c/path/to/StaticSiteGeneratorBenchmarks`), or use vagrant.
 
-The command looks like this: `docker run -it --rm --network ssgberk -v /var/run/docker.sock:/var/run/docker.sock -v [FWROOT]:/StaticSiteGeneratorBenchmarks matheusrv/ssgberk [ARGS]`
+The command looks like this: `docker run -it --rm --network ssgberk -v /var/run/docker.sock:/var/run/docker.sock -v [FWROOT]:/StaticSiteGeneratorBenchmarks ssgberk/toolset [ARGS]`
 
 - `-it` tells docker to run this in 'interactive' mode and simulate a TTY, so that `ctrl+c` is propagated.
 - `--rm` tells docker to remove the container as soon as the toolset finishes running, meaning there aren't hundreds of stopped containers lying around.
 - `--network=ssgberk` tells the container to join the 'ssgberk' Docker virtual network
 - The first `-v` specifies which Docker socket path to mount as a volume in the running container. This allows docker commands run inside this container to use the host container's docker to create/run/stop/remove containers.
 - The second `-v` mounts the StaticSiteGeneratorBenchmarks source directory as a volume to share with the container so that rebuilding the toolset image is unnecessary and any changes you make on the host system are available in the running toolset container.
-- `matheusrv/ssgberk` is the name of toolset container to run
+- `ssgberk/toolset` is the name of toolset container to run
 
 #### A note on Windows:
 
@@ -52,7 +52,7 @@ required.
 
 1. Clone SSGBERK.
 
-        $ git clone https://github.com/matheusrv/StaticSiteGeneratorBenchmarks.git
+        $ git clone --recurse-submodules https://github.com/ssgberk/benchmark-tool.git
 
 2. Change directories
 
@@ -65,7 +65,7 @@ required.
 4. Run a test
 
         $ vagrant ssh
-        $ ssgberk --test gemini
+        $ ssgberk --test hugo -nf 10
 
 
 ## Add a New Test
@@ -77,22 +77,42 @@ Either on your computer, or once you open an SSH connection to your vagrant box,
 This will walk you through the entire process of creating a new test to include in the suite.
 
 
+## Measurement notes
+
+- Bundler-dominated JS generators: "app-like" JavaScript generators (Gatsby, Next.js, Astro, VitePress) with few files are dominated by their bundler time. That is their real behavior and is reported as-is, without adjustment.
+- Docker Desktop on macOS is noisy: local numbers are for validation only. Publish numbers from native Linux.
+- Large scenarios (e.g. `-nf 1000000`) generate content slowly in the bash `build.sh` (loop + `sponge`). This is kept in the minimal port and tracked as a future improvement.
+
+## Content size
+
+`-cs` is the content size per post, in KB:
+
+| `-cs` | KB per post | Paragraphs per post |
+|-------|-------------|---------------------|
+| `0.500` (default) | 0.5 | 1 |
+| `500` | 500 | 1000 |
+| `1000` | 1000 | 2000 |
+| `5000` | 5000 | 10000 |
+| `10000` | 10000 | 20000 |
+| `100000` | 100000 | 200000 |
+
+Any other value is rejected.
+
 ## Resources
 
 #### Official Documentation
 Our official documentation can be found at
-[GitHub Wiki](https://github.com/MatheusRV/StaticSiteGeneratorBenchmarks/wiki/).
+[GitHub Wiki](https://github.com/ssgberk/benchmark-tool/wiki/).
 
 #### Live Results
-Results of continuous benchmarking runs are available in real time [here](https://ssgberk.matheusrv.com/) (coming soon, after v1 release ).
+Results of continuous benchmarking runs are available in real time here (coming soon, after v1 release).
 
 ## Contributing
 
-The community has consistently helped in making these tests better, and we welcome any and all changes. Reviewing our contribution practices and guidelines will help to keep us all on the same page. The [contribution guide](https://github.com/MatheusRV/StaticSiteGeneratorBenchmarks/blob/master/.github/CONTRIBUTING.md) can be found in the [SSGBERK documentation](https://github.com/MatheusRV/StaticSiteGeneratorBenchmarks/wiki/).
+The community has consistently helped in making these tests better, and we welcome any and all changes. Reviewing our contribution practices and guidelines will help to keep us all on the same page. The [contribution guide](https://github.com/ssgberk/benchmark-tool/blob/master/.github/CONTRIBUTING.md) can be found in the [SSGBERK documentation](https://github.com/ssgberk/benchmark-tool/wiki/).
 
 # Português do Brasil
 # Bem vindo ao [Static Site Generator Benchmarks (SSGBerk)]
-[![Build Status](https://travis-ci.org/MatheusRV/StaticSiteGeneratorBenchmarks.svg?branch=master)](https://travis-ci.org/MatheusRV/StaticSiteGeneratorBenchmarks)
 
 ## O que é o Static Site Generator (SSG)?
 Uma página web estática (às vezes chamado de uma página flat / página estacionária) é uma página web é entregue ao usuário que exatamente como armazenadas, em contraste com páginas web dinâmicas são geradas pelo qual um aplicativo web.
@@ -100,33 +120,33 @@ Uma página web estática (às vezes chamado de uma página flat / página estac
 ## O que SSGBerk é?
 Um projeto bifurcado da TechEmpower/FrameworkBenchmarks que fornece medidas de desempenho representativas em um amplo campo de geradores de sites estáticos. Como o tempo de construção entre os diferentes SSGs pode variar, estamos tentando entender o comportamento em diferentes situações. O projeto atualmente inclui geradores em muitas linguangens, incluindo `Go`, `Python`, `Java`, `Ruby`, `php`,  ` JavaScript` e outros.
 
-Se você é novo no projeto, seja bem vindo! Sinta-se livre para fazer perguntas [aqui] (https://github.com/matheusrv/StaticSiteGeneratorBenchmarks/issues/). Encorajamos novos geradores e colaboradores a fazer perguntas. Estamos aqui para ajudar!
+Se você é novo no projeto, seja bem vindo! Sinta-se livre para fazer perguntas [aqui] (https://github.com/ssgberk/benchmark-tool/issues/). Encorajamos novos geradores e colaboradores a fazer perguntas. Estamos aqui para ajudar!
 
-Se você se encontra em um diretório ou arquivo que você não tem certeza qual é o propósito, nosso check-out [estrutura do arquivo] (https://github.com/MatheusRV/StaticSiteGeneratorBenchmarks/wiki/File-Structure) em nossa documentação, que explicará brevemente o uso de diretórios e arquivos relevantes.
+Se você se encontra em um diretório ou arquivo que você não tem certeza qual é o propósito, nosso check-out [estrutura do arquivo] (https://github.com/ssgberk/benchmark-tool/wiki/File-Structure) em nossa documentação, que explicará brevemente o uso de diretórios e arquivos relevantes.
 
 ## Guia de Início Rápido
 Para começar, você vai precisar para desenvolver instalar [docker] (https://docs.docker.com/install/) ou consulte o nosso [Guia de Início Rápido usando vagrant] (.#Guia de Início Rápido (Vagrant))
 
 1. Clone SSGBERK.
 
-        $ git clone https://github.com/matheusrv/StaticSiteGeneratorBenchmarks.git
+        $ git clone --recurse-submodules https://github.com/ssgberk/benchmark-tool.git
 
 2. Execute um teste.
 
-        $ ./ssgberk --test gemini
+        $ ./ssgberk --test hugo -nf 10
 
 ### Explicação do script `./ssgberk`
 
 O script de execução é bastante prolixo, mas cada sinalizador é obrigatório. Se você estiver usando o Windows, a janela de encaixe ou adaptar comando no final do `./ssgberk` (substituindo `${SCRIPT_ROOT}` por `/c/path/to/StaticSiteGeneratorBenchmarks`), ou use vagrant.
 
-O comando se parece com isso: `docker run -it --rm --network ssgberk -v /var/run/docker.sock:/var/run/docker.sock -v [FWROOT]:/StaticSiteGeneratorBenchmarks matheusrv/ssgberk [ARGS]`
+O comando se parece com isso: `docker run -it --rm --network ssgberk -v /var/run/docker.sock:/var/run/docker.sock -v [FWROOT]:/StaticSiteGeneratorBenchmarks ssgberk/toolset [ARGS]`
 
 - `-it` diz janela de encaixe para executar este no modo 'interativa' e simular um TTY, então o `ctrl+c` é propagado.
 - `--rm` diz janela de encaixe para remover o recipiente assim que o Toolset termina a execução, o que significa que não há centenas de recipientes espalhados parado.
 - `--network=ssgberk` diz ao container para se juntar à rede virtual 'ssgberk' Docker
 - O primeiro `-v` especifica qual caminho do soquete do Docker deve ser montado como um volume no contêiner em execução. Isso permite que comandos janela de encaixe são executados dentro deste recipiente de usar recipiente janela de encaixe do hospedeiro para criar / run / stop / remover recipientes.
 - A segunda `-V` StaticSiteGeneratorBenchmarks monta o diretório como um volume de origem para compartilhar com o recipiente para reconstruir o conjunto de ferramentas Essa imagem é desnecessária e todas as alterações feitas no sistema host estão disponíveis no recipiente Toolset execução.
-- `matheusrv/ssgberk` é o nome do contêiner do conjunto de ferramentas a ser executado
+- `ssgberk/toolset` é o nome do contêiner do conjunto de ferramentas a ser executado
 
 #### Uma nota no Windows:
 
@@ -141,7 +161,7 @@ necessário.
 
 1. Clone SSGBERK.
 
-        $ Git clone https://github.com/matheusrv/StaticSiteGeneratorBenchmarks.git
+        $ Git clone https://github.com/ssgberk/benchmark-tool.git
 
 2. Alterar diretórios
 
@@ -154,7 +174,7 @@ necessário.
 4. Execute um teste
 
         $ vagrant ssh
-        $ ssgberk --mode verify --test gemini
+        $ ssgberk --test hugo -nf 10
 
 
 ## Adicionar um novo teste
@@ -166,15 +186,36 @@ No seu computador, ou quando você abrir uma conexão SSH na sua caixa vagrant, 
 Isso orientará você durante todo o processo de criação de um novo teste para incluir na suíte.
 
 
-Recursos
+## Notas de medição
+
+- Geradores JS dominados por bundler: geradores JavaScript "app-like" (Gatsby, Next.js, Astro, VitePress) com poucos arquivos têm o tempo dominado pelo bundler. É o comportamento real deles e fica registrado sem ajuste.
+- O Docker Desktop no macOS é ruidoso: números locais servem apenas para validar. Publique números de Linux nativo.
+- Cenários grandes (por exemplo `-nf 1000000`) geram conteúdo lentamente no `build.sh` em bash (loop + `sponge`). Mantido no port mínimo e registrado como melhoria futura.
+
+## Tamanho do conteúdo
+
+`-cs` é o tamanho do conteúdo por post, em KB:
+
+| `-cs` | KB por post | Parágrafos por post |
+|-------|-------------|---------------------|
+| `0.500` (padrão) | 0,5 | 1 |
+| `500` | 500 | 1000 |
+| `1000` | 1000 | 2000 |
+| `5000` | 5000 | 10000 |
+| `10000` | 10000 | 20000 |
+| `100000` | 100000 | 200000 |
+
+Qualquer outro valor é rejeitado.
+
+## Recursos
 
 #### Documentação oficial
 Nossa documentação oficial pode ser encontrada em
-[GitHub Wiki] (https://github.com/MatheusRV/StaticSiteGeneratorBenchmarks/wiki/).
+[GitHub Wiki] (https://github.com/ssgberk/benchmark-tool/wiki/).
 
 #### Resultados ao vivo
-Resultados da avaliação comparativa corridas contínuas estão disponíveis em tempo real [aqui] (https://ssgberk.matheusrv.com/) (em breve, depois de release v1).
+Resultados da avaliação comparativa corridas contínuas estão disponíveis em tempo real aqui (em breve, depois de release v1).
 
 ## Contribuindo
 
-A comunidade tem ajudado consistentemente a melhorar esses testes e aceitamos todas e quaisquer mudanças. Revisar nossas práticas e diretrizes de contribuição ajudará a manter todos na mesma página. O [Guia de contribuição] (https://github.com/MatheusRV/StaticSiteGeneratorBenchmarks/blob/master/.github/CONTRIBUTING.md) pode ser encontrado no [documentação SSGBERK] (https://github.com/MatheusRV/StaticSiteGeneratorBenchmarks/wiki/).
+A comunidade tem ajudado consistentemente a melhorar esses testes e aceitamos todas e quaisquer mudanças. Revisar nossas práticas e diretrizes de contribuição ajudará a manter todos na mesma página. O [Guia de contribuição] (https://github.com/ssgberk/benchmark-tool/blob/master/.github/CONTRIBUTING.md) pode ser encontrado no [documentação SSGBERK] (https://github.com/ssgberk/benchmark-tool/wiki/).
