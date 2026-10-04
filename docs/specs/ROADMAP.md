@@ -16,6 +16,7 @@ Each spec has `spec.md`, `plan.md`, `tasks.md` in its directory.
 | `docs/specs/001-python3-toolset` | BT | Python 3 toolset image, port, CLI fixes, GitHub Actions, Vagrant, README |
 | `docs/specs/002-hyperfine-results` | BT | Parse the hyperfine JSON from `build.sh` markers into `results.json`; `dool` stats |
 | `docs/specs/003-benchmark-round-2026` | BT | Submodule bump, full benchmark round, example results, CI smoke job |
+| `docs/specs/008-benchmark-methodology` | BT | Suites (smoke/standard/stress), Core/Extended series, resource limits, sequential protocol, CPU/RSS/IO metrics, noise control, environment capture, rankings |
 | `docs/specs/001-canonical-build-runner` | SF | Canonical `build.sh`, `benchmark_config.json` schema and marker contract, Dockerfile skeleton, Hugo, CI |
 | `docs/specs/002-update-existing-generators` | SF | Update 8 existing generators, remove 5 dead ones |
 | `docs/specs/003-new-generators` | SF | Add 8 new generators |
