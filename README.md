@@ -28,20 +28,20 @@ To get started developing you'll need to install [docker](https://docs.docker.co
 
 ### Explanation of the `./ssgberk` script
 
-The run script is pretty wordy, but each and every flag is required. If you are using windows, either adapt the docker command at the end of the `./ssgberk` shell script (replacing `${SCRIPT_ROOT}` with `/c/path/to/StaticSiteGeneratorBenchmarks`), or use vagrant.
+The run script is pretty wordy, but each and every flag is required. If you are using windows, either adapt the docker command at the end of the `./ssgberk` shell script (replacing `${SCRIPT_ROOT}` with `/c/path/to/benchmark-tool`), or use vagrant.
 
-The command looks like this: `docker run -it --rm --network ssgberk -v /var/run/docker.sock:/var/run/docker.sock -v [FWROOT]:/StaticSiteGeneratorBenchmarks ssgberk/toolset [ARGS]`
+The command looks like this: `docker run -i [-t] --rm --network ssgberk -v /var/run/docker.sock:/var/run/docker.sock -v [FWROOT]:/FrameworkBenchmarks ssgberk/toolset [ARGS]`
 
-- `-it` tells docker to run this in 'interactive' mode and simulate a TTY, so that `ctrl+c` is propagated.
+- `-i` tells docker to run this in 'interactive' mode; `-t` (simulate a TTY, so that `ctrl+c` is propagated) is added by the launcher only when stdout is a terminal.
 - `--rm` tells docker to remove the container as soon as the toolset finishes running, meaning there aren't hundreds of stopped containers lying around.
 - `--network=ssgberk` tells the container to join the 'ssgberk' Docker virtual network
 - The first `-v` specifies which Docker socket path to mount as a volume in the running container. This allows docker commands run inside this container to use the host container's docker to create/run/stop/remove containers.
-- The second `-v` mounts the StaticSiteGeneratorBenchmarks source directory as a volume to share with the container so that rebuilding the toolset image is unnecessary and any changes you make on the host system are available in the running toolset container.
+- The second `-v` mounts the benchmark-tool source directory (at `/FrameworkBenchmarks` inside the container) as a volume to share with the container so that rebuilding the toolset image is unnecessary and any changes you make on the host system are available in the running toolset container.
 - `ssgberk/toolset` is the name of toolset container to run
 
 #### A note on Windows:
 
-- Docker expects Linux-style paths. If you cloned on your `C:\` drive, then `[ABS PATH TO THIS DIR]` would be `/c/StaticSiteGeneratorBenchmarks`.
+- Docker expects Linux-style paths. If you cloned on your `C:\` drive, then `[ABS PATH TO THIS DIR]` would be `/c/benchmark-tool`.
 - [Docker for Windows](https://www.docker.com/docker-windows) understands `/var/run/docker.sock` even though that is not a valid path on Windows. [Docker Toolbox](https://docs.docker.com/toolbox/toolbox_install_windows/) **may** not - use at your own risk.
 
 ## Quick Start Guide (Vagrant)
@@ -56,7 +56,7 @@ required.
 
 2. Change directories
 
-        $ cd StaticSiteGeneratorBenchmarks/deployment/vagrant
+        $ cd benchmark-tool/deployment/vagrant
 
 3. Build the vagrant virtual machine
 
@@ -72,7 +72,7 @@ required.
 
 Either on your computer, or once you open an SSH connection to your vagrant box, start the new test initialization wizard.
 
-        vagrant@SSGBERK-all:~/StaticSiteGeneratorBenchmarks$ ./ssgberk --new
+        vagrant@SSGBERK-all:~/benchmark-tool$ ./ssgberk --new
 
 This will walk you through the entire process of creating a new test to include in the suite.
 
@@ -137,20 +137,20 @@ Para começar, você vai precisar para desenvolver instalar [docker] (https://do
 
 ### Explicação do script `./ssgberk`
 
-O script de execução é bastante prolixo, mas cada sinalizador é obrigatório. Se você estiver usando o Windows, a janela de encaixe ou adaptar comando no final do `./ssgberk` (substituindo `${SCRIPT_ROOT}` por `/c/path/to/StaticSiteGeneratorBenchmarks`), ou use vagrant.
+O script de execução é bastante prolixo, mas cada sinalizador é obrigatório. Se você estiver usando o Windows, a janela de encaixe ou adaptar comando no final do `./ssgberk` (substituindo `${SCRIPT_ROOT}` por `/c/path/to/benchmark-tool`), ou use vagrant.
 
-O comando se parece com isso: `docker run -it --rm --network ssgberk -v /var/run/docker.sock:/var/run/docker.sock -v [FWROOT]:/StaticSiteGeneratorBenchmarks ssgberk/toolset [ARGS]`
+O comando se parece com isso: `docker run -i [-t] --rm --network ssgberk -v /var/run/docker.sock:/var/run/docker.sock -v [FWROOT]:/FrameworkBenchmarks ssgberk/toolset [ARGS]`
 
-- `-it` diz janela de encaixe para executar este no modo 'interativa' e simular um TTY, então o `ctrl+c` é propagado.
+- `-i` diz ao docker para executar no modo 'interativo'; `-t` (simula um TTY, para que o `ctrl+c` seja propagado) só é adicionado pelo script quando a saída padrão é um terminal.
 - `--rm` diz janela de encaixe para remover o recipiente assim que o Toolset termina a execução, o que significa que não há centenas de recipientes espalhados parado.
 - `--network=ssgberk` diz ao container para se juntar à rede virtual 'ssgberk' Docker
 - O primeiro `-v` especifica qual caminho do soquete do Docker deve ser montado como um volume no contêiner em execução. Isso permite que comandos janela de encaixe são executados dentro deste recipiente de usar recipiente janela de encaixe do hospedeiro para criar / run / stop / remover recipientes.
-- A segunda `-V` StaticSiteGeneratorBenchmarks monta o diretório como um volume de origem para compartilhar com o recipiente para reconstruir o conjunto de ferramentas Essa imagem é desnecessária e todas as alterações feitas no sistema host estão disponíveis no recipiente Toolset execução.
+- A segunda `-V` benchmark-tool (em `/FrameworkBenchmarks` dentro do recipiente) monta o diretório como um volume de origem para compartilhar com o recipiente para reconstruir o conjunto de ferramentas Essa imagem é desnecessária e todas as alterações feitas no sistema host estão disponíveis no recipiente Toolset execução.
 - `ssgberk/toolset` é o nome do contêiner do conjunto de ferramentas a ser executado
 
 #### Uma nota no Windows:
 
-- O Docker espera caminhos no estilo Linux. Se você clona em sua unidade `C:\`, em seguida a `[ABS caminho para este DIR]` seria `/c/StaticSiteGeneratorBenchmarks`.
+- O Docker espera caminhos no estilo Linux. Se você clona em sua unidade `C:\`, em seguida a `[ABS caminho para este DIR]` seria `/c/benchmark-tool`.
 - [Docker para Windows] (https://www.docker.com/docker-windows) entende `/var/run/docker.sock` embora não é válido esse caminho no Windows. [Docker Toolbox] (https://docs.docker.com/toolbox/toolbox_install_windows/) - use a seu próprio risco.
 
 ## Guia de Início Rápido (Vagrant)
@@ -161,11 +161,11 @@ necessário.
 
 1. Clone SSGBERK.
 
-        $ Git clone https://github.com/ssgberk/benchmark-tool.git
+        $ git clone --recurse-submodules https://github.com/ssgberk/benchmark-tool.git
 
 2. Alterar diretórios
 
-        $ cd StaticSiteGeneratorBenchmarks/deployment/vagrant
+        $ cd benchmark-tool/deployment/vagrant
 
 3. Construa a máquina virtual vagrant
 
@@ -181,7 +181,7 @@ necessário.
 
 No seu computador, ou quando você abrir uma conexão SSH na sua caixa vagrant, inicie o novo assistente de inicialização de teste.
 
-        vagrant@SSGBERK-all:~/StaticSiteGeneratorBenchmarks$./ssgberk --new
+        vagrant@SSGBERK-all:~/benchmark-tool$./ssgberk --new
 
 Isso orientará você durante todo o processo de criação de um novo teste para incluir na suíte.
 
