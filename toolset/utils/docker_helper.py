@@ -16,8 +16,15 @@ from psutil import virtual_memory
 # total memory limit allocated for the test container
 mem_limit = int(round(virtual_memory().total * .95))
 
+TEST_IMAGE_PREFIX = 'ssgberk/test.'
+
 
 class DockerHelper:
+
+    @staticmethod
+    def is_ssgberk_test_image(tag):
+        return tag.startswith(TEST_IMAGE_PREFIX)
+
     def __init__(self, benchmarker=None):
         self.benchmarker = benchmarker
 
@@ -96,9 +103,7 @@ class DockerHelper:
         self.server.images.prune()
         for image in self.server.images.list():
             if len(image.tags) > 0:
-                # 'matheusrv/ssgberk.test.gemini:0.1' -> 'matheusrv/ssgberk.test.gemini'
-                image_tag = image.tags[0].split(':')[0]
-                if image_tag != 'matheusrv/ssgberk' and 'matheusrv' in image_tag:
+                if DockerHelper.is_ssgberk_test_image(image.tags[0]):
                     self.server.images.remove(image.id, force=True)
         self.server.images.prune()
 
@@ -130,7 +135,7 @@ class DockerHelper:
                         self.benchmarker.config.results_environment,
                     'TFB_TEST_NAME': test.name,
                 }),
-                tag="matheusrv/ssgberk.test.%s" % test.name)
+                tag="%s%s" % (TEST_IMAGE_PREFIX, test.name))
         except Exception:
             return 1
 
@@ -188,7 +193,7 @@ class DockerHelper:
                 ports = {test.port: test.port}
 
             container = self.server.containers.run(
-                "matheusrv/ssgberk.test.%s" % test.name,
+                "%s%s" % (TEST_IMAGE_PREFIX, test.name),
                 name=name,
                 command=docker_cmd,
                 network=self.benchmarker.config.network,
@@ -240,8 +245,7 @@ class DockerHelper:
     def __stop_all(docker_client):
         for container in docker_client.containers.list():
             if len(container.image.tags) > 0 \
-                    and 'matheusrv' in container.image.tags[0] \
-                    and 'ssgberk:latest' not in container.image.tags[0]:
+                    and DockerHelper.is_ssgberk_test_image(container.image.tags[0]):
                 DockerHelper.__stop_container(container)
 
     def stop(self, containers=None):
@@ -289,7 +293,7 @@ class DockerHelper:
 
         watch_container(
             self.server.containers.run(
-                "matheusrv/ssgberk.test.%s" % framework_test.name,
+                "%s%s" % (TEST_IMAGE_PREFIX, framework_test.name),
                 "/bin/bash ./%s" % (script),
                 environment=variables,
                 network=self.benchmarker.config.network,

@@ -21,13 +21,13 @@ echo "moving to ssgberk directory"
 cd $TFB_REPOPARENT/$TFB_REPONAME
 
 echo "building ssgberk docker image"
-docker build -t matheusrv/ssgberk .
+docker build -t ssgberk/toolset .
 
 echo "running ssgberk docker image"
 docker run \
   --network=host \
   --mount type=bind,source=$TFB_REPOPARENT/$TFB_REPONAME,target=/FrameworkBenchmarks \
-  matheusrv/ssgberk \
+  ssgberk/toolset \
   --server-host $TFB_SERVER_HOST \
   --client-host $TFB_CLIENT_HOST \
   --database-host $TFB_DATABASE_HOST \

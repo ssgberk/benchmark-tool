@@ -1,17 +1,27 @@
-FROM buildpack-deps:bionic
+FROM ubuntu:24.04
 
-RUN apt-get -yqq update
+ARG DEBIAN_FRONTEND=noninteractive
+ARG DOOL_VERSION=v1.3.8
 
-# WARNING: DONT PUT A SPACE AFTER ANY BACKSLASH OR APT WILL BREAK
-RUN apt-get -yqq install -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" \
-git-core cloc dstat python-dev python-pip software-properties-common
+# WARNING: DON'T PUT A SPACE AFTER ANY BACKSLASH OR APT WILL BREAK
+RUN apt-get -yqq update && apt-get -yqq install --no-install-recommends \
+      -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" \
+      ca-certificates cloc curl git \
+      python3 python3-colorama python3-pip python3-psutil python3-requests && \
+    pip3 install --break-system-packages docker==7.1.0 && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN pip install colorama==0.3.1 requests docker==4.0.2 psutil
+# Collect resource usage statistics
+WORKDIR /tmp/dool
+RUN curl -LSs "https://github.com/scottchiefbaker/dool/archive/${DOOL_VERSION}.tar.gz" | \
+      tar --strip-components=1 -xz && \
+    ./install.py && \
+    rm -rf /tmp/dool
 
-# Fix for docker-py trying to import one package from the wrong location
-RUN cp -r /usr/local/lib/python2.7/dist-packages/backports/ssl_match_hostname/ /usr/lib/python2.7/dist-packages/backports
+# The repository is bind-mounted with the host user's ownership
+RUN git config --system --add safe.directory '*'
 
-ENV PYTHONPATH /FrameworkBenchmarks
-ENV FWROOT /FrameworkBenchmarks
+ENV PYTHONPATH=/FrameworkBenchmarks FWROOT=/FrameworkBenchmarks
+WORKDIR /FrameworkBenchmarks
 
-ENTRYPOINT ["python", "/FrameworkBenchmarks/toolset/run-tests.py"]
+ENTRYPOINT ["python3", "/FrameworkBenchmarks/toolset/run-tests.py"]

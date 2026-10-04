@@ -25,9 +25,9 @@ echo "running docker_clean on server host"
 docker_clean
 
 echo "running docker_clean on database host"
-ssh matheusrv@$TFB_DATABASE_HOST "$(typeset -f docker_clean); docker_clean"
+ssh ssgberk@$TFB_DATABASE_HOST "$(typeset -f docker_clean); docker_clean"
 
 echo "running docker_clean on client host"
-ssh matheusrv@$TFB_CLIENT_HOST "$(typeset -f docker_clean); docker_clean"
+ssh ssgberk@$TFB_CLIENT_HOST "$(typeset -f docker_clean); docker_clean"
 
 echo "done with ssgberk-shutdown script"
