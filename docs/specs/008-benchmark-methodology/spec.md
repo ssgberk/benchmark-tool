@@ -33,7 +33,7 @@ This spec defines suites, profiles, metrics, the run protocol, statistics, the r
 
 ## Goals & success criteria
 
-1. One command runs a named, versioned suite. *Measured by:* `./ssgberk --suite standard --profile core` runs 6 cells × all generators sequentially and writes one `suite.json` plus one standard `results.json` per cell.
+1. One command runs a named, versioned suite. *Measured by:* `./ssgberk --suite standard --profile core` runs its 5 cells × all generators sequentially and writes one `suite.json` plus one standard `results.json` per cell.
 2. Comparable resources for every generator. *Measured by:* every `rawData.datarate[<fw>][0]` carries identical `resources` (CPUs, memory, cpuset), and a unit test asserts `DockerHelper.benchmark` passes `nano_cpus`, `mem_limit`, `memswap_limit` and `cpuset_cpus` to `containers.run`.
 3. Richer metrics. *Measured by:* each successful result has `median`, `stddev`, `cv`, `user`, `system`, `peakRssBytes`, `inputBytes`, `outputFiles`, `outputBytes`, `postsPerSecond` and `inputMBPerSecond`; `imageBuild.<fw>.seconds` is present and never added to a build time.
 4. Noise is visible. *Measured by:* a result with CV > 10% is re-run once with doubled runs (cap 10), and if the CV is still > 10% it carries `noisy: true` and is marked in `summary.md`.
@@ -47,8 +47,8 @@ This spec defines suites, profiles, metrics, the run protocol, statistics, the r
 - **R-1** Suites are data in `toolset/benchmark/suites.json`, validated on load. A suite has `name`, `version` (integer), `cells` (list of `{numberOfFiles, contentSize}`), `runs`, `cooldownSeconds` and `timeoutSeconds` per cell and generator.
 - **R-2** These suites exist with exactly these cells:
   - `smoke`: nf 10, cs 0.500, runs 1.
-  - `standard`: nf ∈ {100, 1000, 10000} × cs ∈ {0.500, 500}, runs 5.
-  - `stress`: (100000, 0.500), (1000, 1000), (100, 5000), runs 3.
+  - `standard`: 5 cells, runs 5: nf ∈ {100, 1000, 10000} × cs 0.500, plus nf ∈ {100, 1000} × cs 500, that is (100, 0.500), (100, 500), (1000, 0.500), (1000, 500), (10000, 0.500). The cell (10000, 500) is not in `standard`.
+  - `stress`: 4 cells, runs 3: (100000, 0.500), (10000, 500), (1000, 1000), (100, 5000). The cell (10000, 500) is 5.12 GB of markdown per run and lives here, where `timeout` and `oom` are expected outcomes.
   - `legacy-2019`: the seven active cells of the former `benchmark_test.sh`, runs 10, for historical comparison only and never ranked against the others.
 - **R-3** `--suite <name>` runs every cell of the suite for every selected generator. Cells run in the order listed. Within a cell, generators run in the deterministic rotated order defined in `plan.md` ("Order"). `--suite` cannot be combined with `-nf`, `-cs` or `-mr` (usage error, exit 1).
 - **R-4** Without `--suite`, `-nf`/`-cs`/`-mr` keep working as today and the result records `suite: null` (an ad-hoc run, never ranked against suite results).
@@ -108,11 +108,16 @@ This spec defines suites, profiles, metrics, the run protocol, statistics, the r
 - Incremental or watch-mode build benchmarks.
 - Changing what the reference site contains (SF 005) or how conformance is decided (SF 006).
 
+## Decisions log
+
+Decided by the maintainer on 2026-10-04:
+
+1. **Suite cells.** (10000, 500) moves out of `standard` and into `stress`. `standard` has 5 cells: {100, 1000, 10000} × cs 0.500 plus {100, 1000} × cs 500. `stress` has 4 cells: (100000, 0.500), (10000, 500), (1000, 1000), (100, 5000). *Decided by the maintainer, 2026-10-04.*
+2. **Peak RSS source.** `peakRssBytes` comes from hyperfine 1.20 `memory_usage_byte` (`ru_maxrss`, `getrusage(RUSAGE_CHILDREN)`), not from `/usr/bin/time -v` or cgroup `memory.peak`. Limits (running maximum, largest single process) stay in `plan.md` "Peak RSS" and threat T7. *Decided by the maintainer, 2026-10-04.*
+3. **Default container resources.** `--cpus 4 --memory 8g`. *Decided by the maintainer, 2026-10-04.*
+
 ## Open questions
 
-1. **Peak RSS source.** The brief allowed `/usr/bin/time -v` or cgroup `memory.peak`. This spec reads the same `ru_maxrss` quantity that `/usr/bin/time -v` reports, from hyperfine 1.20's `memory_usage_byte` (verified in the v1.20.0 source: `getrusage(RUSAGE_CHILDREN)`, KiB×1024 on Linux). It needs no wrapper and no `time` package, and it covers the timed runs instead of a separate build. Caveat: `RUSAGE_CHILDREN` accumulates, so the per-run list is a running maximum, and it measures the largest single process, not the sum over worker processes. cgroup `memory.peak` would capture the sum but includes page cache from writing gigabytes of output, spans the whole container lifetime (content generation and verification included), and needs kernel ≥ 6.12 to reset. Confirm the choice.
-2. **`standard` includes nf 10000 × cs 500.** That cell is 5.12 GB of markdown per run (and several GB of HTML), × 5 runs × 17 generators. Expect hours for the slow generators, and `oom` for generators that hold all content in memory under an 8 GB limit. The cell is kept as specified, with `timeoutSeconds` 7200 (the existing `run_test_timeout_seconds`) and `timeout`/`oom` as reported outcomes. *Alternative:* move it to `stress` and use (10000, 0.500), (1000, 500) and (100, 500) for the cs = 500 row.
-3. **Default resources.** 4 CPUs / 8 GB fits a 2026 laptop and the GitHub `ubuntu-24.04` runner (4 vCPU, 16 GB). Should the reference results instead use 8 CPUs to show multi-core generators (Hugo, Zola, Gatsby workers)?
-4. **Tie rule.** Overlap of `[min, max]` is crude with 5 runs, but it is transparent. A bootstrap CI of the median would be better but adds complexity to `summary.py`. Proposal: keep overlap now and revisit after the first `standard` round.
-5. **CPU model on Docker Desktop.** Inside the Linux VM `/proc/cpuinfo` has no model name on Apple silicon, so the launcher probe (`sysctl -n machdep.cpu.brand_string` on macOS, `lscpu` on Linux) is the primary source. If the toolset runs without the launcher (CI calling `run-tests.py` directly), only the fallback is available.
-6. **Dependence on unmerged specs.** Run ids and labels (BT 004) and `summary.py` (BT 006) are on `feat/004-concurrent-safe-runs` and `feat/006-results-summary`. Tasks 5 and 10 assume both are merged first.
+1. **Tie rule.** Overlap of `[min, max]` is crude with 5 runs, but it is transparent. A bootstrap CI of the median would be better but adds complexity to `summary.py`. Proposal: keep overlap now and revisit after the first `standard` round.
+2. **CPU model on Docker Desktop.** Inside the Linux VM `/proc/cpuinfo` has no model name on Apple silicon, so the launcher probe (`sysctl -n machdep.cpu.brand_string` on macOS, `lscpu` on Linux) is the primary source. If the toolset runs without the launcher (CI calling `run-tests.py` directly), only the fallback is available.
+3. **Dependence on unmerged specs.** Run ids and labels (BT 004) and `summary.py` (BT 006) are on `feat/004-concurrent-safe-runs` and `feat/006-results-summary`. Tasks 5 and 10 assume both are merged first.

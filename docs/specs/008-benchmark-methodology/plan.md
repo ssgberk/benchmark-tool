@@ -10,7 +10,7 @@ Depends on: BT 002 (parser), BT 004 (run id, `ssgberk.run` label, results dir cl
 ./ssgberk --suite standard --profile core --cpus 4 --memory 8g
   launcher (host): probes CPU model / OS → env SSGBERK_HOST_CPU, SSGBERK_HOST_OS → toolset container
   run-tests.py
-    ├─ suites.load("standard") → cells [(100,0.500),(100,500),(1000,0.500),…], runs 5
+    ├─ suites.load("standard") → cells [(100,0.500),(100,500),(1000,0.500),(1000,500),(10000,0.500)], runs 5
     ├─ concurrency guard (labels, BT 004)               ── abort unless --allow-concurrent
     ├─ environment.capture(docker) → environment{…, fingerprint}
     └─ for cell in cells:                                 results/<ts>/<profile>/nf<nf>-cs<cs>/
@@ -41,14 +41,14 @@ Depends on: BT 002 (parser), BT 004 (run id, `ssgberk.run` label, results dir cl
       {"numberOfFiles": 100,   "contentSize": "500"},
       {"numberOfFiles": 1000,  "contentSize": "0.500"},
       {"numberOfFiles": 1000,  "contentSize": "500"},
-      {"numberOfFiles": 10000, "contentSize": "0.500"},
-      {"numberOfFiles": 10000, "contentSize": "500"}
+      {"numberOfFiles": 10000, "contentSize": "0.500"}
     ]
   },
   "stress": {
     "version": 1, "runs": 3, "cooldownSeconds": 30, "timeoutSeconds": 14400,
     "cells": [
       {"numberOfFiles": 100000, "contentSize": "0.500"},
+      {"numberOfFiles": 10000,  "contentSize": "500"},
       {"numberOfFiles": 1000,   "contentSize": "1000"},
       {"numberOfFiles": 100,    "contentSize": "5000"}
     ]
@@ -72,6 +72,8 @@ Validation (`suites.load`): every `contentSize` is one of the toolset's `-cs` ch
 
 ### Why these cells
 
+`standard` has 5 cells: (100, 0.500), (100, 500), (1000, 0.500), (1000, 500), (10000, 0.500). `stress` has 4 cells: (100000, 0.500), (10000, 500), (1000, 1000), (100, 5000). The cell (10000, 500) is in `stress` only (maintainer decision, 2026-10-04; spec "Decisions log").
+
 Input sizes follow 005: 512 bytes per block; `0.500` = 1 block, `500` = 1000 blocks.
 
 | Cell | Posts | Markdown in | What it isolates |
@@ -82,12 +84,12 @@ Input sizes follow 005: 512 bytes per block; `0.500` = 1 block, `500` = 1000 blo
 | 10000 × 0.500 | 10000 | 5.1 MB | per-file overhead dominates: collection handling, template calls, file writes |
 | 100 × 500 | 100 | 51 MB | markdown parser throughput on large documents, with few files |
 | 1000 × 500 | 1000 | 512 MB | parser throughput plus memory pressure |
-| 10000 × 500 | 10000 | 5.12 GB | both at once; memory limits (spec open question 2) |
+| 10000 × 500 (stress) | 10000 | 5.12 GB | both at once; memory limits, where `timeout` and `oom` are expected outcomes |
 | 100000 × 0.500 (stress) | 100000 | 51 MB | file count scaling an order beyond `standard`; the index has 100000 items |
 | 1000 × 1000 (stress) | 1000 | 1 GB | parser throughput at 1 MB posts |
 | 100 × 5000 (stress) | 100 | 512 MB | very large single documents (5 MB each) |
 
-Three decades of nf at two contrasting sizes give the scaling exponent (R-25) at cs = 0.500, where per-file cost dominates, and at cs = 500, where parsing dominates. Five runs is the smallest count for which a stddev is meaningful and a median robust to one outlier. `stress` uses 3 runs because each run takes minutes to hours, and its job is to find the breaking points (`timeout`, `oom`), not to rank closely matched generators.
+Three decades of nf at cs = 0.500 give the scaling exponent (R-25) where per-file cost dominates. At cs = 500, where parsing dominates, `standard` has only two points (nf 100 and 1000), so it reports no exponent there (R-25 needs 3 points) and shows the two medians; the (10000, 500) point is in `stress`. Five runs is the smallest count for which a stddev is meaningful and a median robust to one outlier. `stress` uses 3 runs because each run takes minutes to hours, and its job is to find the breaking points (`timeout`, `oom`), not to rank closely matched generators.
 
 ## Order
 
@@ -137,7 +139,7 @@ Top level (example values):
 ```json
 {
   "schemaVersion": 2,
-  "suite": {"name": "standard", "version": 1, "cellIndex": 3, "cellCount": 6, "runs": 5, "ranked": true},
+  "suite": {"name": "standard", "version": 1, "cellIndex": 3, "cellCount": 5, "runs": 5, "ranked": true},
   "profile": "core",
   "resources": {"cpus": 4.0, "memoryBytes": 8589934592, "swap": false, "cpuset": "4-7"},
   "protocol": {"coldRebuild": true, "warmupBuilds": 1, "sequential": true, "concurrent": false,
@@ -200,7 +202,7 @@ Per result (`rawData.datarate.<fw>[0]`), added keys:
 
 ## `summary.md` additions (per cell)
 
-1. Header lines: `Suite: standard v1 · cell 4/6 (nf 1000, cs 500) · profile core · fingerprint 3f9c1a7b20de · resources 4 CPU / 8.0 GB / cpuset 4-7`.
+1. Header lines: `Suite: standard v1 · cell 4/5 (nf 1000, cs 500) · profile core · fingerprint 3f9c1a7b20de · resources 4 CPU / 8.0 GB / cpuset 4-7`.
 2. Table columns: `Rank`, `Framework`, `Median (s)`, `CV`, `Min–Max (s)`, `Posts/s`, `MB/s`, `CPU (cores)`, `Peak RSS (MB)`, `Output (MB / files)`, `Image build (s)`. `noisy` rows get the suffix ` ⚠`.
 3. "Failed / timeout / oom / nonconformant / unsupported" list with `failureReasons`.
 4. Caveat block when applicable (R-30), with fixed texts per threat id (T1, T5, T7, T9).
@@ -238,7 +240,7 @@ Per result (`rawData.datarate.<fw>[0]`), added keys:
 
 ## Risks
 
-1. **Suite duration.** `standard` at 17 generators may take a day on a laptop, dominated by 10000 × 500. Mitigation: `timeoutSeconds`, per-cell result directories (a crash loses one cell, and `--parse` re-parses it), and `--test`/`--exclude` work with `--suite`.
+1. **Suite duration.** `standard` at 17 generators may take several hours on a laptop, dominated by 1000 × 500 and 10000 × 0.500. The 5.12 GB cell (10000 × 500) is in `stress`, where `timeout` (14400 s) and `oom` under the 8 GB limit are expected outcomes, and `stress` may take a day. Mitigation: `timeoutSeconds`, per-cell result directories (a crash loses one cell, and `--parse` re-parses it), and `--test`/`--exclude` work with `--suite`.
 2. **Container removal hides OOM.** `remove=True` deletes the container before its state can be inspected. Task 4 switches to `wait()` → `inspect` → `remove`.
 3. **Docker API field drift.** `info()` keys differ slightly across Docker versions. Every field is read with `.get()`, and a missing field is `null`.
 4. **BT 004/006 not merged.** Tasks 5 and 10 cannot start before them. Tasks 1–4, 6–9 and 11 are independent.
