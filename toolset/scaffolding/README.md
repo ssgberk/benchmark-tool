@@ -22,9 +22,9 @@ You can create multiple implementations and they will all conform to `[name in b
 
 4. Test your application
 
-        $ ssgberk --mode verify --test $NAME
+        $ ./ssgberk --test $NAME -nf 10
 
-This will run the suite in `verify` mode for your test. This means that no benchmarks will be captured and we will test that we can hit your implementation end-points specified by `benchmark_config.json` and that the response is correct.
+This will run the suite in `benchmark` mode (the default; `--mode` only accepts `benchmark` or `debug`) for your test, generating 10 markdown posts per build (`-nf 10`). This lets us test that we can hit your implementation end-points specified by `benchmark_config.json` and that the response is correct.
 
 Once you are able to successfully run your test through our suite in this way **and** your test passes our validation, you may move on to the next step.
 

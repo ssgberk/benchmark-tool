@@ -4,6 +4,9 @@ on:
     branches: [master]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   toolset:
     runs-on: ubuntu-24.04
@@ -16,3 +19,4 @@ jobs:
       - run: python -m compileall -q toolset
       - run: ruff check toolset tests
       - run: pytest -q
+      - run: docker build -t ssgberk/toolset - < Dockerfile
