@@ -43,21 +43,14 @@ class StoreSeqAction(argparse.Action):
 
 
 ###################################################################################################
-# Main
+# Parser Builder
 ###################################################################################################
-def main(argv=None):
+def build_parser():
     '''
-    Runs the toolset.
+    Builds and returns the argument parser for the toolset.
     '''
-    # Do argv default this way, as doing it in the functional declaration sets it at compile time
-    if argv is None:
-        argv = sys.argv
-
-    ##########################################################
-    # Set up argument parser
-    ##########################################################
     parser = argparse.ArgumentParser(
-        description="Install or run the Framework Benchmarks test suite.",
+        description="Run the Static Site Generator Benchmarks (SSGBerk) suite.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         epilog='''If an argument includes (type int-sequence), then it accepts integer lists in multiple forms.
         Using a single number e.g. 5 will create a list [5]. Using commas will create a list containing those
@@ -142,7 +135,7 @@ def main(argv=None):
             'all','update', 'datarate'
         ],
         nargs='+',
-        default='all',
+        default=['all'],
         help='which type of test to run'
     )
     parser.add_argument(
@@ -159,11 +152,8 @@ def main(argv=None):
         help='lists all the known tests that can run'
     )
     parser.add_argument(
-        '-v',
-        '--verbose',
-        default=False,
-        help='Output verbose'
-    )
+        '-v', '--verbose', action='store_true', default=False,
+        help='Run the generator build command in verbose mode')
 
     # Benchmark options
     parser.add_argument(
@@ -172,27 +162,16 @@ def main(argv=None):
         help='Time in seconds that each test should run for.'
     )
     parser.add_argument(
-        '-nf',
-        '--number-of-files',
-        default=10,
-        help='Time in seconds that each test should run for.'
-    )
+        '-nf', '--number-of-files', default='10',
+        help='Number of markdown posts generated for each build')
     parser.add_argument(
-        '-cs',
-        '--content-size',
-        choices=[
-            '0.500', '500', '1000', '5000', '10000'
-        ],
-        nargs='+',
+        '-cs', '--content-size',
+        choices=['0.500', '500', '1000', '5000', '10000', '100000'],
         default='0.500',
-        help='Time in seconds that each test should run for.'
-    )
+        help='Size of each post in KB (0.500 = one paragraph)')
     parser.add_argument(
-        '-mr',
-        '--min-runs',
-        default='3',
-        help='Time in seconds that each test should run for.'
-    )
+        '-mr', '--min-runs', default='3',
+        help='Number of timed hyperfine runs per build')
     parser.add_argument(
         '--server-host',
         default='ssgberk-server',
@@ -205,7 +184,21 @@ def main(argv=None):
         default=None,
         help='The network mode to run docker in')
 
-    args = parser.parse_args()
+    return parser
+
+
+###################################################################################################
+# Main
+###################################################################################################
+def main(argv=None):
+    '''
+    Runs the toolset.
+    '''
+    # Do argv default this way, as doing it in the functional declaration sets it at compile time
+    if argv is None:
+        argv = sys.argv
+
+    args = build_parser().parse_args()
 
     config = BenchmarkConfig(args)
     benchmarker = Benchmarker(config)
