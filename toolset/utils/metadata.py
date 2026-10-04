@@ -22,7 +22,8 @@ class Metadata:
         lang_dir = os.path.join(self.benchmarker.config.lang_root)
         langs = []
         for dir in glob.glob(os.path.join(lang_dir, "*")):
-            langs.append(dir.replace(lang_dir, "")[1:])
+            if os.path.isdir(dir):
+                langs.append(dir.replace(lang_dir, "")[1:])
         return langs
 
     def gather_language_tests(self, language):

@@ -28,3 +28,11 @@ def test_list_test_metadata_writes_json_list(fake_benchmarker, tmp_path):
     Metadata(fake_benchmarker).list_test_metadata()
     data = json.loads((tmp_path / "test_metadata.json").read_text())
     assert isinstance(data, list) and data[0]["name"] == "hugo"
+
+
+def test_gather_languages_ignores_non_directories(fake_benchmarker, tmp_path):
+    root = tmp_path / "frameworks"
+    (root / "Go" / "hugo").mkdir(parents=True)
+    (root / "Go" / "hugo" / "benchmark_config.json").write_text("{}")
+    (root / "LICENSE").write_text("MIT")
+    assert sorted(Metadata(fake_benchmarker).gather_languages()) == ["Go"]
