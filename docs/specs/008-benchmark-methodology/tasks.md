@@ -46,7 +46,7 @@ Prerequisites: BT 002 done. Tasks 5 and 10 also need BT 004 (`feat/004-concurren
 - `suites.rotate(names: list[str], cell_index: int) -> list[str]` (plan "Order").
 - `run-tests.py`: `--suite NAME` (choices from `suites.json`). Combining it with an explicit `-nf`, `-cs` or `-mr` is a usage error with exit 1.
 
-- [ ] **Step 1: Write the failing test** — `tests/test_suites.py`: `test_standard_cells` (exactly the 6 cells and runs 5 of plan "Suites"); `test_smoke`, `test_stress`, `test_legacy_2019` (7 cells, runs 10, `ranked` false); `test_invalid_content_size_rejected`; `test_unknown_suite`; `test_cell_dir` (`core/nf1000-cs0.500`); `test_rotate_deterministic` (same output twice, cell 0 = sorted, cell 1 rotated by 7 mod n); `test_suite_conflicts_with_nf` (`main(['x', '--suite', 'smoke', '-nf', '5'])` returns 1); `test_benchmark_test_sh_is_wrapper` (the file contains `--suite` and not `--clean`).
+- [ ] **Step 1: Write the failing test** — `tests/test_suites.py`: `test_standard_cells` (exactly the 5 cells and runs 5 of plan "Suites", and `(10000, "500")` absent); `test_smoke`, `test_stress` (exactly 4 cells, including `(10000, "500")`, runs 3), `test_legacy_2019` (7 cells, runs 10, `ranked` false); `test_invalid_content_size_rejected`; `test_unknown_suite`; `test_cell_dir` (`core/nf1000-cs0.500`); `test_rotate_deterministic` (same output twice, cell 0 = sorted, cell 1 rotated by 7 mod n); `test_suite_conflicts_with_nf` (`main(['x', '--suite', 'smoke', '-nf', '5'])` returns 1); `test_benchmark_test_sh_is_wrapper` (the file contains `--suite` and not `--clean`).
 - [ ] **Step 2: Run** `pytest -q tests/test_suites.py` → FAIL.
 - [ ] **Step 3: Implement.** `run-tests.py` main: if `--suite`, then for each cell build a per-cell `BenchmarkConfig` (copy of args with the cell values, `results` dir `results/<ts>/<cell_dir>`) and a `Benchmarker`, and run it. After the loop, write `suite.json` (plan "`suite.json`"). `benchmark_test.sh` becomes `#!/bin/bash` + a comment + `exec ./ssgberk --suite "${1:-standard}" "${@:2}"`.
 - [ ] **Step 4: Run** → PASS; `pytest -q` and `ruff check toolset tests` clean.
@@ -191,7 +191,7 @@ Needs BT 006 merged (`toolset/utils/summary.py`).
 
 **Files:**
 - Modify: `toolset/utils/summary.py` (`build_rows`, `to_csv`, `to_markdown`), `toolset/utils/results.py` (`write_summary`)
-- Create: `toolset/utils/ranking.py`, `tests/test_ranking.py`, `tests/test_summary_008.py`, `tests/fixtures/suite_standard/` (6 cells × 3 frameworks of synthetic `results.json`)
+- Create: `toolset/utils/ranking.py`, `tests/test_ranking.py`, `tests/test_summary_008.py`, `tests/fixtures/suite_standard/` (5 cells × 3 frameworks of synthetic `results.json`)
 - Modify: `toolset/run-tests.py` (after a suite: `suite-summary.csv`, `suite-summary.md`, `scaling.csv`)
 
 **Interfaces:**
