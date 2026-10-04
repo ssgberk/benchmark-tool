@@ -25,7 +25,7 @@ def main(argv=None):
     args = parser.parse_args(argv)
     files = subprocess.check_output(
         ["git", "diff", "--name-only", "%s...HEAD" % args.base],
-        cwd=args.repo, text=True).split()
+        cwd=args.repo, text=True).splitlines()
     all_dirs = sorted(
         os.path.dirname(os.path.relpath(p, args.repo))
         for p in glob.glob(os.path.join(args.repo, "*", "*", "benchmark_config.json")))

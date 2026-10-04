@@ -65,3 +65,18 @@ def test_build_writes_stream_tokens_to_log(monkeypatch, tmp_path):
 def test_build_raises_on_error_detail(monkeypatch, tmp_path):
     with pytest.raises(Exception):
         _build_with_tokens(monkeypatch, [{'errorDetail': {'message': 'boom'}}], tmp_path / "build.log")
+
+
+def test_benchmark_decodes_multibyte_split_across_chunks(tmp_path):
+    encoded = "Time (abs ≡): 0.1 s\n".encode("utf-8")
+    cut = encoded.index("≡".encode("utf-8")) + 1  # split inside the 3-byte char
+    container = mock.Mock()
+    container.logs.return_value = iter([encoded[:cut], encoded[cut:]])
+    helper = docker_helper.DockerHelper.__new__(docker_helper.DockerHelper)
+    helper.benchmarker = mock.Mock()
+    helper.server = mock.Mock()
+    helper.server.containers.run.return_value = container
+    raw = tmp_path / "raw.txt"
+    helper.benchmark(types.SimpleNamespace(name="hugo"), "build.sh", {}, str(raw))
+    text = raw.read_text(encoding="utf-8")
+    assert "≡" in text and "�" not in text

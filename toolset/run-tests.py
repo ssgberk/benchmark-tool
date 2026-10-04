@@ -132,7 +132,7 @@ def build_parser():
     parser.add_argument(
         '--type',
         choices=[
-            'all','update', 'datarate'
+            'all', 'datarate'
         ],
         nargs='+',
         default=['all'],
@@ -198,7 +198,7 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv
 
-    args = build_parser().parse_args()
+    args = build_parser().parse_args(argv[1:])
 
     config = BenchmarkConfig(args)
     benchmarker = Benchmarker(config)
@@ -227,7 +227,7 @@ def main(argv=None):
             all_tests = benchmarker.metadata.gather_tests()
 
             for test in all_tests:
-                test.parse_all()
+                benchmarker.results.parse_all(test)
 
             benchmarker.results.parse(all_tests)
 
