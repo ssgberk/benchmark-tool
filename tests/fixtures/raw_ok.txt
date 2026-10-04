@@ -1,0 +1,9 @@
+Generating 10 posts in content/post
+SSGBERK_VERIFY_OK expected=10 got=10
+STARTTIME 1790000000
+Benchmark 1: hugo
+  Time (abs ≡):        0.120 s
+SSGBERK_RESULT_BEGIN
+{"results":[{"command":"hugo","mean":0.12,"stddev":null,"median":0.12,"user":0.1,"system":0.02,"min":0.12,"max":0.12,"times":[0.12],"exit_codes":[0]}]}
+SSGBERK_RESULT_END
+ENDTIME 1790000001

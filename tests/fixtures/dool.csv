@@ -1,0 +1,9 @@
+"dool 1.3.8 CSV output"
+"Author:","Scott Baker",,,,"URL:","https://github.com/scottchiefbaker/dool/"
+"Host:","4c7c768af061",,,,"User:","root"
+"Cmdline:","/usr/bin/dool -Tcm --output /tmp/d.csv 1 3",,,,"Date:","04 Oct 2026 19:31:50 UTC"
+"epoch","total cpu usage",,,,,"memory usage",,,
+"epoch","usr","sys","idl","wai","stl","used","free","cach","avai"
+1791142310.778,0.848,0.286,98.842,0.024,0,1186459648,5366214656,1673359360,7009468416
+1791142311.784,0.100,0,99.900,0,0,1186455552,5366214656,1673363456,7009509376
+1791142312.780,0.100,0.100,99.799,0,0,1186455552,5366214656,1673363456,7009509376

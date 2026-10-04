@@ -280,9 +280,12 @@ class DockerHelper:
         '''
 
         def watch_container(container):
-            with open(raw_file, 'w') as benchmark_file:
-                for line in container.logs(stream=True):
-                    log(line, file=benchmark_file)
+            with open(raw_file, 'w', encoding='utf-8') as benchmark_file:
+                for chunk in container.logs(stream=True):
+                    text = chunk.decode('utf-8', 'replace')
+                    benchmark_file.write(text)
+                    benchmark_file.flush()
+                    log(text)
 
         sysctl = {'net.core.somaxconn': 65535}
 

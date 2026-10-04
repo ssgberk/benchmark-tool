@@ -6,11 +6,49 @@ import json
 import requests
 import threading
 import re
-import math
 import csv
 from datetime import datetime
 
 from toolset.utils.output_helper import log
+
+
+RESULT_BEGIN = 'SSGBERK_RESULT_BEGIN'
+RESULT_END = 'SSGBERK_RESULT_END'
+VERIFY_FAIL = 'SSGBERK_VERIFY_FAIL'
+
+
+def parse_build_output(text, number_of_files, content_size, min_runs):
+    '''
+    Extracts the hyperfine JSON printed by build.sh between the result
+    markers. Returns [] when the build failed verification or produced
+    no parseable result.
+    '''
+    if VERIFY_FAIL in text:
+        return []
+    start = text.find(RESULT_BEGIN)
+    end = text.find(RESULT_END, start)
+    if start == -1 or end == -1:
+        return []
+    try:
+        result = json.loads(text[start + len(RESULT_BEGIN):end])['results'][0]
+    except (ValueError, KeyError, IndexError, TypeError):
+        return []
+    start_time = re.search(r'^STARTTIME (\d+)', text, re.M)
+    end_time = re.search(r'^ENDTIME (\d+)', text, re.M)
+    return [{
+        'mean': result.get('mean'),
+        'stddev': result.get('stddev'),
+        'median': result.get('median'),
+        'min': result.get('min'),
+        'max': result.get('max'),
+        'times': result.get('times', []),
+        'numberOfFiles': number_of_files,
+        'contentSize': content_size,
+        'minRuns': min_runs,
+        'startTime': int(start_time.group(1)) if start_time else None,
+        'endTime': int(end_time.group(1)) if end_time else None,
+    }]
+
 
 class Results:
     def __init__(self, benchmarker):
@@ -79,69 +117,23 @@ class Results:
         '''
         Parses the given test and test_type from the raw_file.
         '''
-        results = dict()
-        results['results'] = []
+        raw_file = self.get_raw_file(framework_test.name, test_type)
+        text = ''
+        if os.path.exists(raw_file):
+            with open(raw_file, encoding='utf-8', errors='replace') as raw_data:
+                text = raw_data.read()
+        results = {'results': parse_build_output(
+            text, self.config.number_of_files, self.config.content_size,
+            self.config.min_runs)}
+
         stats = []
-
-        if os.path.exists(self.get_raw_file(framework_test.name, test_type)):
-            with open(self.get_raw_file(framework_test.name,
-                                        test_type)) as raw_data:
-
-                is_warmup = True
-                rawData = None
-                for line in raw_data:
-                    if "Queries:" in line or "Concurrency:" in line:
-                        is_warmup = False
-                        rawData = None
-                        continue
-                    if "Warmup" in line or "Primer" in line:
-                        is_warmup = True
-                        continue
-                    if not is_warmup:
-                        if rawData is None:
-                            rawData = dict()
-                            results['results'].append(rawData)
-                        if "Latency" in line:
-                            m = re.findall(r"([0-9]+\.*[0-9]*[us|ms|s|m|%]+)", line)
-                            if len(m) == 4:
-                                rawData['latencyAvg'] = m[0]
-                                rawData['latencyStdev'] = m[1]
-                                rawData['latencyMax'] = m[2]
-                        if "requests in" in line:
-                            m = re.search("([0-9]+) requests in", line)
-                            if m is not None:
-                                rawData['totalRequests'] = int(m.group(1))
-                        if "Socket errors" in line:
-                            if "connect" in line:
-                                m = re.search("connect ([0-9]+)", line)
-                                rawData['connect'] = int(m.group(1))
-                            if "read" in line:
-                                m = re.search("read ([0-9]+)", line)
-                                rawData['read'] = int(m.group(1))
-                            if "write" in line:
-                                m = re.search("write ([0-9]+)", line)
-                                rawData['write'] = int(m.group(1))
-                            if "timeout" in line:
-                                m = re.search("timeout ([0-9]+)", line)
-                                rawData['timeout'] = int(m.group(1))
-                        if "Non-2xx" in line:
-                            m = re.search("Non-2xx or 3xx responses: ([0-9]+)",
-                                          line)
-                            if m is not None:
-                                rawData['5xx'] = int(m.group(1))
-                        if "STARTTIME" in line:
-                            m = re.search("[0-9]+", line)
-                            rawData["startTime"] = int(m.group(0))
-                        if "ENDTIME" in line:
-                            m = re.search("[0-9]+", line)
-                            rawData["endTime"] = int(m.group(0))
-                            test_stats = self.__parse_stats(
-                                framework_test, test_type,
-                                rawData["startTime"], rawData["endTime"], 1)
-                            stats.append(test_stats)
-        with open(
-                self.get_stats_file(framework_test.name, test_type) + ".json",
-                "w") as stats_file:
+        stats_path = self.get_stats_file(framework_test.name, test_type)
+        has_stats = os.path.exists(stats_path) and os.path.getsize(stats_path) > 0
+        for r in results['results']:
+            if has_stats and r['startTime'] and r['endTime']:
+                stats.append(self.__parse_stats(framework_test, test_type,
+                                                r['startTime'], r['endTime'], 1))
+        with open(stats_path + ".json", "w") as stats_file:
             json.dump(stats, stats_file, indent=2)
 
         return results
@@ -389,32 +381,50 @@ class Results:
         stats_dict = dict()
         stats_file = self.get_stats_file(framework_test.name, test_type)
         with open(stats_file) as stats:
-            # dstat doesn't output a completely compliant CSV file - we need to strip the header
-            for _ in range(4):
-                next(stats)
-            stats_reader = csv.reader(stats)
-            main_header = next(stats_reader)
-            sub_header = next(stats_reader)
-            time_row = sub_header.index("epoch")
-            int_counter = 0
-            for row in stats_reader:
-                time = float(row[time_row])
-                int_counter += 1
-                if time < start_time:
-                    continue
-                elif time > end_time:
-                    return stats_dict
-                if int_counter % interval != 0:
-                    continue
-                row_dict = dict()
-                for nextheader in main_header:
-                    if nextheader != "":
-                        row_dict[nextheader] = dict()
-                header = ""
-                for item_num, column in enumerate(row):
-                    if len(main_header[item_num]) != 0:
-                        header = main_header[item_num]
-                    # all the stats are numbers, so we want to make sure that they stay that way in json
-                    row_dict[header][sub_header[item_num]] = float(column)
-                stats_dict[time] = row_dict
+            rows = list(csv.reader(stats))
+
+        def is_number(value):
+            try:
+                float(value)
+                return True
+            except ValueError:
+                return False
+
+        # 'epoch' appears in both header rows; the sub header is the one
+        # immediately followed by a numeric data row.
+        header_index = next(
+            (i for i, row in enumerate(rows)
+             if 'epoch' in row and i > 0 and i + 1 < len(rows)
+             and len(rows[i + 1]) > row.index('epoch')
+             and is_number(rows[i + 1][row.index('epoch')])),
+            None)
+        if header_index is None:
+            return stats_dict
+        main_header = rows[header_index - 1]
+        sub_header = rows[header_index]
+        main_header = main_header + [''] * (len(sub_header) - len(main_header))
+        time_row = sub_header.index("epoch")
+        int_counter = 0
+        for row in rows[header_index + 1:]:
+            if len(row) != len(sub_header):
+                continue
+            time = float(row[time_row])
+            int_counter += 1
+            if time < start_time:
+                continue
+            elif time > end_time:
+                return stats_dict
+            if int_counter % interval != 0:
+                continue
+            row_dict = dict()
+            for nextheader in main_header:
+                if nextheader != "":
+                    row_dict[nextheader] = dict()
+            header = ""
+            for item_num, column in enumerate(row):
+                if len(main_header[item_num]) != 0:
+                    header = main_header[item_num]
+                # all the stats are numbers, so we want to make sure that they stay that way in json
+                row_dict[header][sub_header[item_num]] = float(column) if column.strip() else None
+            stats_dict[time] = row_dict
         return stats_dict
