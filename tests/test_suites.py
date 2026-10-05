@@ -237,3 +237,48 @@ def test_cs_5_and_50_accepted(cs):
 def test_suite_flag_accepts_site_sizes():
     for n in ("P", "M", "G", "GG"):
         assert run_tests.build_parser().parse_args(['--suite', n]).suite == n
+
+
+def _abort_fake(monkeypatch, tmp_path, abort_exc=None):
+    import os
+    import types
+    monkeypatch.setenv('FWROOT', str(tmp_path))
+    made = []
+
+    class FB:
+        def __init__(self, config):
+            self.config = config
+            os.makedirs(os.path.join(config.results_root, config.timestamp))
+            self.tests = [types.SimpleNamespace(name=n) for n in 'ab']
+            self.aborted = None
+            self.results = types.SimpleNamespace(
+                succeeded={'datarate': []}, failed={'datarate': []},
+                unsupported={'datarate': []})
+            made.append(self)
+
+        def run(self):
+            if abort_exc:
+                self.aborted = "usage error"
+                raise abort_exc
+            self.aborted = "another SSGBerk run is active: x"
+            return True
+
+        def stop(self, *a):
+            raise SystemExit(0)
+
+    sleeps = []
+    monkeypatch.setattr(run_tests, 'Benchmarker', FB)
+    monkeypatch.setattr(run_tests.time, 'sleep', sleeps.append)
+    return made, sleeps
+
+
+@pytest.mark.parametrize("exc", [None, SystemExit(1)])
+def test_suite_abort_stops_on_first_cell(monkeypatch, tmp_path, exc):
+    import json
+    made, sleeps = _abort_fake(monkeypatch, tmp_path, exc)
+    args = run_tests.build_parser().parse_args(['--suite', 'standard'])
+    assert run_tests.run_suite(args) == 1
+    assert len(made) == 1 and sleeps == []
+    (suite_json,) = (tmp_path / 'results').glob('*/suite.json')
+    out = json.loads(suite_json.read_text())
+    assert out['aborted'] and out['cells'] == []

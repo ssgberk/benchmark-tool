@@ -150,3 +150,10 @@ def test_resource_flags_parse():
 def test_memory_rejects_garbage():
     with pytest.raises(SystemExit):
         parse("--memory", "lots")
+
+
+@pytest.mark.parametrize("failed,code", [(True, 1), (False, 0)])
+def test_main_exit_code_follows_run(monkeypatch, failed, code):
+    _, bench = _patched_main(monkeypatch)
+    bench.run.return_value = failed
+    assert run_tests.main(["run-tests.py"]) == code

@@ -252,6 +252,7 @@ def run_suite(args):
     cells = []
     benchmarker = None
     any_failed = False
+    aborted = None
 
     def stop(signum=None, frame=None):
         # Benchmarker.stop() ends in sys.exit(0); an interrupted suite is a failure
@@ -272,6 +273,10 @@ def run_suite(args):
             benchmarker.tests.sort(key=lambda t: order.index(t.name))
             if benchmarker.run():
                 any_failed = True
+            if getattr(benchmarker, 'aborted', None):
+                # refused to start: stop the whole suite, no further cells or cooldown
+                aborted = benchmarker.aborted
+                break
             results = benchmarker.results
             cells.append({
                 'index': index,
@@ -285,9 +290,11 @@ def run_suite(args):
             })
             if index < len(suite.cells) - 1 and suite.cooldown_seconds:
                 time.sleep(suite.cooldown_seconds)
-    except (Exception, KeyboardInterrupt, SystemExit):
+    except (Exception, KeyboardInterrupt, SystemExit) as e:
         log("A fatal error has occurred", color=Fore.RED)
         log(traceback.format_exc())
+        aborted = getattr(benchmarker, 'aborted', None) or \
+            "%s: %s" % (type(e).__name__, e)
         try:
             if benchmarker is not None:
                 benchmarker.stop()
@@ -296,15 +303,21 @@ def run_suite(args):
         return 1
     finally:
         out = os.path.join(base.results_root, base.timestamp, 'suite.json')
+        doc = {
+            'schemaVersion': 1, 'suite': suite.name,
+            'version': suite.version, 'profile': profile,
+            'startTime': start,
+            'completionTime': int(round(time.time() * 1000)),
+            'cells': cells,
+        }
+        if aborted:
+            doc['aborted'] = aborted
         with open(out, 'w') as f:
-            json.dump({
-                'schemaVersion': 1, 'suite': suite.name,
-                'version': suite.version, 'profile': profile,
-                'startTime': start,
-                'completionTime': int(round(time.time() * 1000)),
-                'cells': cells,
-            }, f, indent=2)
+            json.dump(doc, f, indent=2)
 
+    if aborted:
+        log("Suite aborted: %s" % aborted, color=Fore.RED)
+        return 1
     return 1 if any_failed else 0
 
 
@@ -381,7 +394,8 @@ def main(argv=None):
             results.parse(all_tests)
 
         else:
-            benchmarker.run()
+            if benchmarker.run():
+                return 1
 
     except Exception:
         tb = traceback.format_exc()

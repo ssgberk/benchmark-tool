@@ -43,6 +43,9 @@ class Benchmarker:
         running their docker build and run, verifying the URLs, and
         running benchmarks against them.
         '''
+        # Set when the run refuses to start (guard, usage error); a suite stops on it
+        self.aborted = None
+
         # Generate metadata
         self.metadata.list_test_metadata()
 
@@ -54,6 +57,7 @@ class Benchmarker:
                     "Concurrent runs share CPUs and invalidate results. "
                     "Wait for it to finish or pass --allow-concurrent."
                     % ", ".join(others), color=Fore.RED)
+                self.aborted = "another SSGBerk run is active: %s" % ", ".join(others)
                 return True
 
         if self.config.mode == "benchmark":
@@ -63,6 +67,7 @@ class Benchmarker:
                 self.resolve_resources()
             except ValueError as e:
                 log("ERROR: %s" % e, color=Fore.RED)
+                self.aborted = str(e)
                 sys.exit(1)
 
         any_failed = False
