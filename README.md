@@ -112,85 +112,85 @@ Results of continuous benchmarking runs are available in real time here (coming 
 The community has consistently helped in making these tests better, and we welcome any and all changes. Reviewing our contribution practices and guidelines will help to keep us all on the same page. The [contribution guide](https://github.com/ssgberk/benchmark-tool/blob/master/.github/CONTRIBUTING.md) can be found in the [SSGBERK documentation](https://github.com/ssgberk/benchmark-tool/wiki/).
 
 # Português do Brasil
-# Bem vindo ao [Static Site Generator Benchmarks (SSGBerk)]
+# Bem-vindo ao [Static Site Generator Benchmarks (SSGBerk)]
 
-## O que é o Static Site Generator (SSG)?
-Uma página web estática (às vezes chamado de uma página flat / página estacionária) é uma página web é entregue ao usuário que exatamente como armazenadas, em contraste com páginas web dinâmicas são geradas pelo qual um aplicativo web.
+## O que é um Static Site Generator (SSG)?
+Uma página web estática (às vezes chamada de página flat ou stationary) é uma página entregue ao usuário exatamente como foi armazenada, ao contrário das páginas web dinâmicas, que são geradas por uma aplicação web.
 
-## O que SSGBerk é?
-Um projeto bifurcado da TechEmpower/FrameworkBenchmarks que fornece medidas de desempenho representativas em um amplo campo de geradores de sites estáticos. Como o tempo de construção entre os diferentes SSGs pode variar, estamos tentando entender o comportamento em diferentes situações. O projeto atualmente inclui geradores em muitas linguangens, incluindo `Go`, `Python`, `Java`, `Ruby`, `php`,  ` JavaScript` e outros.
+## O que é o SSGBerk?
+Um projeto derivado (fork) do TechEmpower/FrameworkBenchmarks que fornece medições de desempenho representativas em um amplo conjunto de geradores de sites estáticos. Como o tempo de build varia bastante entre os diferentes SSGs, buscamos entender o comportamento em diferentes situações. Atualmente o projeto inclui geradores em várias linguagens, entre elas `Go`, `Python`, `Java`, `Ruby`, `PHP`, `JavaScript` e outras.
 
-Se você é novo no projeto, seja bem vindo! Sinta-se livre para fazer perguntas [aqui] (https://github.com/ssgberk/benchmark-tool/issues/). Encorajamos novos geradores e colaboradores a fazer perguntas. Estamos aqui para ajudar!
+Se você é novo no projeto, seja bem-vindo! Fique à vontade para tirar dúvidas [aqui](https://github.com/ssgberk/benchmark-tool/issues/). Incentivamos novos geradores e colaboradores a perguntar. Estamos aqui para ajudar!
 
-Se você se encontra em um diretório ou arquivo que você não tem certeza qual é o propósito, nosso check-out [estrutura do arquivo] (https://github.com/ssgberk/benchmark-tool/wiki/File-Structure) em nossa documentação, que explicará brevemente o uso de diretórios e arquivos relevantes.
+Se você estiver em um diretório ou arquivo cuja finalidade não ficou clara, consulte a [estrutura de arquivos](https://github.com/ssgberk/benchmark-tool/wiki/File-Structure) na nossa documentação, que explica brevemente o uso dos principais diretórios e arquivos.
 
 ## Guia de Início Rápido
-Para começar, você vai precisar para desenvolver instalar [docker] (https://docs.docker.com/install/) ou consulte o nosso [Guia de Início Rápido usando vagrant] (.#Guia de Início Rápido (Vagrant))
 
-1. Clone SSGBERK.
+Para começar a desenvolver, você precisa instalar o [Docker](https://docs.docker.com/install/) ou seguir o nosso [Guia de Início Rápido com Vagrant](#guia-de-início-rápido-vagrant).
 
-        $ git clone --recurse-submodules https://github.com/ssgberk/benchmark-tool.git
+1. Clone o SSGBERK.
+
+        $ git clone --recurse-submodules https://github.com/ssgberk/benchmark-tool.git
 
 2. Execute um teste.
 
-        $ ./ssgberk --test hugo -nf 10
+        $ ./ssgberk --test hugo -nf 10
 
 ### Explicação do script `./ssgberk`
 
-O script de execução é bastante prolixo, mas cada sinalizador é obrigatório. Se você estiver usando o Windows, a janela de encaixe ou adaptar comando no final do `./ssgberk` (substituindo `${SCRIPT_ROOT}` por `/c/path/to/benchmark-tool`), ou use vagrant.
+O script de execução é bastante verboso, mas cada flag é obrigatória. Se você usa Windows, adapte o comando docker no final do script `./ssgberk` (substituindo `${SCRIPT_ROOT}` por `/c/path/to/benchmark-tool`) ou use Vagrant.
 
-O comando se parece com isso: `docker run -i [-t] --rm --network ssgberk -v /var/run/docker.sock:/var/run/docker.sock -v [FWROOT]:/FrameworkBenchmarks ssgberk/toolset [ARGS]`
+O comando tem esta forma: `docker run -i [-t] --rm --network ssgberk -v /var/run/docker.sock:/var/run/docker.sock -v [FWROOT]:/FrameworkBenchmarks ssgberk/toolset [ARGS]`
 
-- `-i` diz ao docker para executar no modo 'interativo'; `-t` (simula um TTY, para que o `ctrl+c` seja propagado) só é adicionado pelo script quando a saída padrão é um terminal.
-- `--rm` diz janela de encaixe para remover o recipiente assim que o Toolset termina a execução, o que significa que não há centenas de recipientes espalhados parado.
-- `--network=ssgberk` diz ao container para se juntar à rede virtual 'ssgberk' Docker
-- O primeiro `-v` especifica qual caminho do soquete do Docker deve ser montado como um volume no contêiner em execução. Isso permite que comandos janela de encaixe são executados dentro deste recipiente de usar recipiente janela de encaixe do hospedeiro para criar / run / stop / remover recipientes.
-- A segunda `-V` benchmark-tool (em `/FrameworkBenchmarks` dentro do recipiente) monta o diretório como um volume de origem para compartilhar com o recipiente para reconstruir o conjunto de ferramentas Essa imagem é desnecessária e todas as alterações feitas no sistema host estão disponíveis no recipiente Toolset execução.
-- `ssgberk/toolset` é o nome do contêiner do conjunto de ferramentas a ser executado
+- `-i` diz ao Docker para executar em modo 'interativo'; `-t` (simula um TTY, para que o `ctrl+c` seja propagado) só é adicionado pelo launcher quando a saída padrão é um terminal.
+- `--rm` diz ao Docker para remover o container assim que o toolset terminar de executar, evitando centenas de containers parados acumulados.
+- `--network=ssgberk` diz ao container para entrar na rede virtual 'ssgberk' do Docker.
+- O primeiro `-v` define qual caminho do socket do Docker será montado como volume no container em execução. Isso permite que os comandos docker executados dentro deste container usem o Docker do host para criar, executar, parar e remover containers.
+- O segundo `-v` monta o diretório do código-fonte do benchmark-tool (em `/FrameworkBenchmarks` dentro do container) como volume compartilhado com o container. Assim, não é preciso reconstruir a imagem do toolset, e qualquer alteração feita no host fica disponível no container do toolset em execução.
+- `ssgberk/toolset` é o nome do container do toolset a ser executado.
 
-#### Uma nota no Windows:
+#### Uma nota sobre o Windows:
 
-- O Docker espera caminhos no estilo Linux. Se você clona em sua unidade `C:\`, em seguida a `[ABS caminho para este DIR]` seria `/c/benchmark-tool`.
-- [Docker para Windows] (https://www.docker.com/docker-windows) entende `/var/run/docker.sock` embora não é válido esse caminho no Windows. [Docker Toolbox] (https://docs.docker.com/toolbox/toolbox_install_windows/) - use a seu próprio risco.
+- O Docker espera caminhos no estilo Linux. Se você clonou o repositório no drive `C:\`, então `[ABS PATH TO THIS DIR]` seria `/c/benchmark-tool`.
+- O [Docker para Windows](https://www.docker.com/docker-windows) entende `/var/run/docker.sock`, mesmo que esse não seja um caminho válido no Windows. O [Docker Toolbox](https://docs.docker.com/toolbox/toolbox_install_windows/) **pode** não entender; use por sua conta e risco.
 
 ## Guia de Início Rápido (Vagrant)
 
-Comece a desenvolver rapidamente usando vagrant com SSGBERK. [Git] (https://git-scm.com),
-[Virtualbox] (https://www.virtualbox.org/) e [errante] (https://www.vagrantup.com/) são
-necessário.
+Comece a desenvolver rapidamente usando Vagrant com o SSGBERK. São necessários o [Git](https://git-scm.com),
+o [Virtualbox](https://www.virtualbox.org/) e o [Vagrant](https://www.vagrantup.com/).
 
-1. Clone SSGBERK.
+1. Clone o SSGBERK.
 
-        $ git clone --recurse-submodules https://github.com/ssgberk/benchmark-tool.git
+        $ git clone --recurse-submodules https://github.com/ssgberk/benchmark-tool.git
 
-2. Alterar diretórios
+2. Entre no diretório
 
-        $ cd benchmark-tool/deployment/vagrant
+        $ cd benchmark-tool/deployment/vagrant
 
-3. Construa a máquina virtual vagrant
+3. Crie a máquina virtual do Vagrant
 
-        $ vagrant up
+        $ vagrant up
 
 4. Execute um teste
 
-        $ vagrant ssh
-        $ ssgberk --test hugo -nf 10
+        $ vagrant ssh
+        $ ssgberk --test hugo -nf 10
 
 
-## Adicionar um novo teste
+## Adicionar um Novo Teste
 
-No seu computador, ou quando você abrir uma conexão SSH na sua caixa vagrant, inicie o novo assistente de inicialização de teste.
+No seu computador, ou depois de abrir uma conexão SSH com a sua box do Vagrant, inicie o assistente de criação de novo teste.
 
-        vagrant@SSGBERK-all:~/benchmark-tool$./ssgberk --new
+        vagrant@SSGBERK-all:~/benchmark-tool$ ./ssgberk --new
 
-Isso orientará você durante todo o processo de criação de um novo teste para incluir na suíte.
+Ele guia você por todo o processo de criação de um novo teste para incluir na suíte.
 
 
 ## Notas de medição
 
-- Geradores JS dominados por bundler: geradores JavaScript "app-like" (Gatsby, Next.js, Astro, VitePress) com poucos arquivos têm o tempo dominado pelo bundler. É o comportamento real deles e fica registrado sem ajuste.
-- O Docker Desktop no macOS é ruidoso: números locais servem apenas para validar. Publique números de Linux nativo.
-- Cenários grandes (por exemplo `-nf 1000000`) geram conteúdo lentamente no `build.sh` em bash (loop + `sponge`). Mantido no port mínimo e registrado como melhoria futura.
+- Geradores JS dominados pelo bundler: geradores JavaScript "app-like" (Gatsby, Next.js, Astro, VitePress) com poucos arquivos têm o tempo dominado pelo bundler. Esse é o comportamento real deles e é reportado como está, sem ajuste.
+- O Docker Desktop no macOS é ruidoso: os números locais servem apenas para validação. Publique números de Linux nativo.
+- Cenários grandes (por exemplo `-nf 1000000`) geram conteúdo lentamente no `build.sh` em bash (loop + `sponge`). Isso foi mantido no port mínimo e está registrado como melhoria futura.
 
 ## Tamanho do conteúdo
 
@@ -207,15 +207,27 @@ Isso orientará você durante todo o processo de criação de um novo teste para
 
 Qualquer outro valor é rejeitado.
 
+## Resultados
+
+> Depende da feature 006 (resumo dos resultados); esta subseção espelha a "Results" da seção em inglês.
+
+Ao final de uma execução, o diretório `results/<timestamp>/` contém:
+
+- `results.json`: os dados brutos de cada gerador;
+- `summary.csv`: o resumo em CSV;
+- `summary.md`: o mesmo resumo em Markdown.
+
+O resumo tem uma linha por gerador, com média, desvio padrão, mediana, mínimo e máximo, todos em segundos.
+
 ## Recursos
 
 #### Documentação oficial
-Nossa documentação oficial pode ser encontrada em
-[GitHub Wiki] (https://github.com/ssgberk/benchmark-tool/wiki/).
+Nossa documentação oficial está disponível na
+[Wiki do GitHub](https://github.com/ssgberk/benchmark-tool/wiki/).
 
 #### Resultados ao vivo
-Resultados da avaliação comparativa corridas contínuas estão disponíveis em tempo real aqui (em breve, depois de release v1).
+Os resultados das execuções contínuas de benchmark estarão disponíveis em tempo real aqui (em breve, após o lançamento da v1).
 
 ## Contribuindo
 
-A comunidade tem ajudado consistentemente a melhorar esses testes e aceitamos todas e quaisquer mudanças. Revisar nossas práticas e diretrizes de contribuição ajudará a manter todos na mesma página. O [Guia de contribuição] (https://github.com/ssgberk/benchmark-tool/blob/master/.github/CONTRIBUTING.md) pode ser encontrado no [documentação SSGBERK] (https://github.com/ssgberk/benchmark-tool/wiki/).
+A comunidade tem ajudado de forma consistente a melhorar estes testes, e aceitamos qualquer mudança. Conhecer nossas práticas e diretrizes de contribuição ajuda a manter todos na mesma página. O [guia de contribuição](https://github.com/ssgberk/benchmark-tool/blob/master/.github/CONTRIBUTING.md) pode ser encontrado na [documentação do SSGBERK](https://github.com/ssgberk/benchmark-tool/wiki/).
