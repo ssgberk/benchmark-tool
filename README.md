@@ -126,7 +126,9 @@ A suite is a fixed list of cells (number of files `nf` x content size `cs`), run
 
         $ ./ssgberk --suite standard --profile core
 
-`--suite` cannot be combined with `-nf`, `-cs` or `-mr`; `--test` and `--exclude` still apply.
+`--suite` cannot be combined with `-nf`, `-cs` or `-mr`; `--test` and `--exclude` still apply. `--cell <index>` (0-based, in the order of the table below) runs only that cell of the suite, with the suite's runs, cooldown and timeout; GitHub Actions uses it for one job per cell.
+
+A run exits 1 when any selected generator fails (build or verification failure, `nonconformant`, `timeout`, `oom`, start failure); `unsupported` is not a failure. A suite exits 1 when any cell fails or the suite aborts. Usage errors (unknown suite, bad `--cell`, conflicting flags) exit 1, and an interrupted run exits non-zero.
 
 | Suite | Cells (`nf` x `cs`) | Runs | Cooldown | Timeout | Purpose |
 |---|---|---|---|---|---|
@@ -145,6 +147,8 @@ In `standard`, the 100 x 0.500 cell is dominated by fixed overhead (runtime boot
 
 `--profile core` (default) benchmarks the Core feature set; `--profile extended` the Extended one (defined by ssg-frameworks spec 005). They are separate result series stored in separate directories and are never ranked together.
 
+Extended needs ssg-frameworks spec 006: a generator supports it only when its `benchmark_config.json` declares `config[0].profiles.extended`. A generator without a `profiles` key supports only Core; with `--profile extended` it is not run and is listed as `unsupported`. Today every generator is Core-only, so an Extended run reports all of them as `unsupported`.
+
 ### Resources
 
 Every generator container gets the same limits, so results do not depend on the host size:
@@ -156,15 +160,15 @@ Every generator container gets the same limits, so results do not depend on the 
 | `--cpuset` | `auto` | `auto` pins to the highest-numbered CPUs and leaves CPU 0 to the host (not applied if the host has no spare CPU); `none` disables pinning; or a list such as `2-5` |
 | `--no-cache` | off | build generator images without the Docker layer cache |
 
-On Docker Desktop these are VM vCPUs, not physical cores.
+On Docker Desktop these are VM vCPUs, not physical cores. `--cpus` above the host's CPU count is a usage error (exit 1) before any image is built.
 
 ### Protocol
 
-- **Sequential:** one generator at a time. If another SSGBerk run is active, the run aborts unless `--allow-concurrent` is given; such results are marked concurrent and not ranked.
+- **Sequential:** one generator at a time. If another SSGBerk run is active, the run aborts unless `--allow-concurrent` is given. With it, a run that found another active run is marked concurrent (`protocol.concurrent`) and not ranked; `protocol.allowConcurrent` records the flag itself.
 - **Cold rebuild, warm OS cache:** every timed run is a full rebuild with the generator's output and cache folders removed first, so generator caches are cold. An untimed verification build runs before the timed runs and loads the generator's binaries, `node_modules` and gems into the OS page cache, which is not dropped, so the page cache is warm. This verification build is the warm-up; hyperfine `--warmup` stays 0.
 - **Order:** generators run in a deterministic rotation that shifts by cell, so thermal and background drift does not always hit the same generator. The order is recorded in `suite.json`.
 - **Cooldown:** a pause between generators (see the table above).
-- **Noise:** if the coefficient of variation (CV) of a generator exceeds 10%, it is re-run once with doubled runs (capped at 10); the last attempt is kept, all attempts are recorded, and the result is flagged `noisy`. Fewer than 3 runs never get the flag.
+- **Noise:** if the coefficient of variation (CV) of a generator exceeds 10%, it is re-run once with doubled runs (capped at 10); the last attempt is kept and all attempts are recorded. The result is flagged `noisy` only when the last attempt's CV is still above 10%. Fewer than 3 runs are never re-run and never get the flag.
 - **Conformance:** until ssg-frameworks spec 006 Task 27 enables `--require-conformance` by default, the conformance check is not enforced and results carry `conformance: unchecked`. Pass `--require-conformance` to treat a run without a passing check as `nonconformant`.
 
 ### Metrics
@@ -181,7 +185,7 @@ Per generator and cell (in `results.json`, `schemaVersion` 2, and the summaries)
 
 ### How to read the rankings
 
-- Rank by median time within a group of identical suite, version, cell, profile and environment fingerprint.
+- Rank by median time within a group of identical suite, version, cell, profile, Extended feature set (for `extended`) and environment fingerprint.
 - Ranks are statistical: if a generator's fastest run is not slower than the previous generator's slowest run, they share a rank, printed `=n`.
 - Rows marked with a warning sign are `noisy`; treat them as indicative only.
 - The scaling exponent `b` is the slope of log(median) over log(`nf`) at equal `cs`, from 3 or more points: `b` near 1 is linear, below 1 means fixed overhead dominates, above 1 is superlinear.
@@ -192,7 +196,11 @@ Per generator and cell (in `results.json`, `schemaVersion` 2, and the summaries)
 
         $ gh workflow run benchmark-round.yml -f suite=standard
 
-`suite` accepts `smoke`, `standard`, `stress`, `P`, `M`, `G` or `GG` and runs one job per generator and cell, with runs taken from `suites.json`. Leave `suite` empty to use `number_of_files`, `content_size`, `min_runs` and `tests` (space-separated generator names; empty runs all). Hosted runners cannot guarantee CPU pinning and have a 6 h job limit; use native Linux for published numbers.
+`suite` accepts `smoke`, `standard`, `stress`, `P`, `M`, `G` or `GG` and runs one job per generator and cell (`./ssgberk --suite <name> --cell <index>`), so each job uses the suite's runs, cooldown and timeout from `suites.json` and records the `suite` object. The job timeout is the suite's timeout plus 30 minutes. Leave `suite` empty to use `number_of_files`, `content_size`, `min_runs` and `tests` (space-separated generator names; empty runs all); such ad-hoc jobs use the default 2 h build timeout, no cooldown and a 6 h job limit. Hosted runners cannot guarantee CPU pinning; use native Linux for published numbers.
+
+- The `frameworks` submodule must include ssg-frameworks spec 005 (`-cs` 5 and 50, `SSGBERK_INPUT`/`SSGBERK_OUTPUT`); with an older pin, `P`, `M`, `G` and `GG` fail with `unknown content_size` and input/output metrics stay empty.
+- `GG` writes about 5 GB of Markdown plus the generated output inside the container; the ~14 GB disk of a hosted `ubuntu-24.04` runner may run out.
+- Each container gets `--cpus 4` by default; a runner with fewer CPUs (e.g. a 2-vCPU private runner) fails every job with the `--cpus` usage error.
 
 ### Validity threats
 
