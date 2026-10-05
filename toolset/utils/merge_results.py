@@ -44,6 +44,23 @@ def merge(results):
         'startTime': min(starts) if starts else None,
         'completionTime': max(ends) if ends else None,
     })
+    # Spec 008 sections: per-framework dicts are unioned across inputs, run-level
+    # keys keep the first non-null value, schemaVersion is 2 if any input is 2.
+    for key in ('failureReasons', 'imageBuild', 'generators'):
+        if any(key in r for r in results):
+            combined = {}
+            for r in results:
+                combined.update(r.get(key) or {})
+            merged[key] = combined
+    if any('unsupported' in r for r in results):
+        merged['unsupported'] = {'datarate': sorted(
+            {n for r in results for n in (r.get('unsupported') or {}).get('datarate') or []})}
+    for key in ('resources', 'protocol', 'environment', 'suite', 'profile'):
+        if key in merged and merged[key] is None:
+            merged[key] = next((r[key] for r in results if r.get(key) is not None), None)
+    merged.pop('schemaVersion', None)
+    if any(r.get('schemaVersion') == 2 for r in results):
+        merged['schemaVersion'] = 2
     merged['uuid'] = str(uuid.uuid4())
     return merged
 

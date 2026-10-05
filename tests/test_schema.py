@@ -94,17 +94,17 @@ def test_v1_results_still_parse(fake_benchmarker, tmp_path):
 
 def test_old_keys_unchanged(fake_benchmarker):
     v1 = _v1()
-    cfg = fake_benchmarker.config
     res = Results(fake_benchmarker)
     pathlib.Path(res.file).write_text(json.dumps(v1))
     res.load()
     out = res._Results__to_jsonable()
+    # `environments` is a merge_results addition and `name` is regenerated per run
+    # (datetime-based), so neither is compared; every other v1 key must survive.
     assert set(v1) - {"environments", "name"} <= set(out)
     for key in ("uuid", "startTime", "completionTime", "frameworks", "duration", "completed",
                 "succeeded", "failed", "git", "environmentDescription"):
         assert out[key] == v1[key] and type(out[key]) is type(v1[key]), key
     assert out["rawData"]["datarate"] == v1["rawData"]["datarate"]
-    assert cfg is not None
 
 
 def test_summary_reads_v1():
@@ -124,3 +124,40 @@ def test_merge_reads_v1(tmp_path):
     p.parent.mkdir()
     p.write_text(json.dumps(v1))
     assert merge_results.main(["--out", str(tmp_path / "out"), str(p)]) == 0
+
+
+def test_noisy_and_attempts_types():
+    from toolset.benchmark import noise
+    r = noise.finalize([{"minRuns": 5, "mean": 2.0, "cv": 0.3}, {"minRuns": 5, "mean": 2.1, "cv": 0.2}])
+    assert isinstance(r["noisy"], bool) and isinstance(r["attempts"], list)
+    assert all(isinstance(a, dict) for a in r["attempts"])
+
+
+def _v2(name, **extra):
+    d = {"schemaVersion": 2, "frameworks": [name],
+         "rawData": {"datarate": {}}, "succeeded": {"datarate": []},
+         "failed": {"datarate": []}, "unsupported": {"datarate": []},
+         "resources": None, "profile": "core"}
+    d.update(extra)
+    return d
+
+
+def test_merge_combines_v2_sections():
+    a = _v2("a", failureReasons={"a": "oom"}, imageBuild={"a": {"seconds": 1}},
+            generators={"a": {"version": "1"}}, unsupported={"datarate": ["a"]},
+            resources={"cpus": 4.0}, suite={"name": "s"})
+    b = _v2("b", failureReasons={"b": "timeout"}, imageBuild={"b": {"seconds": 2}},
+            generators={"b": {"version": "2"}}, unsupported={"datarate": ["b", "a"]})
+    m = merge_results.merge([a, b])
+    assert m["failureReasons"] == {"a": "oom", "b": "timeout"}
+    assert set(m["imageBuild"]) == set(m["generators"]) == {"a", "b"}
+    assert m["unsupported"] == {"datarate": ["a", "b"]}
+    assert m["schemaVersion"] == 2 and m["resources"] == {"cpus": 4.0}
+    assert m["suite"] == {"name": "s"}
+
+
+def test_merge_schema_version_rules():
+    v1 = _v1()
+    assert "schemaVersion" not in merge_results.merge([v1])
+    assert merge_results.merge([v1, _v2("x")])["schemaVersion"] == 2
+    assert merge_results.merge([_v2("x"), v1])["schemaVersion"] == 2
