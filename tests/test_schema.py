@@ -161,3 +161,58 @@ def test_merge_schema_version_rules():
     assert "schemaVersion" not in merge_results.merge([v1])
     assert merge_results.merge([v1, _v2("x")])["schemaVersion"] == 2
     assert merge_results.merge([_v2("x"), v1])["schemaVersion"] == 2
+
+
+def _live_entry(fake_benchmarker, raws):
+    '''rawData entry produced by Benchmarker.__benchmark (the live path).'''
+    from unittest import mock
+    from toolset.benchmark.benchmarker import Benchmarker
+    cfg = fake_benchmarker.config
+    cfg.number_of_files, cfg.content_size, cfg.min_runs = "1000", "0.500", "5"
+    cfg.resources = dict(RES)
+    cfg.run_test_timeout_seconds = 60
+    test_type = mock.Mock()
+    test_type.get_script_name.return_value = "build.sh"
+    test_type.get_script_variables.return_value = {"min_runs": "5"}
+    cfg.types = {"datarate": test_type}
+    res = Results(fake_benchmarker)
+    b = Benchmarker.__new__(Benchmarker)
+    b.config, b.results = cfg, res
+    texts = iter(raws)
+
+    def bench(ft, script, variables, raw_file, resources, timeout):
+        pathlib.Path(raw_file).write_text(next(texts))
+        return {"status": "ok", "exitCode": 0}
+
+    b.docker_helper = mock.Mock()
+    b.docker_helper.benchmark.side_effect = bench
+    b._Benchmarker__begin_logging = mock.Mock()
+    b._Benchmarker__end_logging = mock.Mock()
+    fw = types.SimpleNamespace(name="hugo",
+                               runTests={"datarate": types.SimpleNamespace(failed=False)})
+    assert b._Benchmarker__benchmark(fw, mock.MagicMock()) is True
+    return res._Results__to_jsonable()["rawData"]["datarate"]["hugo"][0]
+
+
+def _v1_types():
+    entry = next(iter(_v1()["rawData"]["datarate"].values()))[0]
+    return {k: type(v) for k, v in entry.items()}
+
+
+def test_live_result_keeps_v1_field_types(fake_benchmarker):
+    raw = (FIX / "raw_v2_ok.txt").read_text()
+    entry = _live_entry(fake_benchmarker, [raw])
+    for key, typ in _v1_types().items():
+        assert type(entry[key]) is typ, key
+    assert entry["minRuns"] == "5"
+
+
+def test_rerun_result_keeps_v1_field_types(fake_benchmarker):
+    raw = (FIX / "raw_v2_ok.txt").read_text()
+    noisy = raw.replace('"stddev": 0.0522', '"stddev": 0.9')
+    entry = _live_entry(fake_benchmarker, [noisy, raw])
+    assert len(entry["attempts"]) == 2
+    for key, typ in _v1_types().items():
+        assert type(entry[key]) is typ, key
+    assert entry["minRuns"] == "10"
+    assert [a["minRuns"] for a in entry["attempts"]] == [5, 10]

@@ -276,7 +276,7 @@ class Benchmarker:
         first['minRuns'] = runs
         ok = {'status': 'ok', 'exitCode': None}
         if not noise.needs_rerun(first, runs):
-            results['results'] = [noise.finalize([first])]
+            results['results'] = [self.__v1_min_runs(noise.finalize([first]))]
             return results, ok
         rerun = noise.rerun_runs(runs)
         log("CV %.3f above %.2f; re-running with %d runs" % (
@@ -294,9 +294,17 @@ class Benchmarker:
         second = self.results.parse_test(framework_test, test_type)
         if outcome['status'] == 'ok' and second['results']:
             second['results'][0]['minRuns'] = rerun
-            second['results'] = [noise.finalize([first, second['results'][0]])]
+            second['results'] = [self.__v1_min_runs(
+                noise.finalize([first, second['results'][0]]))]
         # else: the last attempt is the result (R-21), reported as its failure
         return second, outcome
+
+    @staticmethod
+    def __v1_min_runs(result):
+        '''rawData minRuns stays a string, as in schema v1 (R-28); attempts keep ints.'''
+        if result.get('minRuns') is not None:
+            result['minRuns'] = str(result['minRuns'])
+        return result
 
     def resolve_resources(self):
         '''

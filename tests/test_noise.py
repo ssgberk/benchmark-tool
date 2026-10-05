@@ -90,7 +90,7 @@ def test_benchmarker_reruns_once(tmp_path):
     reported = b.results.report_benchmark_results.call_args[0][2][0]
     assert reported["noisy"] is True and len(reported["attempts"]) == 2
     assert [a["minRuns"] for a in reported["attempts"]] == [5, 10]
-    assert reported["minRuns"] == 10
+    assert reported["minRuns"] == "10"
     assert (tmp_path / "raw.attempt1.txt").read_text() == "attempt1"
     assert (tmp_path / "raw.txt").read_text() == "attempt2"
 
