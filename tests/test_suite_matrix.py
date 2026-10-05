@@ -32,3 +32,17 @@ def test_matrix_unknown_suite():
 def test_cli_prints_json(capsys):
     assert suite_matrix.main(["--suite", "P", "--tests", "a", "b"]) == 0
     assert len(json.loads(capsys.readouterr().out)) == 4
+
+
+@pytest.mark.parametrize("name", ["smoke", "standard", "stress", "P", "M", "G", "GG"])
+def test_matrix_job_timeout_covers_suite_timeout(name):
+    suite = suite_matrix.suites.load(name)
+    for e in suite_matrix.build_matrix(name, ["hugo"]):
+        assert e["timeout_minutes"] * 60 >= suite.timeout_seconds + 30 * 60
+        assert e["timeout_minutes"] <= 360  # hosted runner job limit
+
+
+def test_matrix_cell_is_index_into_suite_cells():
+    suite = suite_matrix.suites.load("standard")
+    m = suite_matrix.build_matrix("standard", ["hugo"])
+    assert [e["cell"] for e in m] == list(range(len(suite.cells)))

@@ -201,6 +201,12 @@ def build_parser():
         help='Run a named suite of (number of files, content size) cells; '
              'cannot be combined with -nf, -cs or -mr')
     parser.add_argument(
+        '--cell',
+        type=int,
+        default=None,
+        help='With --suite, run only the cell with this 0-based index '
+             '(one GitHub Actions job per cell)')
+    parser.add_argument(
         '--no-cache',
         action='store_true',
         default=False,
@@ -248,9 +254,17 @@ SUITE_CONFLICTS = ('-nf', '--number-of-files', '-cs', '--content-size',
 
 def run_suite(args):
     '''
-    Runs every cell of the suite, one Benchmarker per cell, then writes suite.json.
+    Runs every cell of the suite (or only the cell args.cell), one Benchmarker
+    per cell, then writes suite.json.
     '''
     suite = suites.load(args.suite)
+    only = getattr(args, 'cell', None)
+    if only is not None and not 0 <= only < len(suite.cells):
+        log("--cell %d is out of range: suite %s has cells 0-%d" % (
+            only, suite.name, len(suite.cells) - 1), color=Fore.RED)
+        return 1
+    selected = [(i, c) for i, c in enumerate(suite.cells)
+                if only is None or i == only]
     profile = args.profile
     base = BenchmarkConfig(args)
     start = int(round(time.time() * 1000))
@@ -271,7 +285,7 @@ def run_suite(args):
     signal.signal(signal.SIGINT, stop)
 
     try:
-        for index, cell in enumerate(suite.cells):
+        for position, (index, cell) in enumerate(selected):
             config = base.for_cell(suite, cell, index)
             benchmarker = Benchmarker(config)
             order = suites.rotate([t.name for t in benchmarker.tests], index)
@@ -293,7 +307,7 @@ def run_suite(args):
                 'failed': len(results.failed.get('datarate', [])),
                 'unsupported': len(results.unsupported.get('datarate', [])),
             })
-            if index < len(suite.cells) - 1 and suite.cooldown_seconds:
+            if position < len(selected) - 1 and suite.cooldown_seconds:
                 time.sleep(suite.cooldown_seconds)
     except (Exception, KeyboardInterrupt, SystemExit) as e:
         log("A fatal error has occurred", color=Fore.RED)
@@ -315,6 +329,8 @@ def run_suite(args):
             'completionTime': int(round(time.time() * 1000)),
             'cells': cells,
         }
+        if only is not None:
+            doc['cell'] = only
         if aborted:
             doc['aborted'] = aborted
         with open(out, 'w') as f:
@@ -344,6 +360,10 @@ def main(argv=None):
         argv = sys.argv
 
     args = build_parser().parse_args(argv[1:])
+
+    if args.cell is not None and not args.suite:
+        log("--cell requires --suite", color=Fore.RED)
+        return 1
 
     if args.suite:
         explicit = [a for a in argv[1:] if a.split('=')[0] in SUITE_CONFLICTS]

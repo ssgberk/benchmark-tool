@@ -282,3 +282,65 @@ def test_suite_abort_stops_on_first_cell(monkeypatch, tmp_path, exc):
     (suite_json,) = (tmp_path / 'results').glob('*/suite.json')
     out = json.loads(suite_json.read_text())
     assert out['aborted'] and out['cells'] == []
+
+
+def _cell_fake(monkeypatch, tmp_path):
+    import types
+    monkeypatch.setenv('FWROOT', str(tmp_path))
+    seen = []
+
+    class FB:
+        def __init__(self, config):
+            self.config = config
+            self.tests = [types.SimpleNamespace(name=n) for n in 'abc']
+            self.results = types.SimpleNamespace(
+                succeeded={'datarate': ['a', 'b', 'c']}, failed={'datarate': []},
+                unsupported={'datarate': []})
+            seen.append(self)
+
+        def run(self):
+            return False
+
+        def stop(self, *a):
+            raise SystemExit(0)
+
+    sleeps = []
+    monkeypatch.setattr(run_tests, 'Benchmarker', FB)
+    monkeypatch.setattr(run_tests.time, 'sleep', sleeps.append)
+    return seen, sleeps
+
+
+def test_single_cell_runs_only_that_cell(monkeypatch, tmp_path):
+    import json
+    seen, sleeps = _cell_fake(monkeypatch, tmp_path)
+    suite = suites.load('standard')
+    cell = suite.cells[2]
+    assert run_tests.main(['x', '--suite', 'standard', '--cell', '2']) == 0
+    assert len(seen) == 1 and sleeps == []
+    cfg = seen[0].config
+    assert cfg.number_of_files == str(cell.number_of_files)
+    assert cfg.content_size == cell.content_size
+    assert cfg.min_runs == str(suite.runs)
+    assert cfg.run_test_timeout_seconds == suite.timeout_seconds
+    assert cfg.cooldown_seconds == suite.cooldown_seconds
+    assert cfg.suite_info['name'] == 'standard' and cfg.suite_info['cellIndex'] == 2
+    assert cfg.suite_info['cellCount'] == len(suite.cells)
+    assert cfg.timestamp.endswith('/' + suites.cell_dir('core', cell))
+    (suite_json,) = (tmp_path / 'results').glob('*/suite.json')
+    out = json.loads(suite_json.read_text())
+    assert [c['index'] for c in out['cells']] == [2]
+    assert out['cells'][0]['order'] == suites.rotate(['a', 'b', 'c'], 2)
+
+
+@pytest.mark.parametrize("argv", [
+    ['--suite', 'smoke', '--cell', '1'],
+    ['--suite', 'smoke', '--cell', '-1'],
+    ['--cell', '0'],
+])
+def test_single_cell_usage_errors_exit_1(monkeypatch, tmp_path, argv):
+    seen, _ = _cell_fake(monkeypatch, tmp_path)
+    try:
+        rc = run_tests.main(['x'] + argv)
+    except SystemExit as e:
+        rc = e.code
+    assert rc == 1 and seen == []

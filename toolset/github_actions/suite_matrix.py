@@ -11,6 +11,19 @@ import sys
 from toolset.benchmark import suites
 
 MAX_JOBS = 256  # GitHub Actions matrix limit
+MAX_JOB_MINUTES = 360  # GitHub-hosted runner job limit
+# image build, warm-up build, environment capture and upload around the timed run
+JOB_MARGIN_MINUTES = 30
+
+
+def job_timeout_minutes(suite):
+    '''Job timeout-minutes covering the suite's per-generator timeout plus a margin.'''
+    minutes = -(-suite.timeout_seconds // 60) + JOB_MARGIN_MINUTES
+    if minutes > MAX_JOB_MINUTES:
+        raise ValueError('suite %s: timeout %d s plus %d min margin exceeds the %d min '
+                         'job limit' % (suite.name, suite.timeout_seconds,
+                                        JOB_MARGIN_MINUTES, MAX_JOB_MINUTES))
+    return minutes
 
 
 def build_matrix(suite_name, tests, path=suites.DEFAULT):
@@ -18,6 +31,7 @@ def build_matrix(suite_name, tests, path=suites.DEFAULT):
         suite = suites.load(suite_name, path=path)
     except suites.SuiteError as e:
         raise ValueError(str(e))
+    timeout = job_timeout_minutes(suite)
     matrix = [{
         'test': test,
         'suite': suite.name,
@@ -25,6 +39,7 @@ def build_matrix(suite_name, tests, path=suites.DEFAULT):
         'number_of_files': str(cell.number_of_files),
         'content_size': cell.content_size,
         'min_runs': str(suite.runs),
+        'timeout_minutes': timeout,
         'key': '%s-%s-%d' % (test, suite.name, index),
     } for test in tests for index, cell in enumerate(suite.cells)]
     if len(matrix) > MAX_JOBS:

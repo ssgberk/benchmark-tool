@@ -28,3 +28,27 @@ def test_workflow_matrix_from_list_output_and_no_inline_inputs():
     for line in text.splitlines():
         if line.strip().startswith(("run:", "- run:")) or "./ssgberk" in line:
             assert "${{ inputs." not in line and "${{ matrix." not in line
+
+
+def test_suite_rounds_run_one_suite_cell():
+    d = _load()
+    run = d["jobs"]["run"]
+    step = next(s for s in run["steps"] if s.get("name") == "Run benchmark")
+    assert step["env"]["SUITE"] == "${{ matrix.suite }}"
+    assert step["env"]["CELL"] == "${{ matrix.cell }}"
+    assert '--suite "$SUITE" --cell "$CELL"' in step["run"]
+    # ad-hoc dispatch keeps working
+    assert '-nf "$NF" -cs "$CS" -mr "$MR"' in step["run"]
+    assert run["timeout-minutes"] == "${{ matrix.timeout_minutes }}"
+
+
+def test_adhoc_matrix_keeps_full_job_timeout():
+    step = _load()["jobs"]["list"]["steps"][1]
+    assert "timeout_minutes: 360" in step["run"]
+
+
+def test_result_dir_finds_nested_suite_cell():
+    d = _load()
+    step = next(s for s in d["jobs"]["run"]["steps"]
+                if s.get("name") == "Record runner environment")
+    assert "results/*/*/nf*-cs*/" in step["run"]

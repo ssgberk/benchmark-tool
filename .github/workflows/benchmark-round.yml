@@ -70,12 +70,13 @@ jobs:
           fi
           tests=$(printf '%s\n' "$list" | sort -u)
           if [ -n "$SUITE" ]; then
-            # generator x cell matrix; runs come from suites.json
+            # generator x cell matrix; each job runs one suite cell (--suite --cell)
+            # with the suite's runs, cooldown and timeout from suites.json
             # shellcheck disable=SC2086
             matrix=$(python3 -m toolset.github_actions.suite_matrix --suite "$SUITE" --tests $tests)
           else
             matrix=$(printf '%s\n' "$tests" | jq -Rsc --arg nf "$NF" --arg cs "$CS" --arg mr "$MR" \
-              'split("\n") | map(select(length > 0) | {test: ., suite: "", cell: 0, number_of_files: $nf, content_size: $cs, min_runs: $mr, key: .})')
+              'split("\n") | map(select(length > 0) | {test: ., suite: "", cell: 0, number_of_files: $nf, content_size: $cs, min_runs: $mr, timeout_minutes: 360, key: .})')
           fi
           echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
           echo "$matrix"
@@ -83,7 +84,8 @@ jobs:
   run:
     needs: list
     runs-on: ubuntu-24.04
-    timeout-minutes: 360
+    # suite jobs: the suite's timeoutSeconds plus a margin (suite_matrix.py); ad hoc: 360
+    timeout-minutes: ${{ matrix.timeout_minutes }}
     strategy:
       fail-fast: false
       matrix:
@@ -95,16 +97,29 @@ jobs:
       - name: Run benchmark
         env:
           TEST: ${{ matrix.test }}
+          SUITE: ${{ matrix.suite }}
+          CELL: ${{ matrix.cell }}
           NF: ${{ matrix.number_of_files }}
           CS: ${{ matrix.content_size }}
           MR: ${{ matrix.min_runs }}
-        run: ./ssgberk --test "$TEST" -nf "$NF" -cs "$CS" -mr "$MR"
+        run: |
+          if [ -n "$SUITE" ]; then
+            ./ssgberk --test "$TEST" --suite "$SUITE" --cell "$CELL"
+          else
+            ./ssgberk --test "$TEST" -nf "$NF" -cs "$CS" -mr "$MR"
+          fi
       - name: Record runner environment
         if: always()
         env:
           TEST: ${{ matrix.test }}
+          SUITE: ${{ matrix.suite }}
         run: |
-          R=$(ls -td results/*/ 2>/dev/null | head -1 || true)
+          # a suite cell writes results/<ts>/<profile>/nf<nf>-cs<cs>/; ad hoc results/<ts>/
+          if [ -n "$SUITE" ]; then
+            R=$(ls -td results/*/*/nf*-cs*/ 2>/dev/null | head -1 || true)
+          else
+            R=$(ls -td results/*/ 2>/dev/null | head -1 || true)
+          fi
           [ -n "$R" ] || exit 0
           # the container creates results/ as root
           sudo chown -R "$(id -u):$(id -g)" results
