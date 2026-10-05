@@ -4,6 +4,7 @@ import traceback
 import sys
 import time
 import shlex
+import shutil
 import numbers
 
 from colorama import Fore
@@ -14,6 +15,7 @@ from toolset.utils.metadata import Metadata
 from toolset.utils.results import Results
 from toolset.utils.audit import Audit
 from toolset.utils import resources
+from toolset.benchmark import noise
 
 
 class Benchmarker:
@@ -76,7 +78,11 @@ class Benchmarker:
 
         with open(os.path.join(self.results.directory, 'benchmark.log'),
                   'w') as benchmark_log:
-            for test in self.tests:
+            for index, test in enumerate(self.tests):
+                cooldown = getattr(self.config, 'cooldown_seconds', 0)
+                if index > 0 and cooldown:
+                    log("Cooling down %s s" % cooldown)
+                    time.sleep(cooldown)
                 log("Running Framework: %s" % test.name, border='-')
                 with self.config.quiet_out.enable():
                     if not self.__run_test(test, benchmark_log):
@@ -231,8 +237,11 @@ class Benchmarker:
 
             results = self.results.parse_test(framework_test, test_type)
             log("Benchmark results:", file=benchmark_log)
-            # TODO move into log somehow
-            #pprint(results)
+
+            if outcome['status'] == 'ok' and results['results'] and not test.failed:
+                results = self.__noise_control(
+                    framework_test, test_type, script, script_variables,
+                    raw_file, results, benchmark_log)
 
             if outcome['status'] != 'ok':
                 # timeout/oom: whatever was printed is not a result
@@ -247,6 +256,41 @@ class Benchmarker:
 
         for test_type in framework_test.runTests:
             benchmark_type(test_type)
+
+    def __noise_control(self, framework_test, test_type, script,
+                        script_variables, raw_file, results, benchmark_log):
+        '''
+        R-21: one re-run with more runs when the CV is high. Only successful
+        attempts are re-run; timeout/oom are never retried (R-19).
+        '''
+        first = results['results'][0]
+        runs = int(script_variables.get('min_runs') or 0)
+        if not noise.needs_rerun(first, runs):
+            results['results'] = [noise.finalize([first])]
+            return results
+        log("CV %.3f above %.2f; re-running with %d runs" % (
+            first['cv'], noise.CV_THRESHOLD, noise.rerun_runs(runs)),
+            file=benchmark_log)
+        attempt1 = os.path.join(os.path.dirname(raw_file), 'raw.attempt1.txt')
+        shutil.copyfile(raw_file, attempt1)
+        variables = dict(script_variables, min_runs=noise.rerun_runs(runs))
+        self.__begin_logging(framework_test, test_type)
+        try:
+            outcome = self.docker_helper.benchmark(
+                framework_test, script, variables, raw_file,
+                self.resolve_resources(), self.config.run_test_timeout_seconds)
+        finally:
+            self.__end_logging()
+        second = self.results.parse_test(framework_test, test_type)
+        if outcome['status'] == 'ok' and second['results']:
+            second['results'] = [noise.finalize([first, second['results'][0]])]
+            return second
+        # The re-run itself failed: keep the first valid attempt, flagged noisy
+        shutil.copyfile(attempt1, raw_file)
+        kept = noise.finalize([first])
+        kept['noisy'] = True
+        results['results'] = [kept]
+        return results
 
     def resolve_resources(self):
         '''
