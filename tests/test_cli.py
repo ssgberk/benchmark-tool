@@ -157,3 +157,78 @@ def test_main_exit_code_follows_run(monkeypatch, failed, code):
     _, bench = _patched_main(monkeypatch)
     bench.run.return_value = failed
     assert run_tests.main(["run-tests.py"]) == code
+
+
+def _v2_cell(tmp_path, fake_benchmarker, monkeypatch, failure=None):
+    import json
+    import pathlib
+    import types
+    from toolset.utils.results import Results
+
+    monkeypatch.setenv("FWROOT", str(tmp_path))
+    ts = "20261004000000/core/nf1000-cs0.500"
+    fake_benchmarker.config.timestamp = ts
+    # CLI defaults of a plain `--parse` invocation, not the cell's values
+    fake_benchmarker.config.number_of_files = "10"
+    fake_benchmarker.config.content_size = "0.500"
+    fake_benchmarker.config.min_runs = "3"
+    res = Results(fake_benchmarker)
+    resources = {"cpus": 4.0, "memoryBytes": 8589934592, "swap": False, "cpuset": "4-7"}
+    entry = {"mean": 9.9, "median": 9.9, "numberOfFiles": "1000", "contentSize": "0.500",
+             "minRuns": "10", "noisy": True, "resources": resources,
+             "attempts": [{"minRuns": 5, "cv": 0.2}, {"minRuns": 10, "cv": 0.15}]}
+    old = {
+        "schemaVersion": 2, "uuid": "u", "name": "n", "startTime": 1, "completionTime": 2,
+        "numberOfFiles": "1000", "contentSize": "0.500", "frameworks": ["hugo", "zola"],
+        "completed": {}, "environmentDescription": "e", "git": None, "duration": 15,
+        "rawData": {"datarate": {"hugo": [entry]}},
+        "succeeded": {"datarate": ["hugo"]}, "failed": {"datarate": ["zola"]},
+        "unsupported": {"datarate": []},
+        "failureReasons": {"zola": failure} if failure else {},
+        "suite": {"name": "standard", "version": 1, "cellIndex": 1, "cellCount": 5,
+                  "runs": 5, "ranked": True},
+        "profile": "core", "resources": resources,
+        "protocol": {"coldRebuild": True, "cooldownSeconds": 15, "timeoutSeconds": 7200,
+                     "concurrent": False},
+        "environment": {"fingerprint": "fp-1", "cpuModel": "x"},
+        "generators": {"hugo": {"version": "0.1"}},
+        "imageBuild": {"hugo": {"seconds": 12.5, "imageId": "sha256:a"}},
+    }
+    pathlib.Path(res.file).write_text(json.dumps(old))
+    fixtures = pathlib.Path(__file__).parent / "fixtures"
+    pathlib.Path(res.get_raw_file("hugo", "datarate")).write_text(
+        (fixtures / "raw_v2_ok.txt").read_text(encoding="utf-8"), encoding="utf-8")
+    pathlib.Path(res.get_raw_file("zola", "datarate")).write_text(
+        "Generating 1000 posts\nkilled\n", encoding="utf-8")
+    res._Results__count_commits = lambda: None
+    res._Results__count_sloc = lambda: None
+    tests = [types.SimpleNamespace(name=n, runTests={"datarate": object()})
+             for n in ("hugo", "zola")]
+    seen, bench = _patched_main(monkeypatch, parse=ts)
+    bench.results = res
+    bench.metadata.gather_tests.return_value = tests
+    (tmp_path / "results" / ts).mkdir(parents=True, exist_ok=True)
+    assert run_tests.main(["run-tests.py", "--parse", ts]) == 0
+    return old, json.loads(pathlib.Path(res.file).read_text())
+
+
+def test_parse_v2_cell_keeps_run_metadata_and_cell_values(monkeypatch, fake_benchmarker, tmp_path):
+    old, data = _v2_cell(tmp_path, fake_benchmarker, monkeypatch)
+    for key in ("suite", "profile", "resources", "protocol", "environment",
+                "generators", "imageBuild", "numberOfFiles", "contentSize"):
+        assert data[key] == old[key], key
+    hugo = data["rawData"]["datarate"]["hugo"][0]
+    assert hugo["numberOfFiles"] == "1000" and hugo["contentSize"] == "0.500"
+    assert hugo["minRuns"] == "10"
+    # measured fields are refreshed from raw.txt, with the cell's file count
+    assert hugo["median"] == 2.5
+    assert hugo["postsPerSecond"] == 1000 / 2.5
+    for key in ("noisy", "attempts", "resources"):
+        assert hugo[key] == old["rawData"]["datarate"]["hugo"][0][key], key
+    assert data["failed"]["datarate"] == ["zola"]
+
+
+def test_parse_keeps_timeout_failure_reason(monkeypatch, fake_benchmarker, tmp_path):
+    _, data = _v2_cell(tmp_path, fake_benchmarker, monkeypatch, failure="timeout")
+    assert data["failureReasons"]["zola"] == "timeout"
+    assert "zola" in data["failed"]["datarate"]

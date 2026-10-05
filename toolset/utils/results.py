@@ -25,6 +25,15 @@ SCHEMA_VERSION = 2
 
 PROTOCOL_REASON = 'protocol: verification markers missing before STARTTIME'
 
+# Run-level keys a --parse keeps from the stored results.json: they describe
+# how the run was made, which raw.txt cannot tell.
+STORED_RUN_KEYS = ('suite', 'profile', 'resources', 'protocol', 'environment',
+                   'generators', 'imageBuild')
+# Per-result keys a --parse keeps from the stored result.
+STORED_RESULT_KEYS = ('noisy', 'attempts', 'resources')
+# Failure reasons decided by the container outcome, not by raw.txt.
+OUTCOME_REASONS = ('timeout', 'oom')
+
 
 def _first_line(marker, text):
     m = re.search(_BOL + marker + r'.*$', text, re.M)
@@ -241,6 +250,59 @@ class Results:
             log("Error writing summary: %s" % e)
             return ''
 
+    def reparse(self, tests):
+        '''
+        --parse: rebuilds results.json from the raw.txt files of this
+        directory. Everything the stored results.json records about the run
+        (suite, profile, resources, protocol, environment, generators,
+        imageBuild, per-result noisy/attempts/resources, numberOfFiles,
+        contentSize, minRuns) is kept; only the measured fields are refreshed.
+        '''
+        try:
+            with open(self.file) as f:
+                stored = json.load(f)
+        except (ValueError, IOError):
+            stored = {}
+        if not isinstance(stored, dict):
+            stored = {}
+        self.__dict__.update(stored)
+        self._stored_run = {k: stored[k] for k in STORED_RUN_KEYS if k in stored}
+        self._stored_results = {}
+        for name, entries in ((stored.get('rawData') or {}).get('datarate') or {}).items():
+            if isinstance(entries, list) and entries and isinstance(entries[0], dict):
+                self._stored_results[name] = entries[0]
+        stored_reasons = dict(stored.get('failureReasons') or {})
+        self.rawData = {'datarate': {}}
+        self.succeeded = {'datarate': []}
+        self.failed = {'datarate': []}
+        self.unsupported = {'datarate': []}
+        self.failureReasons = {}
+        for test in tests:
+            self.parse_all(test)
+            reason = stored_reasons.get(test.name)
+            if reason in OUTCOME_REASONS and test.name not in self.rawData['datarate']:
+                # a timeout/oom left partial output: keep the recorded outcome
+                self.failureReasons[test.name] = reason
+                if test.name not in self.failed['datarate']:
+                    self.failed['datarate'].append(test.name)
+                if test.name in self.unsupported['datarate']:
+                    self.unsupported['datarate'].remove(test.name)
+            elif reason and test.name in self.failed['datarate'] \
+                    and test.name not in self.failureReasons:
+                self.failureReasons[test.name] = reason
+        self.parse(tests)
+
+    def __cell_values(self, test_name):
+        '''numberOfFiles, contentSize, minRuns for parsing test_name's raw.txt.'''
+        stored_results = getattr(self, '_stored_results', None)
+        if stored_results is None:  # a live run: the config is the truth
+            return (self.config.number_of_files, self.config.content_size,
+                    self.config.min_runs)
+        stored = stored_results.get(test_name) or {}
+        return (stored.get('numberOfFiles', self.numberOfFiles),
+                stored.get('contentSize', self.contentSize),
+                str(stored.get('minRuns', getattr(self, 'minRuns', self.config.min_runs))))
+
     def parse_test(self, framework_test, test_type):
         '''
         Parses the given test and test_type from the raw_file.
@@ -251,9 +313,14 @@ class Results:
             with open(raw_file, encoding='utf-8', errors='replace') as raw_data:
                 text = raw_data.read()
         require = bool(getattr(self.config, 'require_conformance', False))
+        number_of_files, content_size, min_runs = self.__cell_values(framework_test.name)
         results = {'results': parse_build_output(
-            text, self.config.number_of_files, self.config.content_size,
-            self.config.min_runs, require)}
+            text, number_of_files, content_size, min_runs, require)}
+        stored = getattr(self, '_stored_results', None)
+        if stored and results['results'] and framework_test.name in stored:
+            for key in STORED_RESULT_KEYS:
+                if key in stored[framework_test.name]:
+                    results['results'][0][key] = stored[framework_test.name][key]
         status, reason = classify_build_output(text, require)
         results['status'] = status
         results['failureReason'] = reason
@@ -414,6 +481,8 @@ class Results:
         toRet['environment'] = self.__environment()
         toRet['generators'] = self.__generators()
         toRet['imageBuild'] = self.__image_build()
+        # --parse: what the stored run recorded wins over this process's config
+        toRet.update(getattr(self, '_stored_run', None) or {})
 
         return toRet
 

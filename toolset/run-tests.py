@@ -413,16 +413,7 @@ def main(argv=None):
             all_tests = benchmarker.metadata.gather_tests()
 
             # Keep the metadata of the original run; recompute only the outcomes
-            results = benchmarker.results
-            results.load()
-            results.rawData = {'datarate': {}}
-            results.succeeded = {'datarate': []}
-            results.failed = {'datarate': []}
-
-            for test in all_tests:
-                results.parse_all(test)
-
-            results.parse(all_tests)
+            benchmarker.results.reparse(all_tests)
 
         else:
             if benchmarker.run():
