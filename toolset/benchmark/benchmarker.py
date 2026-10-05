@@ -170,9 +170,10 @@ class Benchmarker:
                     time.sleep(1)
 
             # Benchmark this test
+            benchmarked = True
             if self.config.mode == "benchmark":
                 self.time_logger.mark_benchmarking_start()
-                self.__benchmark(test, benchmark_log)
+                benchmarked = self.__benchmark(test, benchmark_log)
                 self.time_logger.log_benchmarking_end(
                     log_prefix=log_prefix, file=benchmark_log)
 
@@ -201,12 +202,15 @@ class Benchmarker:
         finally:
             self.docker_helper.stop()
 
+        # A build that failed, was nonconformant, timed out or ran out of
+        # memory fails the run; an unsupported profile does not
         return self.__exit_test(
-            success=True, prefix=log_prefix, file=benchmark_log)
+            success=benchmarked, prefix=log_prefix, file=benchmark_log)
 
     def __benchmark(self, framework_test, benchmark_log):
         '''
-        Runs the benchmark for each type of test that it implements
+        Runs the benchmark for each type of test that it implements. Returns
+        False when any type ended in failed (unsupported is not a failure).
         '''
 
         def benchmark_type(test_type):
@@ -253,9 +257,13 @@ class Benchmarker:
                                                   results.get('unsupported', False),
                                                   results.get('failureReason'))
             log("Complete", file=benchmark_log)
+            return bool(results['results']) or bool(results.get('unsupported', False))
 
+        ok = True
         for test_type in framework_test.runTests:
-            benchmark_type(test_type)
+            if not benchmark_type(test_type):
+                ok = False
+        return ok
 
     def __noise_control(self, framework_test, test_type, script,
                         script_variables, raw_file, results, benchmark_log):

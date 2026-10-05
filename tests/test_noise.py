@@ -161,3 +161,49 @@ def test_cooldown_sleep_called_between_tests():
         assert sleep.call_count == expected
         if expected:
             sleep.assert_called_with(15)
+
+
+@pytest.mark.parametrize("status", ["timeout", "oom"])
+def test_benchmark_returns_false_on_timeout_or_oom(tmp_path, status):
+    b, ft, _ = _bm(tmp_path, [0.01], statuses=[status])
+    assert b._Benchmarker__benchmark(ft, open(tmp_path / "log", "w")) is False
+
+
+@pytest.mark.parametrize("status,reason", [("failed", "SSGBERK_VERIFY_FAIL x"),
+                                           ("nonconformant", "nonconformant: y"),
+                                           ("failed", None)])
+def test_benchmark_returns_false_on_failed_build(tmp_path, status, reason):
+    b, ft, _ = _bm(tmp_path, [0.01])
+    b.results.parse_test.side_effect = None
+    b.results.parse_test.return_value = {
+        "results": [], "status": status, "failureReason": reason, "unsupported": False}
+    assert b._Benchmarker__benchmark(ft, open(tmp_path / "log", "w")) is False
+
+
+def test_benchmark_returns_true_on_ok_and_unsupported(tmp_path):
+    b, ft, _ = _bm(tmp_path, [0.01])
+    assert b._Benchmarker__benchmark(ft, open(tmp_path / "log", "w")) is True
+    b, ft, _ = _bm(tmp_path, [0.01])
+    b.results.parse_test.side_effect = None
+    b.results.parse_test.return_value = {
+        "results": [], "status": "unsupported", "failureReason": None, "unsupported": True}
+    assert b._Benchmarker__benchmark(ft, open(tmp_path / "log", "w")) is True
+
+
+@pytest.mark.parametrize("ok,expected", [(True, False), (False, True)])
+def test_run_reports_failed_benchmark(tmp_path, ok, expected):
+    from toolset.benchmark.benchmarker import Benchmarker
+    b = Benchmarker.__new__(Benchmarker)
+    b.config = types.SimpleNamespace(
+        mode="benchmark", run_id="r", allow_concurrent=True, resources={"cpus": 1},
+        cooldown_seconds=0, exclude=None, quiet_out=mock.MagicMock())
+    b.metadata = mock.Mock()
+    b.time_logger = mock.Mock()
+    b.results = mock.Mock()
+    b.results.directory = str(tmp_path)
+    b.docker_helper = mock.Mock()
+    test = mock.Mock()
+    test.name = "gen"
+    b.tests = [test]
+    b._Benchmarker__benchmark = mock.Mock(return_value=ok)
+    assert b.run() is expected
