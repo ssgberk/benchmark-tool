@@ -68,7 +68,7 @@ Depends on: BT 002 (parser), BT 004 (run id, `ssgberk.run` label, results dir cl
 }
 ```
 
-Validation (`suites.load`): every `contentSize` is one of the toolset's `-cs` choices; `numberOfFiles ≥ 1`; `runs ≥ 1`; names match `^[a-z0-9-]+$`; `ranked` defaults to `true`. Bumping a suite's cells or runs requires bumping `version`. Ranking groups by name and version, so results from different versions never share a table.
+Validation (`suites.load`): every `contentSize` is one of the toolset's `-cs` choices; `numberOfFiles ≥ 1`; `runs ≥ 1`; names match `^[A-Za-z0-9-]+$` (the site-size suites are `P`, `M`, `G`, `GG`); each suite may carry a human `description`; `ranked` defaults to `true`. Bumping a suite's cells or runs requires bumping `version`. Ranking groups by name and version, so results from different versions never share a table.
 
 ### Why these cells
 
@@ -90,6 +90,19 @@ Input sizes follow 005: 512 bytes per block; `0.500` = 1 block, `500` = 1000 blo
 | 100 × 5000 (stress) | 100 | 512 MB | very large single documents (5 MB each) |
 
 Three decades of nf at cs = 0.500 give the scaling exponent (R-25) where per-file cost dominates. At cs = 500, where parsing dominates, `standard` has only two points (nf 100 and 1000), so it reports no exponent there (R-25 needs 3 points) and shows the two medians; the (10000, 500) point is in `stress`. Five runs is the smallest count for which a stddev is meaningful and a median robust to one outlier. `stress` uses 3 runs because each run takes minutes to hours, and its job is to find the breaking points (`timeout`, `oom`), not to rank closely matched generators.
+
+### Site-size suites (P, M, G, GG)
+
+Decided by the maintainer on 2026-10-05 (spec "Decisions log" 4). Each has 2 cells, 5 KB and 50 KB per page (`contentSize` `5` = 10 blocks, `50` = 100 blocks, per SF 005).
+
+| Suite | Description | Pages | Cells | Runs | Cooldown | Timeout |
+|---|---|---|---|---|---|---|
+| P | website pessoal (ex.: site de professor) | 50 | (50, 5), (50, 50) | 5 | 15 s | 1 h |
+| M | site corporativo | 1000 | (1000, 5), (1000, 50) | 5 | 15 s | 2 h |
+| G | grande portal | 10000 | (10000, 5), (10000, 50) | 3 | 30 s | 4 h |
+| GG | portal massivo | 100000 | (100000, 5), (100000, 50) | 1 | 60 s | 5 h |
+
+Rationale for runs: small sites build in seconds, so 5 runs are cheap and give a meaningful stddev and median. G builds take minutes, so 3 runs trade precision for time. GG is a single run per cell because one build can take an hour or more on slow generators; it finds breaking points (`timeout`, `oom`) and, with `runs = 1`, has `cv = null` and no `noisy` flag. The GG timeout (5 h) stays under the 6 h GitHub-hosted job limit. In `benchmark-round.yml` the `suite` input expands to generator x cell jobs (17 x 2 = 34, under the 256 job matrix limit); the aggregate job merges per cell (`merge_results --by-cell`) and writes `suite-summary.csv/md`.
 
 ## Order
 

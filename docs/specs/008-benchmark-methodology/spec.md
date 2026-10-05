@@ -116,6 +116,10 @@ Decided by the maintainer on 2026-10-04:
 2. **Peak RSS source.** `peakRssBytes` comes from hyperfine 1.20 `memory_usage_byte` (`ru_maxrss`, `getrusage(RUSAGE_CHILDREN)`), not from `/usr/bin/time -v` or cgroup `memory.peak`. Limits (running maximum, largest single process) stay in `plan.md` "Peak RSS" and threat T7. *Decided by the maintainer, 2026-10-04.*
 3. **Default container resources.** `--cpus 4 --memory 8g`. *Decided by the maintainer, 2026-10-04.*
 
+Decided by the maintainer on 2026-10-05:
+
+4. **2026-10-05 — site-size scenarios P/M/G/GG at 5 and 50 KB, decided by the maintainer.** Four suites model real site sizes, each with 2 cells at 5 KB and 50 KB per page: P (website pessoal, 50 pages), M (site corporativo, 1,000), G (grande portal, 10,000) and GG (portal massivo, 100,000). `-cs` accepts two new values, `5` and `50`. The canonical `build.sh` gets the matching mapping in ssg-frameworks spec 005: `5` = 10 blocks, `50` = 100 blocks. *Decided by the maintainer, 2026-10-05.*
+
 ## Open questions
 
 1. **Tie rule.** Overlap of `[min, max]` is crude with 5 runs, but it is transparent. A bootstrap CI of the median would be better but adds complexity to `summary.py`. Proposal: keep overlap now and revisit after the first `standard` round.
