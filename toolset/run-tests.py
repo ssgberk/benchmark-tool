@@ -3,8 +3,11 @@ import glob
 import os
 import socket
 import sys
+import json
 import signal
+import time
 import traceback
+from toolset.benchmark import suites
 from toolset.benchmark.benchmarker import Benchmarker
 from toolset.utils.scaffolding import Scaffolding
 from toolset.utils.audit import Audit
@@ -175,6 +178,12 @@ def build_parser():
         '-mr', '--min-runs', default='3',
         help='Number of timed hyperfine runs per build')
     parser.add_argument(
+        '--suite',
+        choices=suites.names(),
+        default=None,
+        help='Run a named suite of (number of files, content size) cells; '
+             'cannot be combined with -nf, -cs or -mr')
+    parser.add_argument(
         '--server-host',
         default='ssgberk-server',
         help='Hostname/IP for application server'
@@ -189,6 +198,73 @@ def build_parser():
     return parser
 
 
+SUITE_CONFLICTS = ('-nf', '--number-of-files', '-cs', '--content-size',
+                   '-mr', '--min-runs')
+
+
+def run_suite(args):
+    '''
+    Runs every cell of the suite, one Benchmarker per cell, then writes suite.json.
+    '''
+    suite = suites.load(args.suite)
+    profile = os.getenv('SSGBERK_PROFILE', 'core')
+    base = BenchmarkConfig(args)
+    start = int(round(time.time() * 1000))
+    cells = []
+    benchmarker = None
+    interrupted = []
+
+    def stop(signum=None, frame=None):
+        interrupted.append(signum)
+        if benchmarker is not None:
+            benchmarker.stop(signum, frame)
+
+    signal.signal(signal.SIGTERM, stop)
+    signal.signal(signal.SIGINT, stop)
+
+    try:
+        for index, cell in enumerate(suite.cells):
+            if interrupted:
+                break
+            config = base.for_cell(suite, cell, index, profile)
+            benchmarker = Benchmarker(config)
+            order = suites.rotate([t.name for t in benchmarker.tests], index)
+            benchmarker.tests.sort(key=lambda t: order.index(t.name))
+            benchmarker.run()
+            results = benchmarker.results
+            cells.append({
+                'index': index,
+                'numberOfFiles': cell.number_of_files,
+                'contentSize': cell.content_size,
+                'dir': suites.cell_dir(profile, cell),
+                'order': order,
+                'succeeded': len(results.succeeded.get('datarate', [])),
+                'failed': len(results.failed.get('datarate', [])),
+            })
+            if index < len(suite.cells) - 1 and suite.cooldown_seconds:
+                time.sleep(suite.cooldown_seconds)
+    except Exception:
+        log("A fatal error has occurred", color=Fore.RED)
+        log(traceback.format_exc())
+        try:
+            benchmarker.stop()
+        except Exception:
+            pass
+        return 1
+    finally:
+        out = os.path.join(base.results_root, base.timestamp, 'suite.json')
+        with open(out, 'w') as f:
+            json.dump({
+                'schemaVersion': 1, 'suite': suite.name,
+                'version': suite.version, 'profile': profile,
+                'startTime': start,
+                'completionTime': int(round(time.time() * 1000)),
+                'cells': cells,
+            }, f, indent=2)
+
+    return 0
+
+
 ###################################################################################################
 # Main
 ###################################################################################################
@@ -201,6 +277,14 @@ def main(argv=None):
         argv = sys.argv
 
     args = build_parser().parse_args(argv[1:])
+
+    if args.suite:
+        explicit = [a for a in argv[1:] if a.split('=')[0] in SUITE_CONFLICTS]
+        if explicit:
+            log("--suite cannot be combined with %s" % ", ".join(explicit),
+                color=Fore.RED)
+            return 1
+        return run_suite(args)
 
     if args.parse:
         # Validate before BenchmarkConfig/Benchmarker, which create the directory

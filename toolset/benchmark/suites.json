@@ -1,0 +1,37 @@
+{
+  "smoke": {
+    "version": 1, "runs": 1, "cooldownSeconds": 0, "timeoutSeconds": 1800,
+    "cells": [{"numberOfFiles": 10, "contentSize": "0.500"}]
+  },
+  "standard": {
+    "version": 1, "runs": 5, "cooldownSeconds": 15, "timeoutSeconds": 7200,
+    "cells": [
+      {"numberOfFiles": 100,   "contentSize": "0.500"},
+      {"numberOfFiles": 100,   "contentSize": "500"},
+      {"numberOfFiles": 1000,  "contentSize": "0.500"},
+      {"numberOfFiles": 1000,  "contentSize": "500"},
+      {"numberOfFiles": 10000, "contentSize": "0.500"}
+    ]
+  },
+  "stress": {
+    "version": 1, "runs": 3, "cooldownSeconds": 30, "timeoutSeconds": 14400,
+    "cells": [
+      {"numberOfFiles": 100000, "contentSize": "0.500"},
+      {"numberOfFiles": 10000,  "contentSize": "500"},
+      {"numberOfFiles": 1000,   "contentSize": "1000"},
+      {"numberOfFiles": 100,    "contentSize": "5000"}
+    ]
+  },
+  "legacy-2019": {
+    "version": 1, "runs": 10, "cooldownSeconds": 15, "timeoutSeconds": 7200, "ranked": false,
+    "cells": [
+      {"numberOfFiles": 10,     "contentSize": "0.500"},
+      {"numberOfFiles": 100,    "contentSize": "0.500"},
+      {"numberOfFiles": 1000,   "contentSize": "0.500"},
+      {"numberOfFiles": 10000,  "contentSize": "0.500"},
+      {"numberOfFiles": 10,     "contentSize": "1000"},
+      {"numberOfFiles": 10,     "contentSize": "5000"},
+      {"numberOfFiles": 100000, "contentSize": "0.500"}
+    ]
+  }
+}

@@ -26,6 +26,10 @@ To get started developing you'll need to install [docker](https://docs.docker.co
 
         $ ./ssgberk --test hugo -nf 10
 
+   Or run a named suite (`smoke`, `standard`, `stress`, `legacy-2019`; defined in `toolset/benchmark/suites.json`). `--suite` cannot be combined with `-nf`, `-cs` or `-mr`:
+
+        $ ./ssgberk --suite standard
+
 ### Explanation of the `./ssgberk` script
 
 The run script is pretty wordy, but each and every flag is required. If you are using windows, either adapt the docker command at the end of the `./ssgberk` shell script (replacing `${SCRIPT_ROOT}` with `/c/path/to/benchmark-tool`), or use vagrant.
