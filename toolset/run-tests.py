@@ -57,6 +57,7 @@ def build_parser():
     parser = argparse.ArgumentParser(
         description="Run the Static Site Generator Benchmarks (SSGBerk) suite.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        allow_abbrev=False,
         epilog='''If an argument includes (type int-sequence), then it accepts integer lists in multiple forms.
         Using a single number e.g. 5 will create a list [5]. Using commas will create a list containing those
         values e.g. 1,3,6 creates [1, 3, 6]. Using three colon-separated numbers of start:step:end will create a
@@ -219,25 +220,27 @@ def run_suite(args):
     start = int(round(time.time() * 1000))
     cells = []
     benchmarker = None
-    interrupted = []
+    any_failed = False
 
     def stop(signum=None, frame=None):
-        interrupted.append(signum)
-        if benchmarker is not None:
-            benchmarker.stop(signum, frame)
+        # Benchmarker.stop() ends in sys.exit(0); an interrupted suite is a failure
+        try:
+            if benchmarker is not None:
+                benchmarker.stop(signum, frame)
+        finally:
+            raise SystemExit(1)
 
     signal.signal(signal.SIGTERM, stop)
     signal.signal(signal.SIGINT, stop)
 
     try:
         for index, cell in enumerate(suite.cells):
-            if interrupted:
-                break
             config = base.for_cell(suite, cell, index)
             benchmarker = Benchmarker(config)
             order = suites.rotate([t.name for t in benchmarker.tests], index)
             benchmarker.tests.sort(key=lambda t: order.index(t.name))
-            benchmarker.run()
+            if benchmarker.run():
+                any_failed = True
             results = benchmarker.results
             cells.append({
                 'index': index,
@@ -250,13 +253,14 @@ def run_suite(args):
             })
             if index < len(suite.cells) - 1 and suite.cooldown_seconds:
                 time.sleep(suite.cooldown_seconds)
-    except Exception:
+    except (Exception, KeyboardInterrupt, SystemExit):
         log("A fatal error has occurred", color=Fore.RED)
         log(traceback.format_exc())
         try:
-            benchmarker.stop()
-        except Exception:
-            pass
+            if benchmarker is not None:
+                benchmarker.stop()
+        except BaseException:
+            pass  # Benchmarker.stop() exits with 0; we return 1 regardless
         return 1
     finally:
         out = os.path.join(base.results_root, base.timestamp, 'suite.json')
@@ -269,7 +273,7 @@ def run_suite(args):
                 'cells': cells,
             }, f, indent=2)
 
-    return 0
+    return 1 if any_failed else 0
 
 
 ###################################################################################################
@@ -287,6 +291,11 @@ def main(argv=None):
 
     if args.suite:
         explicit = [a for a in argv[1:] if a.split('=')[0] in SUITE_CONFLICTS]
+        if args.parse:
+            explicit.append('--parse')
+        explicit += [flag for flag, on in (
+            ('--clean', args.clean), ('--audit', args.audit),
+            ('--new', args.new), ('--list-tests', args.list_tests)) if on]
         if explicit:
             log("--suite cannot be combined with %s" % ", ".join(explicit),
                 color=Fore.RED)

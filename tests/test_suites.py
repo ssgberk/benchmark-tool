@@ -123,3 +123,76 @@ def test_for_cell_and_suite_loop(monkeypatch, tmp_path):
     assert ts.endswith('/core/nf10-cs0.500')
     out = json.loads((tmp_path / 'results' / ts.split('/')[0] / 'suite.json').read_text())
     assert out['suite'] == 'smoke' and out['cells'][0]['order'] == ['a', 'b', 'c']
+
+
+@pytest.mark.parametrize("flag,val", [("--min", "2"), ("--number", "5"),
+                                      ("--content", "500")])
+def test_suite_rejects_abbreviated_conflicts(flag, val):
+    # abbreviations must not be silently accepted (and ignored) with --suite
+    try:
+        rc = run_tests.main(['x', '--suite', 'smoke', flag, val])
+    except SystemExit as e:
+        rc = e.code
+    assert rc not in (0, None)
+
+
+@pytest.mark.parametrize("mode", ["--parse=1", "--clean", "--audit", "--new",
+                                  "--list-tests"])
+def test_suite_conflicts_with_other_modes(mode):
+    assert run_tests.main(['x', '--suite', 'smoke', mode]) == 1
+
+
+def _fake(monkeypatch, tmp_path, run_result=False, run_raises=None, stop_exits=True):
+    import types
+    monkeypatch.setenv('FWROOT', str(tmp_path))
+
+    class FB:
+        def __init__(self, config):
+            self.config = config
+            import os
+            os.makedirs(os.path.join(config.results_root, config.timestamp))
+            self.tests = [types.SimpleNamespace(name='a')]
+            self.results = types.SimpleNamespace(
+                succeeded={'datarate': []}, failed={'datarate': ['a']})
+
+        def run(self):
+            if run_raises:
+                raise run_raises
+            return run_result
+
+        def stop(self, *a):
+            if stop_exits:
+                raise SystemExit(0)  # mirrors Benchmarker.stop
+
+    monkeypatch.setattr(run_tests, 'Benchmarker', FB)
+
+
+def test_suite_fatal_error_exits_nonzero(monkeypatch, tmp_path):
+    _fake(monkeypatch, tmp_path, run_raises=RuntimeError("boom"))
+    args = run_tests.build_parser().parse_args(['--suite', 'smoke'])
+    assert run_tests.run_suite(args) == 1
+
+
+def test_suite_failed_cell_exits_nonzero(monkeypatch, tmp_path):
+    _fake(monkeypatch, tmp_path, run_result=True)
+    args = run_tests.build_parser().parse_args(['--suite', 'smoke'])
+    assert run_tests.run_suite(args) == 1
+
+
+def test_suite_interrupt_exits_nonzero(monkeypatch, tmp_path):
+    _fake(monkeypatch, tmp_path, run_raises=KeyboardInterrupt())
+    args = run_tests.build_parser().parse_args(['--suite', 'smoke'])
+    assert run_tests.run_suite(args) != 0
+
+
+def test_suite_profile_consistent(monkeypatch, tmp_path):
+    import json
+    _fake(monkeypatch, tmp_path)
+    args = run_tests.build_parser().parse_args(
+        ['--suite', 'smoke', '--profile', 'extended'])
+    run_tests.run_suite(args)
+    (suite_json,) = (tmp_path / 'results').glob('*/suite.json')
+    out = json.loads(suite_json.read_text())
+    assert out['profile'] == 'extended'
+    assert out['cells'][0]['dir'] == 'extended/nf10-cs0.500'
+    assert (suite_json.parent / out['cells'][0]['dir']).is_dir()
