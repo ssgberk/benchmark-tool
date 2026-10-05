@@ -3,7 +3,7 @@
 # Prepares a virtual machine for running TFB
 
 # A shell provisioner is called multiple times
-if [ ! -e "~/.firstboot" ]; then
+if [ ! -e "$HOME/.firstboot" ]; then
 
   # Workaround mitchellh/vagrant#289
   echo "grub-pc grub-pc/install_devices multiselect     /dev/sda" | sudo debconf-set-selections
@@ -46,4 +46,6 @@ EOF
 
   sudo mv motd /etc/
   sudo chmod 777 /var/run/docker.sock
+
+  touch "$HOME/.firstboot"
 fi

@@ -104,7 +104,7 @@ class Scaffolding:
 
     def __prompt_confirm_new_language(self):
         self.confirm_new_lang = input("Create New Language '%s' (y/n): " %
-                                          self.language).strip().lower()
+                                      self.language).strip().lower()
         return self.confirm_new_lang == 'y' or self.confirm_new_lang == 'n'
 
     def __gather_approach(self):

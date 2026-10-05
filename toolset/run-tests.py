@@ -1,4 +1,6 @@
 import argparse
+import glob
+import os
 import socket
 import sys
 import signal
@@ -132,7 +134,7 @@ def build_parser():
     parser.add_argument(
         '--type',
         choices=[
-            'all','update', 'datarate'
+            'all', 'datarate'
         ],
         nargs='+',
         default=['all'],
@@ -198,7 +200,15 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv
 
-    args = build_parser().parse_args()
+    args = build_parser().parse_args(argv[1:])
+
+    if args.parse:
+        # Validate before BenchmarkConfig/Benchmarker, which create the directory
+        results_dir = os.path.join(os.getenv('FWROOT', ''), 'results', args.parse)
+        if not glob.glob(os.path.join(results_dir, '*', '*', 'raw.txt')):
+            log("Cannot --parse %s: no raw.txt files found under %s" %
+                (args.parse, results_dir), color=Fore.RED)
+            return 1
 
     config = BenchmarkConfig(args)
     benchmarker = Benchmarker(config)
@@ -226,10 +236,17 @@ def main(argv=None):
         elif config.parse:
             all_tests = benchmarker.metadata.gather_tests()
 
-            for test in all_tests:
-                test.parse_all()
+            # Keep the metadata of the original run; recompute only the outcomes
+            results = benchmarker.results
+            results.load()
+            results.rawData = {'datarate': {}}
+            results.succeeded = {'datarate': []}
+            results.failed = {'datarate': []}
 
-            benchmarker.results.parse(all_tests)
+            for test in all_tests:
+                results.parse_all(test)
+
+            results.parse(all_tests)
 
         else:
             benchmarker.run()
@@ -243,6 +260,7 @@ def main(argv=None):
             benchmarker.stop()
         except:
             sys.exit(1)
+        return 1
 
     return 0
 
