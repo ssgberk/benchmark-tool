@@ -30,6 +30,7 @@ Each spec has `spec.md`, `plan.md`, `tasks.md` in its directory.
 5. SF 003-new-generators (needs SF 001 Task 1).
 6. SF 001-canonical-build-runner, Task 2 (CI; needs SF 002 and SF 003 so every `build.sh` is canonical).
 7. BT 003-benchmark-round-2026 (needs everything above).
+8. BT 008-benchmark-methodology (needs BT 002, BT 004, BT 006, SF 006 Task 9).
 
 Each step is an independent PR with green CI, on branch `chore/modernize-2026` of each repo, in isolated worktrees.
 
