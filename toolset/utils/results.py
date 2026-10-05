@@ -15,17 +15,70 @@ from toolset.utils import summary
 
 RESULT_BEGIN = 'SSGBERK_RESULT_BEGIN'
 RESULT_END = 'SSGBERK_RESULT_END'
-VERIFY_FAIL = 'SSGBERK_VERIFY_FAIL'
 PROFILE_UNSUPPORTED = 'SSGBERK_PROFILE_UNSUPPORTED'
+
+PROTOCOL_REASON = 'protocol: verification markers missing before STARTTIME'
+
+
+def _first_line(marker, text):
+    m = re.search(r'^' + marker + r'.*$', text, re.M)
+    return m.group(0).strip() if m else None
+
+
+def classify_build_output(text):
+    """
+    Returns (status, reason) for a raw build.sh output. Status is one of
+    nonconformant, failed, unsupported or ok. reason is the first matching
+    failure line, a protocol message, or None.
+    """
+    line = _first_line('SSGBERK_CONFORMANCE_FAIL', text)
+    if line:
+        return 'nonconformant', line
+    line = _first_line('SSGBERK_VERIFY_FAIL', text)
+    if line:
+        return 'failed', line
+    has_result = RESULT_BEGIN in text
+    if re.search(r'^' + PROFILE_UNSUPPORTED, text, re.M) and not has_result:
+        return 'unsupported', None
+    start = re.search(r'^STARTTIME ', text, re.M)
+    if not start:
+        # Nothing was timed: with a result block that is a protocol breach.
+        return 'failed', (PROTOCOL_REASON if has_result else None)
+    verify = re.search(r'^SSGBERK_VERIFY_OK', text, re.M)
+    if not verify or verify.start() > start.start():
+        return 'failed', PROTOCOL_REASON
+    conformance = re.search(r'^SSGBERK_CONFORMANCE_OK', text, re.M)
+    if conformance:
+        if conformance.start() > start.start():
+            return 'failed', PROTOCOL_REASON
+    elif re.search(r'^SSGBERK_CONFORMANCE_', text, re.M):
+        return 'failed', PROTOCOL_REASON
+    # else: transition window before SF 006 Task 9, no conformance output.
+    return 'ok', None
+
+
+def _number(value):
+    """A hyperfine scalar, or the mean of a per-run list; None if absent."""
+    if isinstance(value, list):
+        value = [v for v in value if isinstance(v, (int, float))]
+        return sum(value) / len(value) if value else None
+    return value if isinstance(value, (int, float)) else None
+
+
+def _io_marker(name, text):
+    m = re.search(r'^' + name + r' files=(\d+) bytes=(\d+)', text, re.M)
+    return (int(m.group(1)), int(m.group(2))) if m else (None, None)
 
 
 def parse_build_output(text, number_of_files, content_size, min_runs):
-    '''
+    """
     Extracts the hyperfine JSON printed by build.sh between the result
-    markers. Returns [] when the build failed verification or produced
-    no parseable result.
-    '''
-    if VERIFY_FAIL in text:
+    markers plus the SSGBERK_INPUT/OUTPUT/CONFORMANCE_OK values. Returns []
+    when the build did not classify as ok or produced no parseable result.
+    Optional fields missing from old outputs are None.
+    """
+    status, _ = classify_build_output(text)
+    if status != 'ok':
         return []
     start = text.find(RESULT_BEGIN)
     end = text.find(RESULT_END, start)
@@ -37,10 +90,30 @@ def parse_build_output(text, number_of_files, content_size, min_runs):
         return []
     start_time = re.search(r'^STARTTIME (\d+)', text, re.M)
     end_time = re.search(r'^ENDTIME (\d+)', text, re.M)
+    mean = result.get('mean')
+    median = result.get('median')
+    stddev = result.get('stddev')
+    user = _number(result.get('user'))
+    system = _number(result.get('system'))
+    memory = result.get('memory_usage_byte')
+    if isinstance(memory, (int, float)):
+        memory = [memory]
+    memory = [m for m in memory if isinstance(m, (int, float))] if isinstance(memory, list) else []
+    in_files, in_bytes = _io_marker('SSGBERK_INPUT', text)
+    out_files, out_bytes = _io_marker('SSGBERK_OUTPUT', text)
+    features = None
+    m = re.search(r'^SSGBERK_CONFORMANCE_OK\b.*?\bfeatures=(\S*)', text, re.M)
+    if m:
+        features = [f for f in m.group(1).split(',') if f and f != '-']
+    try:
+        files = float(number_of_files)
+    except (TypeError, ValueError):
+        files = None
+    have_cpu = user is not None and system is not None and mean
     return [{
-        'mean': result.get('mean'),
-        'stddev': result.get('stddev'),
-        'median': result.get('median'),
+        'mean': mean,
+        'stddev': stddev,
+        'median': median,
         'min': result.get('min'),
         'max': result.get('max'),
         'times': result.get('times', []),
@@ -49,6 +122,20 @@ def parse_build_output(text, number_of_files, content_size, min_runs):
         'minRuns': min_runs,
         'startTime': int(start_time.group(1)) if start_time else None,
         'endTime': int(end_time.group(1)) if end_time else None,
+        'user': user,
+        'system': system,
+        'cpuUtilization': round((user + system) / mean, 3) if have_cpu else None,
+        'memoryUsageBytes': memory or None,
+        'peakRssBytes': max(memory) if memory else None,
+        'inputFiles': in_files,
+        'inputBytes': in_bytes,
+        'outputFiles': out_files,
+        'outputBytes': out_bytes,
+        'cv': stddev / mean if stddev is not None and mean else None,
+        'postsPerSecond': files / median if files is not None and median else None,
+        'inputMBPerSecond': in_bytes / 1e6 / median if in_bytes is not None and median else None,
+        'features': features,
+        'status': 'ok',
     }]
 
 
@@ -96,6 +183,7 @@ class Results:
         self.failed['datarate'] = []
         self.unsupported = dict()
         self.unsupported['datarate'] = []
+        self.failureReasons = dict()
 
     #############################################################################
     # PUBLIC FUNCTIONS
@@ -151,8 +239,10 @@ class Results:
         results = {'results': parse_build_output(
             text, self.config.number_of_files, self.config.content_size,
             self.config.min_runs)}
-        # Simple marker check; replaced by the Task 3 parser status.
-        results['unsupported'] = PROFILE_UNSUPPORTED in text and not results['results']
+        status, reason = classify_build_output(text)
+        results['status'] = status
+        results['failureReason'] = reason
+        results['unsupported'] = status == 'unsupported' and not results['results']
 
         stats = []
         stats_path = self.get_stats_file(framework_test.name, test_type)
@@ -176,7 +266,8 @@ class Results:
                 results = self.parse_test(framework_test, test_type)
                 self.report_benchmark_results(framework_test, test_type,
                                               results['results'],
-                                              results.get('unsupported', False))
+                                              results.get('unsupported', False),
+                                              results.get('failureReason'))
 
     def write_intermediate(self, test_name, status_message):
         '''
@@ -242,7 +333,7 @@ class Results:
         return path
 
     def report_benchmark_results(self, framework_test, test_type, results,
-                                 unsupported=False):
+                                 unsupported=False, failure_reason=None):
         '''
         Used by FrameworkTest to add benchmark data to this
 
@@ -268,6 +359,8 @@ class Results:
             # This may already be set for single-tests
             if framework_test.name not in self.failed[test_type]:
                 self.failed[test_type].append(framework_test.name)
+            if failure_reason:
+                self.failureReasons[framework_test.name] = failure_reason
 
     #############################################################################
     # PRIVATE FUNCTIONS
@@ -295,6 +388,7 @@ class Results:
         toRet['failed'] = self.failed
         toRet['profile'] = self.profile
         toRet['unsupported'] = self.unsupported
+        toRet['failureReasons'] = self.failureReasons
 
         return toRet
 

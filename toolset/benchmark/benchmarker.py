@@ -207,7 +207,8 @@ class Benchmarker:
             #pprint(results)
 
             self.results.report_benchmark_results(framework_test, test_type, results['results'],
-                                                  results.get('unsupported', False))
+                                                  results.get('unsupported', False),
+                                                  results.get('failureReason'))
             log("Complete", file=benchmark_log)
 
         for test_type in framework_test.runTests:

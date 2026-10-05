@@ -1,0 +1,28 @@
+Generating 1000 posts in content/post
+SSGBERK_INPUT files=1000 bytes=512000
+SSGBERK_VERIFY_OK expected=1000 got=1000
+SSGBERK_CONFORMANCE_OK profile=core posts=1000 sampled=10 features=-
+SSGBERK_OUTPUT files=1004 bytes=905000
+STARTTIME 1790000000
+Benchmark 1: hugo
+  Time (mean ± σ):      2.610 s ±  0.055 s
+SSGBERK_RESULT_BEGIN
+{
+  "results": [
+    {
+      "command": "hugo",
+      "mean": 2.61,
+      "stddev": 0.0522,
+      "median": 2.5,
+      "user": 3.91,
+      "system": 0.62,
+      "min": 2.55,
+      "max": 2.7,
+      "times": [2.55, 2.5, 2.7],
+      "memory_usage_byte": [512000000, 514000000, 513000000],
+      "exit_codes": [0, 0, 0]
+    }
+  ]
+}
+SSGBERK_RESULT_END
+ENDTIME 1790000010
