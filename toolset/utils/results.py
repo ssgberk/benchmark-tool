@@ -407,6 +407,7 @@ class Results:
         toRet['protocol'] = self.__protocol()
         toRet['environment'] = self.__environment()
         toRet['generators'] = self.__generators()
+        toRet['imageBuild'] = self.__image_build()
 
         return toRet
 
@@ -431,6 +432,11 @@ class Results:
             return None
         return environment.generator_versions(
             fw_root, self.frameworks, self.__docker_client())
+
+    def __image_build(self):
+        return {t.name: t.image_build
+                for t in getattr(self.benchmarker, 'tests', [])
+                if getattr(t, 'image_build', None)}
 
     def __protocol(self):
         concurrent = bool(getattr(self.config, 'allow_concurrent', False))

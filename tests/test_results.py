@@ -284,3 +284,17 @@ def test_results_json_has_environment_and_generators(fake_benchmarker):
 def test_results_json_environment_null_without_docker(fake_benchmarker):
     out = Results(fake_benchmarker)._Results__to_jsonable()
     assert out["environment"] is None
+
+
+def test_image_build_in_results_not_in_rawdata(fake_benchmarker):
+    from types import SimpleNamespace
+    ib = {"seconds": 41.8, "imageId": "sha256:a", "sizeBytes": 1, "noCache": False}
+    fake_benchmarker.tests = [SimpleNamespace(name="hugo", image_build=ib),
+                              SimpleNamespace(name="zola")]
+    res = Results(fake_benchmarker)
+    res.report_benchmark_results(SimpleNamespace(name="hugo"), "datarate", [{"mean": 2.0}])
+    out = res._Results__to_jsonable()
+    assert out["imageBuild"] == {"hugo": ib}
+    row = out["rawData"]["datarate"]["hugo"][0]
+    assert "imageBuild" not in row and "seconds" not in row
+    assert row["mean"] == 2.0

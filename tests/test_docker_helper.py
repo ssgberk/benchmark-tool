@@ -328,3 +328,65 @@ def test_benchmark_status_routes_to_failed_with_reason(fake_benchmarker, tmp_pat
     assert "gatsby" not in res.unsupported["datarate"]
     assert res._Results__to_jsonable()["failureReasons"]["gatsby"] == status
     assert "gatsby" not in res.rawData["datarate"]
+
+
+def _build_helper(images_get=None):
+    helper = _helper()
+    helper.benchmarker.config.no_cache = False
+    helper.benchmarker.config.server_docker_host = "unix://x"
+    helper.benchmarker.config.results_environment = "e"
+    if images_get is not None:
+        helper.server.images.get = images_get
+    return helper
+
+
+def test_build_records_seconds(monkeypatch):
+    helper = _build_helper(lambda tag: types.SimpleNamespace(id="sha256:a", attrs={"Size": 7}))
+    monkeypatch.setattr(helper, "_DockerHelper__build", lambda **kw: None)
+    ticks = iter([10.0, 52.5])
+    monkeypatch.setattr(docker_helper.time, "monotonic", lambda: next(ticks))
+    test = types.SimpleNamespace(name="hugo", directory=".")
+    assert helper.build(test) == 0
+    assert helper.last_build == {"seconds": 42.5, "imageId": "sha256:a",
+                                 "sizeBytes": 7, "noCache": False}
+
+
+def test_build_records_seconds_on_failure_and_missing_image(monkeypatch):
+    def missing(tag):
+        raise docker.errors.ImageNotFound("x")
+    helper = _build_helper(missing)
+
+    def boom(**kw):
+        raise Exception("x")
+    monkeypatch.setattr(helper, "_DockerHelper__build", boom)
+    assert helper.build(types.SimpleNamespace(name="hugo", directory=".")) == 1
+    assert helper.last_build["imageId"] is None
+    assert helper.last_build["sizeBytes"] is None
+    assert helper.last_build["seconds"] >= 0
+
+
+def test_no_cache_flag_passed(monkeypatch):
+    helper = _build_helper(lambda tag: types.SimpleNamespace(id="i", attrs={}))
+    helper.benchmarker.config.no_cache = True
+    seen = {}
+    monkeypatch.setattr(helper, "_DockerHelper__build", lambda **kw: seen.update(kw))
+    helper.build(types.SimpleNamespace(name="hugo", directory="."))
+    assert seen["nocache"] is True
+    assert helper.last_build["noCache"] is True
+
+
+def test_no_cache_reaches_docker_api(monkeypatch, tmp_path):
+    seen = {}
+
+    class FakeAPIClient:
+        def __init__(self, base_url=None):
+            pass
+
+        def build(self, **kw):
+            seen.update(kw)
+            return iter([])
+    monkeypatch.setattr(docker_helper.docker, "APIClient", FakeAPIClient)
+    helper = docker_helper.DockerHelper.__new__(docker_helper.DockerHelper)
+    helper.benchmarker = types.SimpleNamespace(time_logger=_FakeTimeLogger())
+    helper._DockerHelper__build("unix://x", ".", str(tmp_path / "l"), "p", "a.dockerfile", "t", nocache=True)
+    assert seen["nocache"] is True

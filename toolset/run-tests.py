@@ -200,6 +200,11 @@ def build_parser():
         default=None,
         help='Run a named suite of (number of files, content size) cells; '
              'cannot be combined with -nf, -cs or -mr')
+    parser.add_argument(
+        '--no-cache',
+        action='store_true',
+        default=False,
+        help='Build generator images without the Docker layer cache')
     # Resource limits applied to every generator container of the run
     parser.add_argument(
         '--cpus',

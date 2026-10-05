@@ -32,11 +32,13 @@ class DockerHelper:
         self.server = docker.DockerClient(
             base_url=self.benchmarker.config.server_docker_host)
 
+    last_build = None
+
     def _run_labels(self):
         return {RUN_LABEL: str(self.benchmarker.config.run_id)}
 
     def __build(self, base_url, path, build_log_file, log_prefix, dockerfile,
-                tag, buildargs={}):
+                tag, buildargs={}, nocache=False):
         '''
         Builds docker containers using docker-py low-level api
         '''
@@ -52,6 +54,7 @@ class DockerHelper:
                     forcerm=True,
                     timeout=3600,
                     pull=True,
+                    nocache=nocache,
                     buildargs=buildargs,
                     decode=True
                 )
@@ -127,6 +130,10 @@ class DockerHelper:
                 build_log_dir,
                 "%s.log" % test_docker_file.replace(".dockerfile", "").lower())
 
+        tag = "%s%s" % (TEST_IMAGE_PREFIX, test.name)
+        no_cache = bool(getattr(self.benchmarker.config, 'no_cache', False))
+        rc = 0
+        start = time.monotonic()
         try:
             self.__build(
                 base_url=self.benchmarker.config.server_docker_host,
@@ -139,11 +146,23 @@ class DockerHelper:
                         self.benchmarker.config.results_environment,
                     'TFB_TEST_NAME': test.name,
                 }),
-                tag="%s%s" % (TEST_IMAGE_PREFIX, test.name))
+                tag=tag,
+                nocache=no_cache)
         except Exception:
-            return 1
+            rc = 1
+        seconds = time.monotonic() - start
 
-        return 0
+        # Recorded (also for a failed build) apart from the timed site build
+        image_id = size_bytes = None
+        try:
+            image = self.server.images.get(tag)
+            image_id = image.id
+            size_bytes = image.attrs.get("Size")
+        except Exception:
+            pass
+        self.last_build = {"seconds": seconds, "imageId": image_id,
+                           "sizeBytes": size_bytes, "noCache": no_cache}
+        return rc
 
     def run(self, test, run_log_dir):
         '''

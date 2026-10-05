@@ -48,6 +48,7 @@ class FrameworkTest:
             pass
 
         result = self.benchmarker.docker_helper.build(self, build_log_dir)
+        self.image_build = getattr(self.benchmarker.docker_helper, 'last_build', None)
         if result != 0:
             return None
 
