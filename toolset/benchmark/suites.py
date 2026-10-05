@@ -6,8 +6,8 @@ from dataclasses import dataclass, field
 DEFAULT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "suites.json")
 
 # Must match the `-cs` choices of toolset/run-tests.py
-CONTENT_SIZES = ("0.500", "500", "1000", "5000", "10000", "100000")
-_NAME_RE = re.compile(r"^[a-z0-9-]+$")
+CONTENT_SIZES = ("0.500", "5", "50", "500", "1000", "5000", "10000", "100000")
+_NAME_RE = re.compile(r"^[A-Za-z0-9-]+$")
 
 
 class SuiteError(ValueError):
@@ -28,6 +28,7 @@ class Suite:
     cooldown_seconds: int
     timeout_seconds: int
     ranked: bool = True
+    description: str = ""
     cells: list = field(default_factory=list)
 
 
@@ -62,6 +63,7 @@ def load(name, path=DEFAULT):
             cooldown_seconds=int(raw["cooldownSeconds"]),
             timeout_seconds=int(raw["timeoutSeconds"]),
             ranked=bool(raw.get("ranked", True)),
+            description=str(raw.get("description", "")),
             cells=cells)
     except (KeyError, TypeError, ValueError) as e:
         raise SuiteError("invalid suite %r: %r" % (name, e))

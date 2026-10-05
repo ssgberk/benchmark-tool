@@ -33,5 +33,37 @@
       {"numberOfFiles": 10,     "contentSize": "5000"},
       {"numberOfFiles": 100000, "contentSize": "0.500"}
     ]
+  },
+  "P": {
+    "description": "P — website pessoal (ex.: site de professor)",
+    "version": 1, "runs": 5, "cooldownSeconds": 15, "timeoutSeconds": 3600,
+    "cells": [
+      {"numberOfFiles": 50, "contentSize": "5"},
+      {"numberOfFiles": 50, "contentSize": "50"}
+    ]
+  },
+  "M": {
+    "description": "M — site corporativo (médio)",
+    "version": 1, "runs": 5, "cooldownSeconds": 15, "timeoutSeconds": 7200,
+    "cells": [
+      {"numberOfFiles": 1000, "contentSize": "5"},
+      {"numberOfFiles": 1000, "contentSize": "50"}
+    ]
+  },
+  "G": {
+    "description": "G — grande portal",
+    "version": 1, "runs": 3, "cooldownSeconds": 30, "timeoutSeconds": 14400,
+    "cells": [
+      {"numberOfFiles": 10000, "contentSize": "5"},
+      {"numberOfFiles": 10000, "contentSize": "50"}
+    ]
+  },
+  "GG": {
+    "description": "GG — portal massivo",
+    "version": 1, "runs": 1, "cooldownSeconds": 60, "timeoutSeconds": 18000,
+    "cells": [
+      {"numberOfFiles": 100000, "contentSize": "5"},
+      {"numberOfFiles": 100000, "contentSize": "50"}
+    ]
   }
 }

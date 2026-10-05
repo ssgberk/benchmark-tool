@@ -209,3 +209,31 @@ def test_suite_json_counts_add_up(monkeypatch, tmp_path):
     cell = json.loads(suite_json.read_text())['cells'][0]
     assert (cell['succeeded'], cell['failed'], cell['unsupported']) == (1, 1, 1)
     assert cell['succeeded'] + cell['failed'] + cell['unsupported'] == len(cell['order'])
+
+
+@pytest.mark.parametrize("name,nf,runs", [("P", 50, 5), ("M", 1000, 5),
+                                          ("G", 10000, 3), ("GG", 100000, 1)])
+def test_site_size_suites(name, nf, runs):
+    s = suites.load(name)
+    assert pairs(s) == [(nf, "5"), (nf, "50")]
+    assert s.runs == runs
+    assert s.description.startswith(name + " ")
+    assert s.ranked is True
+
+
+def test_site_size_descriptions():
+    assert suites.load("P").description == "P — website pessoal (ex.: site de professor)"
+    assert "corporativo" in suites.load("M").description
+    assert "portal" in suites.load("G").description
+    assert "massivo" in suites.load("GG").description
+
+
+@pytest.mark.parametrize("cs", ["5", "50"])
+def test_cs_5_and_50_accepted(cs):
+    assert run_tests.build_parser().parse_args(['-cs', cs]).content_size == cs
+    assert cs in suites.CONTENT_SIZES
+
+
+def test_suite_flag_accepts_site_sizes():
+    for n in ("P", "M", "G", "GG"):
+        assert run_tests.build_parser().parse_args(['--suite', n]).suite == n

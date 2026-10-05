@@ -179,9 +179,9 @@ def build_parser():
         help='Number of markdown posts generated for each build')
     parser.add_argument(
         '-cs', '--content-size',
-        choices=['0.500', '500', '1000', '5000', '10000', '100000'],
+        choices=list(suites.CONTENT_SIZES),
         default='0.500',
-        help='Size of each post in KB (0.500 = one paragraph)')
+        help='Size of each post in KB (0.500 = one paragraph, 5 = 10 blocks, 50 = 100 blocks)')
     parser.add_argument(
         '-mr', '--min-runs', default='3',
         help='Number of timed hyperfine runs per build')
