@@ -241,8 +241,9 @@ def build_parser():
         '--allow-concurrent',
         action='store_true',
         default=False,
-        help='Run even if another SSGBerk run is active; results are marked '
-             'concurrent and not ranked')
+        help='Run even if another SSGBerk run is active; if one is found, results '
+             'are marked concurrent and not ranked (protocol.allowConcurrent '
+             'records the flag either way)')
     parser.add_argument(
         '--server-host',
         default='ssgberk-server',

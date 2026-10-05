@@ -38,8 +38,23 @@ def test_cli_prints_json(capsys):
 def test_matrix_job_timeout_covers_suite_timeout(name):
     suite = suite_matrix.suites.load(name)
     for e in suite_matrix.build_matrix(name, ["hugo"]):
-        assert e["timeout_minutes"] * 60 >= suite.timeout_seconds + 30 * 60
-        assert e["timeout_minutes"] <= 360  # hosted runner job limit
+        if suite.runs >= 3:
+            # a noise re-run can follow the first attempt: use the hosted maximum
+            assert e["timeout_minutes"] == 360
+        else:
+            assert e["timeout_minutes"] == min(360, -(-suite.timeout_seconds // 60) + 30)
+
+
+def test_matrix_job_timeout_values():
+    assert suite_matrix.build_matrix("GG", ["a"])[0]["timeout_minutes"] == 330
+    assert suite_matrix.build_matrix("smoke", ["a"])[0]["timeout_minutes"] == 60
+    assert suite_matrix.build_matrix("P", ["a"])[0]["timeout_minutes"] == 360
+
+
+def test_matrix_job_timeout_capped_for_long_single_run_suite():
+    suite = suite_matrix.suites.Suite(name="X", version=1, runs=1, cooldown_seconds=0,
+                                      timeout_seconds=6 * 3600)
+    assert suite_matrix.job_timeout_minutes(suite) == 360
 
 
 def test_matrix_cell_is_index_into_suite_cells():

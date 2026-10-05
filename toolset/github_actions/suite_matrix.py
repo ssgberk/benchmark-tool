@@ -17,13 +17,14 @@ JOB_MARGIN_MINUTES = 30
 
 
 def job_timeout_minutes(suite):
-    '''Job timeout-minutes covering the suite's per-generator timeout plus a margin.'''
-    minutes = -(-suite.timeout_seconds // 60) + JOB_MARGIN_MINUTES
-    if minutes > MAX_JOB_MINUTES:
-        raise ValueError('suite %s: timeout %d s plus %d min margin exceeds the %d min '
-                         'job limit' % (suite.name, suite.timeout_seconds,
-                                        JOB_MARGIN_MINUTES, MAX_JOB_MINUTES))
-    return minutes
+    '''
+    Job timeout-minutes. With 3 or more runs a noise re-run (R-21) can follow
+    the first attempt, so the job gets the hosted maximum; otherwise the
+    suite's per-generator timeout plus a margin, capped at the maximum.
+    '''
+    if suite.runs >= 3:
+        return MAX_JOB_MINUTES
+    return min(MAX_JOB_MINUTES, -(-suite.timeout_seconds // 60) + JOB_MARGIN_MINUTES)
 
 
 def build_matrix(suite_name, tests, path=suites.DEFAULT):

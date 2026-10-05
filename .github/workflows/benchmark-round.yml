@@ -84,7 +84,7 @@ jobs:
   run:
     needs: list
     runs-on: ubuntu-24.04
-    # suite jobs: the suite's timeoutSeconds plus a margin (suite_matrix.py); ad hoc: 360
+    # suite jobs: from suite_matrix.job_timeout_minutes (360 when runs >= 3); ad hoc: 360
     timeout-minutes: ${{ matrix.timeout_minutes }}
     strategy:
       fail-fast: false

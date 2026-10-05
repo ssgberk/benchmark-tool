@@ -279,12 +279,20 @@ class Results:
             if isinstance(entries, list) and entries and isinstance(entries[0], dict):
                 self._stored_results[name] = entries[0]
         stored_reasons = dict(stored.get('failureReasons') or {})
+        stored_lists = {key: list((stored.get(key) or {}).get('datarate') or [])
+                        for key in ('succeeded', 'failed', 'unsupported')}
         self.rawData = {'datarate': {}}
         self.succeeded = {'datarate': []}
         self.failed = {'datarate': []}
         self.unsupported = {'datarate': []}
         self.failureReasons = {}
         for test in tests:
+            if not any(os.path.exists(os.path.join(self.directory, test.name, t, 'raw.txt'))
+                       for t in test.runTests):
+                # never benchmarked (profile skip, start failure): nothing to
+                # re-parse, so the stored outcome stands
+                self.__keep_stored_outcome(test.name, stored_lists, stored_reasons)
+                continue
             self.parse_all(test)
             reason = stored_reasons.get(test.name)
             if reason in OUTCOME_REASONS and test.name not in self.rawData['datarate']:
@@ -298,6 +306,15 @@ class Results:
                     and test.name not in self.failureReasons:
                 self.failureReasons[test.name] = reason
         self.parse(tests)
+
+    def __keep_stored_outcome(self, name, stored_lists, stored_reasons):
+        for key, names in stored_lists.items():
+            if name in names and name not in getattr(self, key)['datarate']:
+                getattr(self, key)['datarate'].append(name)
+        if name in stored_lists['succeeded'] and name in self._stored_results:
+            self.rawData['datarate'][name] = [self._stored_results[name]]
+        if name in stored_reasons:
+            self.failureReasons[name] = stored_reasons[name]
 
     def __cell_values(self, test_name):
         '''numberOfFiles, contentSize, minRuns for parsing test_name's raw.txt.'''

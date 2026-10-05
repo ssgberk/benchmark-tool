@@ -159,7 +159,7 @@ def test_main_exit_code_follows_run(monkeypatch, failed, code):
     assert run_tests.main(["run-tests.py"]) == code
 
 
-def _v2_cell(tmp_path, fake_benchmarker, monkeypatch, failure=None):
+def _v2_cell(tmp_path, fake_benchmarker, monkeypatch, failure=None, runless=None):
     import json
     import pathlib
     import types
@@ -194,6 +194,10 @@ def _v2_cell(tmp_path, fake_benchmarker, monkeypatch, failure=None):
         "generators": {"hugo": {"version": "0.1"}},
         "imageBuild": {"hugo": {"seconds": 12.5, "imageId": "sha256:a"}},
     }
+    runless = runless or {}
+    for key in ("unsupported", "failed"):
+        old[key]["datarate"] += runless.get(key, {}).get("datarate", [])
+    old["failureReasons"].update(runless.get("failureReasons", {}))
     pathlib.Path(res.file).write_text(json.dumps(old))
     fixtures = pathlib.Path(__file__).parent / "fixtures"
     pathlib.Path(res.get_raw_file("hugo", "datarate")).write_text(
@@ -203,7 +207,7 @@ def _v2_cell(tmp_path, fake_benchmarker, monkeypatch, failure=None):
     res._Results__count_commits = lambda: None
     res._Results__count_sloc = lambda: None
     tests = [types.SimpleNamespace(name=n, runTests={"datarate": object()})
-             for n in ("hugo", "zola")]
+             for n in ["hugo", "zola"] + sorted(runless.get("names", []))]
     seen, bench = _patched_main(monkeypatch, parse=ts)
     bench.results = res
     bench.metadata.gather_tests.return_value = tests
@@ -249,3 +253,19 @@ def test_single_run_interrupt_exits_nonzero(monkeypatch):
     with pytest.raises(SystemExit) as exc:
         handlers[signal.SIGTERM](signal.SIGTERM, None)
     assert exc.value.code == 128 + signal.SIGTERM
+
+
+def test_parse_keeps_outcomes_of_generators_without_raw(monkeypatch, fake_benchmarker, tmp_path):
+    runless = {
+        "names": ["astro", "gatsby"],
+        # astro: skipped for an undeclared profile; gatsby: failed to start
+        "unsupported": {"datarate": ["astro"]},
+        "failed": {"datarate": ["gatsby"]},
+        "failureReasons": {"gatsby": "ERROR: Problem starting gatsby"},
+    }
+    _, data = _v2_cell(tmp_path, fake_benchmarker, monkeypatch, runless=runless)
+    assert data["unsupported"]["datarate"] == ["astro"]
+    assert "astro" not in data["failed"]["datarate"]
+    assert sorted(data["failed"]["datarate"]) == ["gatsby", "zola"]
+    assert data["failureReasons"]["gatsby"] == "ERROR: Problem starting gatsby"
+    assert data["succeeded"]["datarate"] == ["hugo"]
