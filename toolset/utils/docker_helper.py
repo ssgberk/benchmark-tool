@@ -119,6 +119,7 @@ class DockerHelper:
         Builds the test docker containers
         '''
         log_prefix = "%s: " % test.name
+        self.last_build = None
 
         # Build the test image
         test_docker_file = '%s.dockerfile' % test.name
@@ -154,12 +155,14 @@ class DockerHelper:
 
         # Recorded (also for a failed build) apart from the timed site build
         image_id = size_bytes = None
-        try:
-            image = self.server.images.get(tag)
-            image_id = image.id
-            size_bytes = image.attrs.get("Size")
-        except Exception:
-            pass
+        # (a failed build must not pick up a stale image from an earlier build)
+        if rc == 0:
+            try:
+                image = self.server.images.get(tag)
+                image_id = image.id
+                size_bytes = image.attrs.get("Size")
+            except Exception:
+                pass
         self.last_build = {"seconds": seconds, "imageId": image_id,
                            "sizeBytes": size_bytes, "noCache": no_cache}
         return rc

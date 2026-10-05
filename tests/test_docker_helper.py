@@ -390,3 +390,15 @@ def test_no_cache_reaches_docker_api(monkeypatch, tmp_path):
     helper.benchmarker = types.SimpleNamespace(time_logger=_FakeTimeLogger())
     helper._DockerHelper__build("unix://x", ".", str(tmp_path / "l"), "p", "a.dockerfile", "t", nocache=True)
     assert seen["nocache"] is True
+
+
+def test_failed_build_has_no_stale_image_id(monkeypatch):
+    helper = _build_helper(lambda tag: types.SimpleNamespace(id="sha256:old", attrs={"Size": 9}))
+
+    def boom(**kw):
+        raise Exception("x")
+    monkeypatch.setattr(helper, "_DockerHelper__build", boom)
+    assert helper.build(types.SimpleNamespace(name="hugo", directory=".")) == 1
+    assert helper.last_build["imageId"] is None
+    assert helper.last_build["sizeBytes"] is None
+    assert helper.last_build["seconds"] >= 0
