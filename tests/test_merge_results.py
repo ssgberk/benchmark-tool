@@ -113,3 +113,39 @@ def test_duplicate_succeeded_deduplicated():
     merged = merge_results.merge([_result("a", 1, 2), _result("a", 3, 4)])
     assert merged["succeeded"]["datarate"] == ["a"]
     assert merged["frameworks"] == ["a"]
+
+
+def _cell_result(name, nf, cs, mean):
+    r = _result(name, 1000, 2000, mean=mean)
+    r["numberOfFiles"] = nf
+    r["contentSize"] = cs
+    r["rawData"]["datarate"][name][0].update(numberOfFiles=nf, contentSize=cs)
+    return r
+
+
+def test_merge_by_cell_writes_one_summary_per_cell_and_suite_summary(tmp_path):
+    paths = [
+        _write(tmp_path, "a-P-0", _cell_result("a", "50", "5", 1.0)),
+        _write(tmp_path, "b-P-0", _cell_result("b", "50", "5", 2.0)),
+        _write(tmp_path, "a-P-1", _cell_result("a", "50", "50", 3.0)),
+        _write(tmp_path, "b-P-1", _cell_result("b", "50", "50", 4.0)),
+    ]
+    out = tmp_path / "out"
+    assert merge_results.main(["--out", str(out), "--by-cell"] + paths) == 0
+    for cell in ("nf50-cs5", "nf50-cs50"):
+        merged = json.loads((out / cell / "results.json").read_text())
+        assert sorted(merged["rawData"]["datarate"]) == ["a", "b"]
+        assert (out / cell / "summary.csv").exists()
+        assert (out / cell / "summary.md").exists()
+    rows = list(csv.DictReader(io.StringIO((out / "suite-summary.csv").read_text())))
+    assert len(rows) == 4
+    assert {r["cell"] for r in rows} == {"nf50-cs5", "nf50-cs50"}
+    md = (out / "suite-summary.md").read_text()
+    assert "nf50-cs5" in md and "nf50-cs50" in md
+
+
+def test_by_cell_groups_same_cell_and_ignores_unrelated(tmp_path):
+    paths = [_write(tmp_path, "a", _cell_result("a", "10", "0.500", 1.0))]
+    out = tmp_path / "out"
+    assert merge_results.main(["--out", str(out), "--by-cell"] + paths) == 0
+    assert (out / "nf10-cs0.500" / "results.json").exists()
