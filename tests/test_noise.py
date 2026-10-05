@@ -1,4 +1,6 @@
 import types
+
+import pytest
 from unittest import mock
 
 from toolset.benchmark import noise
@@ -28,14 +30,20 @@ def test_rerun_reports_last_attempt():
     r = noise.finalize([a1, a2], 0.10)
     assert r["median"] == 2.0 and r["noisy"] is True
     assert [a["cv"] for a in r["attempts"]] == [0.15, 0.12]
+    assert "runs" not in r["attempts"][0] and "minRuns" in r["attempts"][0]
     a2 = {"cv": 0.04, "median": 2.0}
     r = noise.finalize([a1, a2], 0.10)
     assert r["median"] == 2.0 and r["noisy"] is False
 
 
 def test_finalize_single_attempt_not_noisy():
-    r = noise.finalize([{"cv": 0.01}], 0.10)
+    r = noise.finalize([{"cv": 0.01, "minRuns": 5}], 0.10)
     assert r["noisy"] is False and len(r["attempts"]) == 1
+
+
+def test_finalize_below_three_runs_has_no_noisy_key():
+    r = noise.finalize([{"cv": None, "minRuns": 1}], 0.10)
+    assert "noisy" not in r
 
 
 def _bm(tmp_path, cvs, min_runs="5", statuses=None):
@@ -81,6 +89,8 @@ def test_benchmarker_reruns_once(tmp_path):
     assert b.config.types["datarate"].get_script_variables()["min_runs"] == "5"
     reported = b.results.report_benchmark_results.call_args[0][2][0]
     assert reported["noisy"] is True and len(reported["attempts"]) == 2
+    assert [a["minRuns"] for a in reported["attempts"]] == [5, 10]
+    assert reported["minRuns"] == 10
     assert (tmp_path / "raw.attempt1.txt").read_text() == "attempt1"
     assert (tmp_path / "raw.txt").read_text() == "attempt2"
 
@@ -93,10 +103,42 @@ def test_benchmarker_no_rerun_when_quiet(tmp_path):
     assert reported["noisy"] is False
 
 
-def test_benchmarker_no_rerun_on_timeout(tmp_path):
-    b, ft, calls = _bm(tmp_path, [0.5], statuses=["timeout"])
+def _args(b):
+    return b.results.report_benchmark_results.call_args[0]
+
+
+@pytest.mark.parametrize("status", ["timeout", "oom"])
+def test_benchmarker_no_rerun_on_nonok_first_attempt(tmp_path, status):
+    b, ft, calls = _bm(tmp_path, [0.5], statuses=[status])
     b._Benchmarker__benchmark(ft, open(tmp_path / "log", "w"))
     assert len(calls) == 1
+    assert _args(b)[2] == [] and _args(b)[4] == status
+
+
+def test_benchmarker_no_rerun_when_first_attempt_failed_to_parse(tmp_path):
+    b, ft, calls = _bm(tmp_path, [0.5])
+    b.results.parse_test.side_effect = None
+    b.results.parse_test.return_value = {
+        "results": [], "status": "failed", "failureReason": "build failed",
+        "unsupported": False}
+    b._Benchmarker__benchmark(ft, open(tmp_path / "log", "w"))
+    assert len(calls) == 1 and _args(b)[2] == []
+
+
+def test_failed_rerun_is_reported_as_failure(tmp_path):
+    b, ft, calls = _bm(tmp_path, [0.5, 0.5], statuses=["ok", "timeout"])
+    b._Benchmarker__benchmark(ft, open(tmp_path / "log", "w"))
+    assert len(calls) == 2
+    assert _args(b)[2] == [] and _args(b)[4] == "timeout"
+    assert (tmp_path / "raw.attempt1.txt").read_text() == "attempt1"
+    assert (tmp_path / "raw.txt").read_text() == "attempt2"
+
+
+def test_below_three_runs_no_rerun_and_no_noisy_key(tmp_path):
+    b, ft, calls = _bm(tmp_path, [0.9], min_runs="1")
+    b._Benchmarker__benchmark(ft, open(tmp_path / "log", "w"))
+    assert len(calls) == 1
+    assert "noisy" not in _args(b)[2][0]
 
 
 def test_cooldown_sleep_called_between_tests():

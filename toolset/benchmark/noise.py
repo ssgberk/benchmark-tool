@@ -19,12 +19,16 @@ def rerun_runs(runs):
 
 
 def finalize(attempts, threshold=CV_THRESHOLD):
-    """The last attempt is the result; all attempts are summarized."""
+    """The last attempt is the result; all attempts are summarized.
+    Below 3 runs there is no noisy flag (plan: runs = 1 has cv null)."""
     last = dict(attempts[-1])
     cv = _cv(last)
-    last['attempts'] = [{'cv': a.get('cv'), 'median': a.get('median'),
-                         'mean': a.get('mean'), 'stddev': a.get('stddev'),
-                         'runs': len(a.get('times') or []) or None}
-                        for a in attempts]
-    last['noisy'] = cv is not None and cv > threshold
+    last['attempts'] = [{'minRuns': a.get('minRuns'), 'mean': a.get('mean'),
+                         'median': a.get('median'), 'stddev': a.get('stddev'),
+                         'cv': a.get('cv')} for a in attempts]
+    runs = last.get('minRuns')
+    if isinstance(runs, int) and runs < 3:
+        last.pop('noisy', None)
+    else:
+        last['noisy'] = cv is not None and cv > threshold
     return last

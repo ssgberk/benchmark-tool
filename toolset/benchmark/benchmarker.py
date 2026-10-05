@@ -239,7 +239,7 @@ class Benchmarker:
             log("Benchmark results:", file=benchmark_log)
 
             if outcome['status'] == 'ok' and results['results'] and not test.failed:
-                results = self.__noise_control(
+                results, outcome = self.__noise_control(
                     framework_test, test_type, script, script_variables,
                     raw_file, results, benchmark_log)
 
@@ -263,17 +263,19 @@ class Benchmarker:
         R-21: one re-run with more runs when the CV is high. Only successful
         attempts are re-run; timeout/oom are never retried (R-19).
         '''
-        first = results['results'][0]
         runs = int(script_variables.get('min_runs') or 0)
+        first = results['results'][0]
+        first['minRuns'] = runs
+        ok = {'status': 'ok', 'exitCode': None}
         if not noise.needs_rerun(first, runs):
             results['results'] = [noise.finalize([first])]
-            return results
+            return results, ok
+        rerun = noise.rerun_runs(runs)
         log("CV %.3f above %.2f; re-running with %d runs" % (
-            first['cv'], noise.CV_THRESHOLD, noise.rerun_runs(runs)),
-            file=benchmark_log)
-        attempt1 = os.path.join(os.path.dirname(raw_file), 'raw.attempt1.txt')
-        shutil.copyfile(raw_file, attempt1)
-        variables = dict(script_variables, min_runs=noise.rerun_runs(runs))
+            first['cv'], noise.CV_THRESHOLD, rerun), file=benchmark_log)
+        shutil.copyfile(raw_file, os.path.join(
+            os.path.dirname(raw_file), 'raw.attempt1.txt'))
+        variables = dict(script_variables, min_runs=rerun)
         self.__begin_logging(framework_test, test_type)
         try:
             outcome = self.docker_helper.benchmark(
@@ -283,14 +285,10 @@ class Benchmarker:
             self.__end_logging()
         second = self.results.parse_test(framework_test, test_type)
         if outcome['status'] == 'ok' and second['results']:
+            second['results'][0]['minRuns'] = rerun
             second['results'] = [noise.finalize([first, second['results'][0]])]
-            return second
-        # The re-run itself failed: keep the first valid attempt, flagged noisy
-        shutil.copyfile(attempt1, raw_file)
-        kept = noise.finalize([first])
-        kept['noisy'] = True
-        results['results'] = [kept]
-        return results
+        # else: the last attempt is the result (R-21), reported as its failure
+        return second, outcome
 
     def resolve_resources(self):
         '''
