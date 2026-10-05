@@ -46,6 +46,16 @@ class Benchmarker:
         # Generate metadata
         self.metadata.list_test_metadata()
 
+        if self.config.mode == "benchmark" and not getattr(
+                self.config, 'allow_concurrent', False):
+            others = self.docker_helper.other_runs(self.config.run_id)
+            if others:
+                log("ERROR: another SSGBerk run is active (run id: %s). "
+                    "Concurrent runs share CPUs and invalidate results. "
+                    "Wait for it to finish or pass --allow-concurrent."
+                    % ", ".join(others), color=Fore.RED)
+                return True
+
         any_failed = False
         # Run tests
         log("Running Tests...", border='=')

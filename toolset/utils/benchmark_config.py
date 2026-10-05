@@ -85,6 +85,8 @@ class BenchmarkConfig:
                 time.strftime("%Y%m%d%H%M%S", time.localtime()))
 
         self.run_test_timeout_seconds = 7200
+        self.cooldown_seconds = 0
+        self.allow_concurrent = bool(getattr(args, 'allow_concurrent', False))
 
     def __claim_results_dir(self, base):
         '''
@@ -116,6 +118,7 @@ class BenchmarkConfig:
         cfg.content_size = cell.content_size
         cfg.min_runs = str(suite.runs)
         cfg.run_test_timeout_seconds = suite.timeout_seconds
+        cfg.cooldown_seconds = suite.cooldown_seconds
         cfg.timestamp = "%s/%s" % (base, suites.cell_dir(self.profile, cell))
         # test types keep a reference to their config
         cfg.types = {k: type(v)(cfg) for k, v in self.types.items()}

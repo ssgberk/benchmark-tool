@@ -217,6 +217,12 @@ def build_parser():
         help="CPUs to pin containers to: 'auto' (highest-numbered CPUs, leaving CPU 0 "
              "to the host), 'none', or a list such as 2-5 (default: auto)")
     parser.add_argument(
+        '--allow-concurrent',
+        action='store_true',
+        default=False,
+        help='Run even if another SSGBerk run is active; results are marked '
+             'concurrent and not ranked')
+    parser.add_argument(
         '--server-host',
         default='ssgberk-server',
         help='Hostname/IP for application server'

@@ -401,8 +401,21 @@ class Results:
         toRet['unsupported'] = self.unsupported
         toRet['failureReasons'] = self.failureReasons
         toRet['resources'] = getattr(self.config, 'resources', None)
+        toRet['protocol'] = self.__protocol()
 
         return toRet
+
+    def __protocol(self):
+        concurrent = bool(getattr(self.config, 'allow_concurrent', False))
+        return {
+            'coldRebuild': True,
+            'warmupBuilds': 1,
+            'sequential': not concurrent,
+            'concurrent': concurrent,
+            'cooldownSeconds': getattr(self.config, 'cooldown_seconds', 0),
+            'timeoutSeconds': getattr(self.config, 'run_test_timeout_seconds', 7200),
+            'cvThreshold': 0.10,
+        }
 
     def __write_results(self):
         try:

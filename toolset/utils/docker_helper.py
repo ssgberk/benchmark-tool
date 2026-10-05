@@ -258,6 +258,26 @@ class DockerHelper:
         for container in containers:
             DockerHelper.__stop_container(container)
 
+    def other_runs(self, own_run_id):
+        '''
+        Run ids of live containers labelled ssgberk.run that belong to a run
+        other than own_run_id (sorted, unique).
+        '''
+        try:
+            containers = self.server.containers.list(filters={'label': RUN_LABEL})
+        except docker.errors.NotFound:
+            return []
+        found = set()
+        for container in containers:
+            try:
+                run_id = container.labels.get(RUN_LABEL)
+            except docker.errors.NotFound:
+                # container vanished between list and inspect
+                continue
+            if run_id and run_id != str(own_run_id):
+                found.add(run_id)
+        return sorted(found)
+
     def stop(self, containers=None):
         '''
         Attempts to stop a container or list of containers.
