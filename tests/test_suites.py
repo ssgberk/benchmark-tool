@@ -344,3 +344,43 @@ def test_single_cell_usage_errors_exit_1(monkeypatch, tmp_path, argv):
     except SystemExit as e:
         rc = e.code
     assert rc == 1 and seen == []
+
+
+def test_suite_json_fingerprint_from_first_cell(monkeypatch, tmp_path):
+    import json
+    import os
+    import types
+    monkeypatch.setenv('FWROOT', str(tmp_path))
+    fps = iter(['fp-first', 'fp-second'])
+
+    class FB:
+        def __init__(self, config):
+            self.config = config
+            directory = os.path.join(config.results_root, config.timestamp)
+            os.makedirs(directory)
+            with open(os.path.join(directory, 'results.json'), 'w') as f:
+                json.dump({'environment': {'fingerprint': next(fps)}}, f)
+            self.tests = [types.SimpleNamespace(name='a')]
+            self.results = types.SimpleNamespace(
+                directory=directory, succeeded={'datarate': ['a']},
+                failed={'datarate': []}, unsupported={'datarate': []})
+
+        def run(self):
+            return False
+
+        def stop(self, *a):
+            raise SystemExit(0)
+
+    monkeypatch.setattr(run_tests, 'Benchmarker', FB)
+    monkeypatch.setattr(run_tests.time, 'sleep', lambda s: None)
+    args = run_tests.build_parser().parse_args(['--suite', 'M'])
+    assert run_tests.run_suite(args) == 0
+    (suite_json,) = (tmp_path / 'results').glob('*/suite.json')
+    assert json.loads(suite_json.read_text())['fingerprint'] == 'fp-first'
+
+
+@pytest.mark.parametrize("argv", [['--suite', 'bogus'], ['--profile', 'x'], ['-cs', '7']])
+def test_argparse_usage_errors_exit_1(argv):
+    with pytest.raises(SystemExit) as exc:
+        run_tests.main(['x'] + argv)
+    assert exc.value.code == 1

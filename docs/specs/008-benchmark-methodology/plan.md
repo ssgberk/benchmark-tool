@@ -156,7 +156,7 @@ Top level (example values):
   "profile": "core",
   "resources": {"cpus": 4.0, "memoryBytes": 8589934592, "swap": false, "cpuset": "4-7"},
   "protocol": {"coldRebuild": true, "warmupBuilds": 1, "sequential": true, "concurrent": false,
-               "cooldownSeconds": 15, "timeoutSeconds": 7200, "cvThreshold": 0.10},
+               "allowConcurrent": false, "cooldownSeconds": 15, "timeoutSeconds": 7200, "cvThreshold": 0.10},
   "environment": {
     "fingerprint": "3f9c1a7b20de",
     "cpuModel": "Apple M3 Pro", "cpuModelSource": "launcher",

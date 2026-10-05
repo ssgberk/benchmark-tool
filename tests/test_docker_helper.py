@@ -276,6 +276,7 @@ def _bm(**cfg):
     b.results = mock.Mock()
     b.docker_helper = mock.Mock()
     b.docker_helper.server.info.return_value = {"NCPU": 8}
+    b.docker_helper.other_runs.return_value = []
     b._Benchmarker__run_test = mock.Mock(return_value=False)
     return b
 

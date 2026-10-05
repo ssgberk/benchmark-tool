@@ -232,3 +232,20 @@ def test_parse_keeps_timeout_failure_reason(monkeypatch, fake_benchmarker, tmp_p
     _, data = _v2_cell(tmp_path, fake_benchmarker, monkeypatch, failure="timeout")
     assert data["failureReasons"]["zola"] == "timeout"
     assert "zola" in data["failed"]["datarate"]
+
+
+def test_single_run_interrupt_exits_nonzero(monkeypatch):
+    import signal
+    handlers = {}
+    _, bench = _patched_main(monkeypatch)
+    monkeypatch.setattr(run_tests.signal, "signal",
+                        lambda sig, handler: handlers.__setitem__(sig, handler))
+    bench.stop.side_effect = SystemExit(0)  # mirrors Benchmarker.stop
+    run_tests.main(["run-tests.py"])
+    with pytest.raises(SystemExit) as exc:
+        handlers[signal.SIGINT](signal.SIGINT, None)
+    assert exc.value.code == 130
+    bench.stop.assert_called_once()
+    with pytest.raises(SystemExit) as exc:
+        handlers[signal.SIGTERM](signal.SIGTERM, None)
+    assert exc.value.code == 128 + signal.SIGTERM

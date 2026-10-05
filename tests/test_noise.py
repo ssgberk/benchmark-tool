@@ -154,6 +154,7 @@ def test_cooldown_sleep_called_between_tests():
         b.results = mock.Mock()
         b.results.directory = "/tmp"
         b.docker_helper = mock.Mock()
+        b.docker_helper.other_runs.return_value = []
         b._Benchmarker__run_test = mock.Mock(return_value=True)
         with mock.patch("toolset.benchmark.benchmarker.time.sleep") as sleep, \
                 mock.patch("builtins.open", mock.mock_open()):
@@ -202,6 +203,7 @@ def test_run_reports_failed_benchmark(tmp_path, ok, expected):
     b.results = mock.Mock()
     b.results.directory = str(tmp_path)
     b.docker_helper = mock.Mock()
+    b.docker_helper.other_runs.return_value = []
     test = mock.Mock()
     test.name = "gen"
     b.tests = [test]
@@ -247,3 +249,11 @@ def test_supported_profile_runs_generator(tmp_path, profile, supports):
     b._Benchmarker__run_test(test, mock.MagicMock())
     test.start.assert_called_once()
     b._Benchmarker__benchmark.assert_called_once()
+
+
+def test_dool_stopped_when_first_attempt_raises(tmp_path):
+    b, ft, _ = _bm(tmp_path, [0.01])
+    b.docker_helper.benchmark.side_effect = RuntimeError("daemon gone")
+    with pytest.raises(RuntimeError):
+        b._Benchmarker__benchmark(ft, open(tmp_path / "log", "w"))
+    b._Benchmarker__end_logging.assert_called_once()

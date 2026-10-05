@@ -66,23 +66,36 @@ def test_guard_ignores_own_run(tmp_path):
     b._Benchmarker__run_test.assert_called_once()
 
 
-def test_allow_concurrent_skips_guard(tmp_path):
+def test_allow_concurrent_runs_despite_other_run_and_marks_concurrent(tmp_path):
     b = _benchmarker(["abc-123"], tmp_path, allow_concurrent=True)
     b.run()
-    b.docker_helper.other_runs.assert_not_called()
     b._Benchmarker__run_test.assert_called_once()
+    assert b.config.concurrent is True
 
 
-def test_allow_concurrent_records_flag(fake_config):
+def test_allow_concurrent_alone_is_not_concurrent(tmp_path):
+    b = _benchmarker([], tmp_path, allow_concurrent=True)
+    b.run()
+    b._Benchmarker__run_test.assert_called_once()
+    assert b.config.concurrent is False
+
+
+def test_protocol_records_concurrent_and_allow_flag(fake_config):
     fake_config.allow_concurrent = True
+    fake_config.concurrent = True
     fake_config.run_test_timeout_seconds = 900
     fake_config.cooldown_seconds = 15
     r = Results.__new__(Results)
     r.config = fake_config
     p = r._Results__protocol()
-    assert p["concurrent"] is True and p["sequential"] is False
     assert p == {"coldRebuild": True, "warmupBuilds": 1, "sequential": False,
-                 "concurrent": True, "cooldownSeconds": 15,
+                 "concurrent": True, "allowConcurrent": True, "cooldownSeconds": 15,
                  "timeoutSeconds": 900, "cvThreshold": 0.10}
+    # --allow-concurrent with no other run found: sequential, rankable
+    fake_config.concurrent = False
+    p = r._Results__protocol()
+    assert p["concurrent"] is False and p["sequential"] is True
+    assert p["allowConcurrent"] is True
     fake_config.allow_concurrent = False
-    assert r._Results__protocol()["sequential"] is True
+    del fake_config.concurrent
+    assert r._Results__protocol()["allowConcurrent"] is False

@@ -51,10 +51,16 @@ class Benchmarker:
         # Generate metadata
         self.metadata.list_test_metadata()
 
-        if self.config.mode == "benchmark" and not getattr(
-                self.config, 'allow_concurrent', False):
+        # Set only when another run was actually found (protocol.concurrent)
+        self.config.concurrent = False
+        if self.config.mode == "benchmark":
             others = self.docker_helper.other_runs(self.config.run_id)
-            if others:
+            if others and getattr(self.config, 'allow_concurrent', False):
+                log("WARNING: another SSGBerk run is active (run id: %s); "
+                    "results are marked concurrent and not ranked."
+                    % ", ".join(others), color=Fore.YELLOW)
+                self.config.concurrent = True
+            elif others:
                 log("ERROR: another SSGBerk run is active (run id: %s). "
                     "Concurrent runs share CPUs and invalidate results. "
                     "Wait for it to finish or pass --allow-concurrent."
@@ -237,18 +243,17 @@ class Benchmarker:
                     pass
 
             if not test.failed:
-                # Begin resource usage metrics collection
-                self.__begin_logging(framework_test, test_type)
-
                 script = self.config.types[test_type].get_script_name()
                 script_variables = self.config.types[test_type].get_script_variables()
 
-                outcome = self.docker_helper.benchmark(
-                    framework_test, script, script_variables, raw_file,
-                    self.resolve_resources(), self.config.run_test_timeout_seconds)
-
-                # End resource usage metrics collection
-                self.__end_logging()
+                # Resource usage metrics collection, stopped even if the run raises
+                self.__begin_logging(framework_test, test_type)
+                try:
+                    outcome = self.docker_helper.benchmark(
+                        framework_test, script, script_variables, raw_file,
+                        self.resolve_resources(), self.config.run_test_timeout_seconds)
+                finally:
+                    self.__end_logging()
 
             results = self.results.parse_test(framework_test, test_type)
             log("Benchmark results:", file=benchmark_log)

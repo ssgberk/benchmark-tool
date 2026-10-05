@@ -48,6 +48,16 @@ class StoreSeqAction(argparse.Action):
         return [abs(int(item)) for item in result]
 
 
+class UsageErrorParser(argparse.ArgumentParser):
+    '''
+    argparse exits 2 on a usage error; SSGBerk usage errors exit 1 (R-3).
+    '''
+
+    def error(self, message):
+        self.print_usage(sys.stderr)
+        self.exit(1, '%s: error: %s\n' % (self.prog, message))
+
+
 ###################################################################################################
 # Parser Builder
 ###################################################################################################
@@ -55,7 +65,7 @@ def build_parser():
     '''
     Builds and returns the argument parser for the toolset.
     '''
-    parser = argparse.ArgumentParser(
+    parser = UsageErrorParser(
         description="Run the Static Site Generator Benchmarks (SSGBerk) suite.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         allow_abbrev=False,
@@ -248,6 +258,16 @@ def build_parser():
     return parser
 
 
+def _cell_fingerprint(config):
+    '''environment.fingerprint of a finished cell's results.json, or None.'''
+    path = os.path.join(config.results_root, config.timestamp, 'results.json')
+    try:
+        with open(path) as f:
+            return (json.load(f).get('environment') or {}).get('fingerprint')
+    except (OSError, ValueError, AttributeError):
+        return None
+
+
 SUITE_CONFLICTS = ('-nf', '--number-of-files', '-cs', '--content-size',
                    '-mr', '--min-runs')
 
@@ -272,6 +292,7 @@ def run_suite(args):
     benchmarker = None
     any_failed = False
     aborted = None
+    fingerprint = None
 
     def stop(signum=None, frame=None):
         # Benchmarker.stop() ends in sys.exit(0); an interrupted suite is a failure
@@ -297,6 +318,8 @@ def run_suite(args):
                 aborted = benchmarker.aborted
                 break
             results = benchmarker.results
+            if fingerprint is None:
+                fingerprint = _cell_fingerprint(config)
             cells.append({
                 'index': index,
                 'numberOfFiles': cell.number_of_files,
@@ -329,6 +352,8 @@ def run_suite(args):
             'completionTime': int(round(time.time() * 1000)),
             'cells': cells,
         }
+        if fingerprint:
+            doc['fingerprint'] = fingerprint
         if only is not None:
             doc['cell'] = only
         if aborted:
@@ -389,8 +414,15 @@ def main(argv=None):
     config = BenchmarkConfig(args)
     benchmarker = Benchmarker(config)
 
-    signal.signal(signal.SIGTERM, benchmarker.stop)
-    signal.signal(signal.SIGINT, benchmarker.stop)
+    def interrupted(signum=None, frame=None):
+        # Benchmarker.stop() ends in sys.exit(0); an interrupted run is a failure
+        try:
+            benchmarker.stop(signum, frame)
+        finally:
+            raise SystemExit(128 + (signum or signal.SIGINT))
+
+    signal.signal(signal.SIGTERM, interrupted)
+    signal.signal(signal.SIGINT, interrupted)
 
     try:
         if config.new:

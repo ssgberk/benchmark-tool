@@ -521,12 +521,14 @@ class Results:
                 if getattr(t, 'image_build', None)}
 
     def __protocol(self):
-        concurrent = bool(getattr(self.config, 'allow_concurrent', False))
+        # concurrent: another run was found at start; allowConcurrent: the flag
+        concurrent = bool(getattr(self.config, 'concurrent', False))
         return {
             'coldRebuild': True,
             'warmupBuilds': 1,
             'sequential': not concurrent,
             'concurrent': concurrent,
+            'allowConcurrent': bool(getattr(self.config, 'allow_concurrent', False)),
             'cooldownSeconds': getattr(self.config, 'cooldown_seconds', 0),
             'timeoutSeconds': getattr(self.config, 'run_test_timeout_seconds', 7200),
             'cvThreshold': 0.10,
