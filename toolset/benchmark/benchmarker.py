@@ -13,6 +13,7 @@ from toolset.utils.time_logger import TimeLogger
 from toolset.utils.metadata import Metadata
 from toolset.utils.results import Results
 from toolset.utils.audit import Audit
+from toolset.utils import resources
 
 
 class Benchmarker:
@@ -181,6 +182,7 @@ class Benchmarker:
         def benchmark_type(test_type):
             log("BENCHMARKING %s ... " % test_type.upper(), file=benchmark_log, border='*')
 
+            outcome = {'status': 'ok', 'exitCode': None}
             test = framework_test.runTests[test_type]
             raw_file = self.results.get_raw_file(framework_test.name,
                                                  test_type)
@@ -196,7 +198,9 @@ class Benchmarker:
                 script = self.config.types[test_type].get_script_name()
                 script_variables = self.config.types[test_type].get_script_variables()
 
-                self.docker_helper.benchmark(framework_test, script, script_variables, raw_file)
+                outcome = self.docker_helper.benchmark(
+                    framework_test, script, script_variables, raw_file,
+                    self.resolve_resources(), self.config.run_test_timeout_seconds)
 
                 # End resource usage metrics collection
                 self.__end_logging()
@@ -206,6 +210,12 @@ class Benchmarker:
             # TODO move into log somehow
             #pprint(results)
 
+            if outcome['status'] != 'ok':
+                # timeout/oom: whatever was printed is not a result
+                results['results'] = []
+                results['unsupported'] = False
+                results['failureReason'] = outcome['status']
+
             self.results.report_benchmark_results(framework_test, test_type, results['results'],
                                                   results.get('unsupported', False),
                                                   results.get('failureReason'))
@@ -213,6 +223,17 @@ class Benchmarker:
 
         for test_type in framework_test.runTests:
             benchmark_type(test_type)
+
+    def resolve_resources(self):
+        '''
+        Resolves --cpus/--memory/--cpuset against the Docker host once; the
+        same values apply to every container of the run and go to results.
+        '''
+        if self.config.resources is None:
+            ncpu = self.docker_helper.server.info().get('NCPU') or os.cpu_count()
+            self.config.resources = resources.resolve(
+                self.config.cpus, self.config.memory, self.config.cpuset, ncpu)
+        return self.config.resources
 
     def __begin_logging(self, framework_test, test_type):
         '''

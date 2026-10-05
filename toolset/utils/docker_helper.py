@@ -4,6 +4,7 @@ import time
 import re
 import traceback
 import docker
+import requests
 
 from threading import Thread
 from colorama import Fore, Style
@@ -12,7 +13,7 @@ from toolset.utils.output_helper import log
 
 from psutil import virtual_memory
 
-# total memory limit allocated for the test container
+# memory limit for the (non-benchmark) test server container
 mem_limit = int(round(virtual_memory().total * .95))
 
 TEST_IMAGE_PREFIX = 'ssgberk/test.'
@@ -284,9 +285,12 @@ class DockerHelper:
         except:
             return False
 
-    def benchmark(self, framework_test, script, variables, raw_file):
+    def benchmark(self, framework_test, script, variables, raw_file,
+                  resources, timeout_seconds):
         '''
-        Runs the given remote_script on the wrk container on the client machine.
+        Runs the generator container with fixed resource limits and returns
+        {"status": "ok"|"timeout"|"oom", "exitCode": int}. The container is
+        always stopped and removed before returning.
         '''
 
         def watch_container(container):
@@ -311,20 +315,55 @@ class DockerHelper:
             #{'name': 'cpu', 'hard': 18446744073709551615, 'soft': 0} 
         ]
 
-        watch_container(
-            self.server.containers.run(
-                "%s%s" % (TEST_IMAGE_PREFIX, framework_test.name),
-                "/bin/bash ./%s" % (script),
-                environment=variables,
-                labels=self._run_labels(),
-                network=self.benchmarker.config.network,
-                network_mode=self.benchmarker.config.network_mode,
-                #volumes=volume,
-                detach=True,
-                stderr=True,
-                ulimits=ulimit,
-                sysctls=sysctl,
-                remove=True,
-                log_config={'type': None}
-            )
+        container = self.server.containers.run(
+            "%s%s" % (TEST_IMAGE_PREFIX, framework_test.name),
+            "/bin/bash ./%s" % (script),
+            environment=variables,
+            labels=self._run_labels(),
+            network=self.benchmarker.config.network,
+            network_mode=self.benchmarker.config.network_mode,
+            #volumes=volume,
+            detach=True,
+            stderr=True,
+            ulimits=ulimit,
+            sysctls=sysctl,
+            nano_cpus=int(resources['cpus'] * 1e9),
+            mem_limit=resources['memoryBytes'],
+            # equal to mem_limit: swap disabled
+            memswap_limit=resources['memoryBytes'],
+            cpuset_cpus=resources.get('cpuset'),
+            remove=False,
+            log_config={'type': None}
         )
+        status, exit_code = 'ok', None
+        try:
+            watcher = Thread(target=watch_container, args=(container,), daemon=True)
+            watcher.start()
+            try:
+                result = container.wait(timeout=timeout_seconds)
+                exit_code = result.get('StatusCode')
+            except requests.exceptions.ReadTimeout:
+                status = 'timeout'
+            except requests.exceptions.ConnectionError as e:
+                # docker-py surfaces a read timeout as ConnectionError on some urllib3 versions
+                if 'timed out' not in str(e).lower():
+                    raise
+                status = 'timeout'
+            if status == 'timeout':
+                try:
+                    container.stop(timeout=10)
+                except docker.errors.APIError:
+                    pass
+            watcher.join(timeout=60)
+            container.reload()
+            state = container.attrs.get('State', {})
+            if status == 'ok' and state.get('OOMKilled'):
+                status = 'oom'
+            if exit_code is None:
+                exit_code = state.get('ExitCode')
+        finally:
+            try:
+                container.remove(force=True)
+            except docker.errors.NotFound:
+                pass
+        return {'status': status, 'exitCode': exit_code}

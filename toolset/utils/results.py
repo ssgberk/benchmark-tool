@@ -389,6 +389,7 @@ class Results:
         toRet['profile'] = self.profile
         toRet['unsupported'] = self.unsupported
         toRet['failureReasons'] = self.failureReasons
+        toRet['resources'] = getattr(self.config, 'resources', None)
 
         return toRet
 

@@ -11,6 +11,7 @@ from toolset.benchmark import suites
 from toolset.benchmark.benchmarker import Benchmarker
 from toolset.utils.scaffolding import Scaffolding
 from toolset.utils.audit import Audit
+from toolset.utils import resources
 from toolset.utils import cleaner
 from toolset.utils.benchmark_config import BenchmarkConfig
 from toolset.utils.output_helper import log
@@ -191,6 +192,22 @@ def build_parser():
         default=None,
         help='Run a named suite of (number of files, content size) cells; '
              'cannot be combined with -nf, -cs or -mr')
+    # Resource limits applied to every generator container of the run
+    parser.add_argument(
+        '--cpus',
+        type=float,
+        default=4.0,
+        help='CPUs allotted to each generator container (default: 4)')
+    parser.add_argument(
+        '--memory',
+        type=resources.parse_memory,
+        default=resources.parse_memory('8g'),
+        help='Memory limit per generator container, swap disabled, e.g. 8g (default: 8g)')
+    parser.add_argument(
+        '--cpuset',
+        default='auto',
+        help="CPUs to pin containers to: 'auto' (highest-numbered CPUs, leaving CPU 0 "
+             "to the host), 'none', or a list such as 2-5 (default: auto)")
     parser.add_argument(
         '--server-host',
         default='ssgberk-server',

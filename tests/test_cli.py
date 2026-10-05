@@ -135,3 +135,18 @@ def test_profile_default_core():
 def test_profile_rejects_unknown():
     with pytest.raises(SystemExit):
         parse("--profile", "bogus")
+
+
+def test_resource_flag_defaults():
+    a = parse()
+    assert (a.cpus, a.memory, a.cpuset) == (4.0, 8589934592, "auto")
+
+
+def test_resource_flags_parse():
+    a = parse("--cpus", "2", "--memory", "512m", "--cpuset", "none")
+    assert (a.cpus, a.memory, a.cpuset) == (2.0, 512 * 1024 ** 2, "none")
+
+
+def test_memory_rejects_garbage():
+    with pytest.raises(SystemExit):
+        parse("--memory", "lots")

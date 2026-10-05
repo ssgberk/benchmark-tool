@@ -41,6 +41,11 @@ class BenchmarkConfig:
         self.min_runs = args.min_runs
         self.profile = getattr(args, 'profile', 'core')
         self.verbose_build = args.verbose
+        self.cpus = getattr(args, 'cpus', 4.0)
+        self.memory = getattr(args, 'memory', 8 * 1024 ** 3)
+        self.cpuset = getattr(args, 'cpuset', 'auto')
+        # Resolved lazily against the Docker host (Benchmarker.resolve_resources)
+        self.resources = None
         self.parse = args.parse
         self.results_environment = args.results_environment
         self.results_name = args.results_name
