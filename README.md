@@ -160,6 +160,8 @@ Every generator container gets the same limits, so results do not depend on the 
 | `--cpuset` | `auto` | `auto` pins to the highest-numbered CPUs and leaves CPU 0 to the host (not applied if the host has no spare CPU); `none` disables pinning; or a list such as `2-5` |
 | `--no-cache` | off | build generator images without the Docker layer cache |
 
+Node generators all run with `NODE_OPTIONS=--max-old-space-size=6144` (set in their images), one V8 heap cap inside the memory limit (spec 008, decision 6).
+
 On Docker Desktop these are VM vCPUs, not physical cores. `--cpus` above the host's CPU count is a usage error (exit 1) before any image is built.
 
 ### Protocol
