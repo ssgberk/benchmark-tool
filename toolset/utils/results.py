@@ -10,6 +10,7 @@ import csv
 from datetime import datetime
 
 from toolset.utils.output_helper import log
+from toolset.utils import summary
 
 
 RESULT_BEGIN = 'SSGBERK_RESULT_BEGIN'
@@ -112,6 +113,27 @@ class Results:
         # Aggregate JSON file
         with open(self.file, "w") as f:
             f.write(json.dumps(self.__to_jsonable(), indent=2))
+        self.write_summary()
+
+    def write_summary(self):
+        '''
+        Writes summary.csv and summary.md next to results.json and returns
+        the Markdown text ('' on error).
+        '''
+        try:
+            data = self.__to_jsonable()
+            data['excluded'] = list(self.config.exclude or [])
+            languages = {t.name: getattr(t, 'language', '') for t in self.benchmarker.tests}
+            rows = summary.build_rows(data, languages)
+            markdown = summary.to_markdown(rows, data)
+            with open(os.path.join(self.directory, 'summary.csv'), 'w', newline='') as f:
+                f.write(summary.to_csv(rows))
+            with open(os.path.join(self.directory, 'summary.md'), 'w') as f:
+                f.write(markdown)
+            return markdown
+        except Exception as e:
+            log("Error writing summary: %s" % e)
+            return ''
 
     def parse_test(self, framework_test, test_type):
         '''
@@ -162,6 +184,7 @@ class Results:
         '''
         self.completionTime = int(round(time.time() * 1000))
         self.__write_results()
+        self.write_summary()
 
     def upload(self):
         '''
