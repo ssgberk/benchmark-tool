@@ -10,7 +10,7 @@ import csv
 from datetime import datetime
 
 from toolset.utils.output_helper import log
-from toolset.utils import summary
+from toolset.utils import summary, environment
 
 
 RESULT_BEGIN = 'SSGBERK_RESULT_BEGIN'
@@ -405,8 +405,32 @@ class Results:
         toRet['failureReasons'] = self.failureReasons
         toRet['resources'] = getattr(self.config, 'resources', None)
         toRet['protocol'] = self.__protocol()
+        toRet['environment'] = self.__environment()
+        toRet['generators'] = self.__generators()
 
         return toRet
+
+    def __docker_client(self):
+        helper = getattr(self.benchmarker, 'docker_helper', None)
+        return getattr(helper, 'server', None)
+
+    def __environment(self):
+        if getattr(self, '_environment', None) is None:
+            client = self.__docker_client()
+            if client is None:
+                return None
+            fw_root = getattr(self.config, 'fw_root', None)
+            self._environment = environment.capture(
+                client, getattr(self.config, 'resources', None),
+                environment.toolset_commit(fw_root) if fw_root else None)
+        return self._environment
+
+    def __generators(self):
+        fw_root = getattr(self.config, 'fw_root', None)
+        if not fw_root:
+            return None
+        return environment.generator_versions(
+            fw_root, self.frameworks, self.__docker_client())
 
     def __protocol(self):
         concurrent = bool(getattr(self.config, 'allow_concurrent', False))

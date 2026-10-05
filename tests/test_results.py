@@ -261,3 +261,26 @@ def test_every_result_carries_identical_resources(fake_benchmarker):
     out = res._Results__to_jsonable()
     assert out["rawData"]["datarate"]["a"][0]["resources"] == out["resources"]
     assert out["rawData"]["datarate"]["b"][0]["resources"] == out["resources"]
+
+
+def test_results_json_has_environment_and_generators(fake_benchmarker):
+    import json as _json, os as _os
+    from types import SimpleNamespace
+    fw = _os.path.join(fake_benchmarker.config.fw_root, "frameworks")
+    with open(_os.path.join(fw, "generators.json"), "w") as f:
+        _json.dump({"generators": [{"id": "hugo", "version": "0.167.0"}]}, f)
+    fake_benchmarker.config.resources = {"cpus": 4.0, "memoryBytes": 1, "swap": False, "cpuset": None}
+    fake_benchmarker.tests = [SimpleNamespace(name="hugo")]
+    fake_benchmarker.docker_helper = SimpleNamespace(server=SimpleNamespace(
+        info=lambda: {"NCPU": 8}, version=lambda: {"Version": "29"},
+        images=SimpleNamespace(get=lambda n: (_ for _ in ()).throw(Exception("x")))))
+    out = Results(fake_benchmarker)._Results__to_jsonable()
+    assert out["environment"]["docker"]["ncpu"] == 8
+    assert len(out["environment"]["fingerprint"]) == 12
+    assert out["generators"]["hugo"]["version"] == "0.167.0"
+    assert out["generators"]["hugo"]["imageId"] is None
+
+
+def test_results_json_environment_null_without_docker(fake_benchmarker):
+    out = Results(fake_benchmarker)._Results__to_jsonable()
+    assert out["environment"] is None

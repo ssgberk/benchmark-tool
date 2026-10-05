@@ -103,4 +103,7 @@ fi
 
 test -t 1 && USE_TTY="-t"
 docker build -t ssgberk/toolset - < ${SCRIPT_ROOT}/Dockerfile
-exec docker run -i ${USE_TTY} --rm --network ssgberk -v /var/run/docker.sock:/var/run/docker.sock -v ${SCRIPT_ROOT}:/FrameworkBenchmarks ssgberk/toolset "${@}"
+SSGBERK_HOST_CPU="$( (sysctl -n machdep.cpu.brand_string 2>/dev/null || lscpu 2>/dev/null | sed -n 's/^Model name:[[:space:]]*//p') | head -1)"
+SSGBERK_HOST_OS="$(uname -srm)"
+export SSGBERK_HOST_CPU SSGBERK_HOST_OS
+exec docker run -i ${USE_TTY} -e SSGBERK_HOST_CPU -e SSGBERK_HOST_OS --rm --network ssgberk -v /var/run/docker.sock:/var/run/docker.sock -v ${SCRIPT_ROOT}:/FrameworkBenchmarks ssgberk/toolset "${@}"
