@@ -1,0 +1,116 @@
+name: benchmark-round
+
+on:
+  workflow_dispatch:
+    inputs:
+      number_of_files:
+        description: Number of posts per build (-nf)
+        type: string
+        default: "100"
+      content_size:
+        description: Size of each post in KB (-cs)
+        type: choice
+        default: "0.500"
+        options: ["0.500", "500", "1000", "5000", "10000", "100000"]
+      min_runs:
+        description: Timed hyperfine runs per build (-mr)
+        type: string
+        default: "3"
+      tests:
+        description: Space-separated generator names; empty runs all
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  list:
+    runs-on: ubuntu-24.04
+    outputs:
+      tests: ${{ steps.list.outputs.tests }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - id: list
+        env:
+          TESTS: ${{ inputs.tests }}
+        run: |
+          set -euo pipefail
+          if [ -n "${TESTS// /}" ]; then
+            list=$(printf '%s\n' $TESTS)
+          else
+            list=$(jq -r '.framework' frameworks/*/*/benchmark_config.json)
+          fi
+          if printf '%s\n' "$list" | grep -vqE '^[A-Za-z0-9_.-]+$'; then
+            echo "invalid test name" >&2
+            exit 1
+          fi
+          json=$(printf '%s\n' "$list" | sort -u | jq -Rsc 'split("\n") | map(select(length > 0))')
+          echo "tests=$json" >> "$GITHUB_OUTPUT"
+          echo "$json"
+
+  run:
+    needs: list
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      matrix:
+        test: ${{ fromJSON(needs.list.outputs.tests) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Run benchmark
+        env:
+          TEST: ${{ matrix.test }}
+          NF: ${{ inputs.number_of_files }}
+          CS: ${{ inputs.content_size }}
+          MR: ${{ inputs.min_runs }}
+        run: ./ssgberk --test "$TEST" -nf "$NF" -cs "$CS" -mr "$MR"
+      - name: Record runner environment
+        if: always()
+        env:
+          TEST: ${{ matrix.test }}
+        run: |
+          R=$(ls -td results/*/ 2>/dev/null | head -1 || true)
+          [ -n "$R" ] || exit 0
+          {
+            echo "## lscpu"; lscpu
+            echo "## nproc"; nproc
+            echo "## free -m"; free -m
+            echo "## docker version"
+            docker version --format 'client {{.Client.Version}} server {{.Server.Version}}'
+            echo "## uname -a"; uname -a
+          } > "${R}env-${TEST}.txt" 2>&1 || true
+          echo "RESULT_DIR=$R" >> "$GITHUB_ENV"
+      - uses: actions/upload-artifact@v4
+        if: always() && env.RESULT_DIR != ''
+        with:
+          name: result-${{ matrix.test }}
+          path: ${{ env.RESULT_DIR }}
+          if-no-files-found: warn
+
+  aggregate:
+    needs: run
+    if: always()
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: result-*
+          path: artifacts
+      - name: Merge results
+        run: |
+          set -euo pipefail
+          python3 -m toolset.utils.merge_results --out round artifacts/result-*/results.json
+          mkdir -p round/runs
+          for d in artifacts/result-*; do cp -r "$d" "round/runs/$(basename "$d")"; done
+          cat round/summary.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-round
+          path: round
