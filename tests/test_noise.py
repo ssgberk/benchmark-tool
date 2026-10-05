@@ -207,3 +207,43 @@ def test_run_reports_failed_benchmark(tmp_path, ok, expected):
     b.tests = [test]
     b._Benchmarker__benchmark = mock.Mock(return_value=ok)
     assert b.run() is expected
+
+
+def _profile_bm(tmp_path, profile, supports):
+    from toolset.benchmark.benchmarker import Benchmarker
+    from toolset.utils.results import Results
+    cfg = types.SimpleNamespace(
+        mode="benchmark", profile=profile, exclude=None, results_root=str(tmp_path),
+        timestamp="ts", results_name="n", results_environment="e", number_of_files="10",
+        content_size="0.500", min_runs="3", verbose_build=False, duration=15,
+        results_upload_uri=None, fw_root=None)
+    b = Benchmarker.__new__(Benchmarker)
+    b.config = cfg
+    b.time_logger = mock.Mock()
+    b.docker_helper = mock.Mock()
+    test = mock.Mock()
+    test.name = "gen"
+    test.runTests = {"datarate": mock.Mock(failed=False)}
+    test.supports_profile.side_effect = lambda p: p == "core" or supports
+    test.image_build = None
+    b.tests = [test]
+    b.results = Results(types.SimpleNamespace(config=cfg, tests=[test]))
+    b._Benchmarker__benchmark = mock.Mock(return_value=True)
+    return b, test
+
+
+def test_extended_profile_skips_generator_without_profiles(tmp_path):
+    b, test = _profile_bm(tmp_path, "extended", supports=False)
+    assert b._Benchmarker__run_test(test, mock.MagicMock()) is True
+    test.start.assert_not_called()
+    b._Benchmarker__benchmark.assert_not_called()
+    assert b.results.unsupported["datarate"] == ["gen"]
+    assert b.results.failed["datarate"] == []
+
+
+@pytest.mark.parametrize("profile,supports", [("core", False), ("extended", True)])
+def test_supported_profile_runs_generator(tmp_path, profile, supports):
+    b, test = _profile_bm(tmp_path, profile, supports)
+    b._Benchmarker__run_test(test, mock.MagicMock())
+    test.start.assert_called_once()
+    b._Benchmarker__benchmark.assert_called_once()

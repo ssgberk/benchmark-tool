@@ -146,6 +146,17 @@ class Benchmarker:
                 prefix=log_prefix,
                 file=benchmark_log)
 
+        profile = getattr(self.config, 'profile', 'core')
+        if self.config.mode == "benchmark" and not test.supports_profile(profile):
+            # Same series semantics as SSGBERK_PROFILE_UNSUPPORTED: not run, not a failure
+            message = "Test {name} does not declare profile {profile}. Skipping.".format(
+                name=test.name, profile=profile)
+            for test_type in test.runTests:
+                self.results.report_benchmark_results(test, test_type, [], unsupported=True)
+            self.results.write_intermediate(test.name, message)
+            log(message, prefix=log_prefix, file=benchmark_log)
+            return self.__exit_test(success=True, prefix=log_prefix, file=benchmark_log)
+
         try:
             # Start webapp
             container = test.start()

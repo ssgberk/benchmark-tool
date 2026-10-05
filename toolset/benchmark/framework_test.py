@@ -30,6 +30,10 @@ class FrameworkTest:
     # Public Methods
     ##########################################################################################
 
+    def supports_profile(self, profile):
+        '''core always; other profiles only when benchmark_config.json declares them.'''
+        return profile == 'core' or profile in getattr(self, 'benchmark_profiles', ['core'])
+
     def start(self):
         '''
         Start the test implementation

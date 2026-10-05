@@ -36,3 +36,21 @@ def test_gather_languages_ignores_non_directories(fake_benchmarker, tmp_path):
     (root / "Go" / "hugo" / "benchmark_config.json").write_text("{}")
     (root / "LICENSE").write_text("MIT")
     assert sorted(Metadata(fake_benchmarker).gather_languages()) == ["Go"]
+
+
+def _parsed(fake_benchmarker, **extra):
+    fake_benchmarker.config.types = {"datarate": DatarateTestType(fake_benchmarker.config)}
+    return Metadata(fake_benchmarker).parse_config(dict(CONFIG, **extra), "/x/frameworks/Go/hugo")[0]
+
+
+def test_generator_without_profiles_key_supports_only_core(fake_benchmarker):
+    t = _parsed(fake_benchmarker, config=[{"build_command": "hugo"}])
+    assert t.supports_profile("core") and not t.supports_profile("extended")
+    t = _parsed(fake_benchmarker)  # no config array at all
+    assert t.supports_profile("core") and not t.supports_profile("extended")
+
+
+def test_generator_with_extended_profile_supports_it(fake_benchmarker):
+    t = _parsed(fake_benchmarker, config=[{
+        "build_command": "hugo", "profiles": {"extended": {"features": ["search"]}}}])
+    assert t.supports_profile("extended") and t.supports_profile("core")

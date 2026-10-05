@@ -215,11 +215,25 @@ class Metadata:
                     test_name = "%s-%s" % (config['framework'], test_name)
 
                 # By passing the entire set of keys, each FrameworkTest will have a member for each key
-                tests.append(
-                    FrameworkTest(test_name, directory, self.benchmarker,
-                                  sortedRunTests, test_keys))
+                framework_test = FrameworkTest(test_name, directory, self.benchmarker,
+                                               sortedRunTests, test_keys)
+                framework_test.benchmark_profiles = Metadata.profiles(config)
+                tests.append(framework_test)
 
         return tests
+
+    @staticmethod
+    def profiles(config):
+        '''
+        Profiles a generator supports: core always, plus every key of
+        config[0].profiles (ssg-frameworks spec 006). Without a `profiles`
+        key the generator supports only core.
+        '''
+        entries = config.get('config') if isinstance(config, dict) else None
+        first = entries[0] if isinstance(entries, list) and entries else {}
+        extra = first.get('profiles') if isinstance(first, dict) else None
+        return ['core'] + sorted(k for k in (extra if isinstance(extra, dict) else {})
+                                 if k != 'core')
 
     def list_test_metadata(self):
         '''
