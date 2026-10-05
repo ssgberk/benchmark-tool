@@ -115,6 +115,11 @@ class BenchmarkConfig:
         cfg.suite_timestamp = base
         cfg.suite = suite.name
         cfg.cell_index = cell_index
+        cfg.suite_info = {
+            'name': suite.name, 'version': suite.version,
+            'cellIndex': cell_index, 'cellCount': len(suite.cells),
+            'runs': suite.runs, 'ranked': suite.ranked,
+        }
         cfg.number_of_files = str(cell.number_of_files)
         cfg.content_size = cell.content_size
         cfg.min_runs = str(suite.runs)

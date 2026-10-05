@@ -61,3 +61,5 @@ def test_results_dir_includes_profile_for_suite(monkeypatch, tmp_path):
     cc = cfg.for_cell(s, cell, 0)
     assert cc.timestamp == cfg.timestamp + '/extended/nf10-cs0.500'
     assert cc.profile == 'extended'
+    assert cc.suite_info == {'name': 'smoke', 'version': s.version, 'cellIndex': 0,
+                             'cellCount': len(s.cells), 'runs': s.runs, 'ranked': s.ranked}

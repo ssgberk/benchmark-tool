@@ -1,0 +1,41 @@
+Generating 100 posts (0.500 KB) in content/posts
+SSGBERK_VERIFY_OK expected=100 got=100
+STARTTIME 1791161945
+Benchmark 1: zola build
+  Time (mean ± σ):      0.036 s ±  0.000 s    [User: 0.014 s, System: 0.040 s]
+  Range (min … max):    0.036 s …  0.037 s    3 runs
+ 
+ENDTIME 1791161945
+Number of files: 100 | content size: 0.500 KB | runs: 3
+SSGBERK_RESULT_BEGIN
+{
+  "results": [
+    {
+      "command": "zola build",
+      "mean": 0.03623587524,
+      "stddev": 0.00027817126155122525,
+      "median": 0.036202827240000006,
+      "user": 0.01419384,
+      "system": 0.04031152666666667,
+      "min": 0.03597570424,
+      "max": 0.036529094240000004,
+      "times": [
+        0.03597570424,
+        0.036202827240000006,
+        0.036529094240000004
+      ],
+      "memory_usage_byte": [
+        29888512,
+        30150656,
+        30150656
+      ],
+      "exit_codes": [
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}
+
+SSGBERK_RESULT_END

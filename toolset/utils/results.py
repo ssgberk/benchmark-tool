@@ -19,6 +19,10 @@ PROFILE_UNSUPPORTED = 'SSGBERK_PROFILE_UNSUPPORTED'
 
 _BOL = r'^[ \t]*'
 
+# results.json schemaVersion. Readers treat every key added since version 1
+# as optional; an absent schemaVersion means 1.
+SCHEMA_VERSION = 2
+
 PROTOCOL_REASON = 'protocol: verification markers missing before STARTTIME'
 
 
@@ -386,6 +390,7 @@ class Results:
         '''
         toRet = dict()
 
+        toRet['schemaVersion'] = SCHEMA_VERSION
         toRet['uuid'] = self.uuid
         toRet['name'] = self.name
         toRet['environmentDescription'] = self.environmentDescription
@@ -400,6 +405,7 @@ class Results:
         toRet['completed'] = self.completed
         toRet['succeeded'] = self.succeeded
         toRet['failed'] = self.failed
+        toRet['suite'] = getattr(self.config, 'suite_info', None)
         toRet['profile'] = self.profile
         toRet['unsupported'] = self.unsupported
         toRet['failureReasons'] = self.failureReasons

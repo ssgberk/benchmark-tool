@@ -1,0 +1,41 @@
+Generating 100 posts (0.500 KB) in content/post
+SSGBERK_VERIFY_OK expected=100 got=100
+STARTTIME 1791161947
+Benchmark 1: hugo --quiet
+  Time (mean ± σ):      0.066 s ±  0.002 s    [User: 0.095 s, System: 0.032 s]
+  Range (min … max):    0.064 s …  0.068 s    3 runs
+ 
+ENDTIME 1791161947
+Number of files: 100 | content size: 0.500 KB | runs: 3
+SSGBERK_RESULT_BEGIN
+{
+  "results": [
+    {
+      "command": "hugo --quiet",
+      "mean": 0.06580610411333333,
+      "stddev": 0.0021633706476933906,
+      "median": 0.06481607478000001,
+      "user": 0.09460086666666667,
+      "system": 0.031721900000000004,
+      "min": 0.06431490278,
+      "max": 0.06828733478,
+      "times": [
+        0.06431490278,
+        0.06481607478000001,
+        0.06828733478
+      ],
+      "memory_usage_byte": [
+        62832640,
+        62832640,
+        63782912
+      ],
+      "exit_codes": [
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}
+
+SSGBERK_RESULT_END
