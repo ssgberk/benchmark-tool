@@ -298,3 +298,30 @@ def test_image_build_in_results_not_in_rawdata(fake_benchmarker):
     row = out["rawData"]["datarate"]["hugo"][0]
     assert "imageBuild" not in row and "seconds" not in row
     assert row["mean"] == 2.0
+
+
+PENDING = "SSGBERK_CONFORMANCE_PENDING nav-missing aria-current not found\n"
+
+
+def _pending():
+    # SF 006 R-3 report mode: PENDING, no OK, then timing follows
+    return _no_conf().replace("SSGBERK_OUTPUT", PENDING + "SSGBERK_OUTPUT", 1)
+
+
+def test_conformance_pending_tolerated_when_switch_off():
+    assert classify_build_output(_pending()) == ("ok", None)
+    [r] = parse_build_output(_pending(), "1000", "0.500", "3")
+    assert r["conformance"] == "unchecked" and r["median"] == 2.5
+
+
+def test_conformance_pending_nonconformant_when_required():
+    assert classify_build_output(_pending(), require_conformance=True) == (
+        "nonconformant", "nonconformant: " + PENDING.strip())
+    assert parse_build_output(_pending(), "1000", "0.500", "3",
+                              require_conformance=True) == []
+
+
+def test_unknown_conformance_marker_still_protocol_failure():
+    text = _no_conf().replace("STARTTIME", "SSGBERK_CONFORMANCE_BOGUS\nSTARTTIME", 1)
+    assert classify_build_output(text) == (
+        "failed", "protocol: verification markers missing before STARTTIME")

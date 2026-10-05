@@ -46,8 +46,9 @@ def classify_build_output(text, require_conformance=False):
     nonconformant, failed, unsupported or ok. reason is the failure line
     (prefixed 'nonconformant: ' for conformance failures), a protocol
     message, or None. With require_conformance a missing
-    SSGBERK_CONFORMANCE_OK is nonconformant; otherwise it is tolerated
-    (the result is recorded as conformance 'unchecked').
+    SSGBERK_CONFORMANCE_OK is nonconformant (reason: the first
+    SSGBERK_CONFORMANCE_PENDING line, if any); otherwise it is tolerated
+    (the result is recorded as conformance 'unchecked'), PENDING included.
     """
     line = _first_line('SSGBERK_CONFORMANCE_FAIL', text)
     if line:
@@ -69,11 +70,17 @@ def classify_build_output(text, require_conformance=False):
     if conformance:
         if conformance.start() > start.start():
             return 'failed', PROTOCOL_REASON
-    elif require_conformance:
-        return 'nonconformant', 'nonconformant: missing SSGBERK_CONFORMANCE_OK'
-    elif re.search(_BOL + r'SSGBERK_CONFORMANCE_', text, re.M):
-        return 'failed', PROTOCOL_REASON
-    # else: tolerated until SF 006 Task 27 flips --require-conformance on.
+    else:
+        # SF 006 report mode: PENDING (no OK) is informational and timing
+        # follows; it is a missing OK, not a protocol breach.
+        pending = _first_line('SSGBERK_CONFORMANCE_PENDING', text)
+        if require_conformance:
+            return 'nonconformant', 'nonconformant: ' + (
+                pending or 'missing SSGBERK_CONFORMANCE_OK')
+        if re.search(_BOL + r'SSGBERK_CONFORMANCE_(?!PENDING)', text, re.M):
+            return 'failed', PROTOCOL_REASON
+    # else: tolerated (conformance 'unchecked') until SF 006 Task 27 flips
+    # --require-conformance on.
     return 'ok', None
 
 

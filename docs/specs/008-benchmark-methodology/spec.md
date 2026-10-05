@@ -94,7 +94,7 @@ This spec defines suites, profiles, metrics, the run protocol, statistics, the r
 
 ### Parsing (toolset side of SF markers)
 
-- **R-29** `Results.parse_build_output` additionally: treats `SSGBERK_CONFORMANCE_FAIL` like `SSGBERK_VERIFY_FAIL` (returns `[]`, failure reason `nonconformant: <first fail line>`); treats `SSGBERK_PROFILE_UNSUPPORTED` as status `unsupported`; reads `user`, `system` and `memory_usage_byte` from the hyperfine result; reads `SSGBERK_INPUT`/`SSGBERK_OUTPUT`; and reads `features=` from `SSGBERK_CONFORMANCE_OK`. A missing optional marker leaves the field `null` without failing.
+- **R-29** `Results.parse_build_output` additionally: treats `SSGBERK_CONFORMANCE_FAIL` like `SSGBERK_VERIFY_FAIL` (returns `[]`, failure reason `nonconformant: <first fail line>`); treats `SSGBERK_PROFILE_UNSUPPORTED` as status `unsupported`; reads `user`, `system` and `memory_usage_byte` from the hyperfine result; reads `SSGBERK_INPUT`/`SSGBERK_OUTPUT`; and reads `features=` from `SSGBERK_CONFORMANCE_OK`. A missing optional marker leaves the field `null` without failing. `SSGBERK_CONFORMANCE_PENDING` (ssg-frameworks spec 006 report mode, timing follows) is not a protocol failure: it counts as a missing `SSGBERK_CONFORMANCE_OK`, so the result is `conformance: "unchecked"` while `--require-conformance` is off, and `nonconformant` with reason `nonconformant: <first PENDING line>` when it is on.
 
 ### Validity threats
 
