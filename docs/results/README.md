@@ -1,5 +1,10 @@
 # Benchmark rounds
 
+## Published rounds
+
+- [2026-10-05](./2026-10-05/): site-size suites P, M, G and GG (50 to 100,000 pages × 5 KB and 50 KB), 17 generators, GitHub Actions hosted runners.
+- [example-2026-10](./example-2026-10.md): first round after the modernization (100 posts × 0.5 KB, pre-spec-008 schema).
+
 ## Running a round
 
 Rounds run on GitHub Actions through the `benchmark-round` workflow
@@ -9,6 +14,7 @@ Rounds run on GitHub Actions through the `benchmark-round` workflow
 gh workflow run benchmark-round.yml \
   -f number_of_files=100 -f content_size=0.500 -f min_runs=3
 # optional: -f tests="hugo zola"   (empty = all generators)
+gh workflow run benchmark-round.yml -f suite=P    # a named suite: smoke, standard, stress, P, M, G, GG
 gh run list --workflow benchmark-round.yml
 gh run download <run-id> -n benchmark-round
 ```

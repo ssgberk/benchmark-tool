@@ -1,0 +1,18 @@
+framework,language,numberOfFiles,contentSize,minRuns,mean,stddev,median,min,max,status,suite,suiteVersion,profile,features,fingerprint,cv,noisy,attempts,user,system,cpuUtilization,peakRssMB,inputMB,outputFiles,outputMB,postsPerSecond,inputMBPerSecond,imageBuildSeconds,failureReason
+pelican,python,100000,50,1,4805.39095079762,,4805.39095079762,4805.39095079762,4805.39095079762,ok,GG,1,core,,fe92e3e10f7a,,,1,4708.63902516,23.89822848,0.985,7534.37,5141.54,100001,7224.4,20.809961358794663,1.0699519669979372,42.48,
+astro,javascript,100000,50,,,,,,,failed,GG,1,core,,e2d6f2db677c,,,,,,,,,,,,,44.253,SSGBERK_VERIFY_FAIL build exited 134
+eleventy,javascript,100000,50,,,,,,,failed,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,32.08,SSGBERK_VERIFY_FAIL build exited 134
+gatsby,javascript,100000,50,,,,,,,timeout,GG,1,core,,0719afa5a160,,,,,,,,,,,,,223.733,timeout
+hexo,javascript,100000,50,,,,,,,failed,GG,1,core,,ae30efe0efb4,,,,,,,,,,,,,38.97,SSGBERK_VERIFY_FAIL build exited 134
+hugo,go,100000,50,,,,,,,oom,GG,1,core,,ba134637a49c,,,,,,,,,,,,,27.095,oom
+jekyll,ruby,100000,50,,,,,,,oom,GG,1,core,,ebe58c534103,,,,,,,,,,,,,46.259,oom
+jigsaw,php,100000,50,,,,,,,oom,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,83.809,oom
+metalsmith-handlebars,javascript,100000,50,,,,,,,failed,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,35.891,SSGBERK_VERIFY_FAIL build exited 1
+metalsmith-nunjucks,javascript,100000,50,,,,,,,failed,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,40.165,SSGBERK_VERIFY_FAIL build exited 1
+middleman,ruby,100000,50,,,,,,,oom,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,101.14,oom
+mkdocs,python,100000,50,,,,,,,oom,GG,1,core,,ebe58c534103,,,,,,,,,,,,,46.142,oom
+nanoc,ruby,100000,50,,,,,,,oom,GG,1,core,,90616b2b906d,,,,,,,,,,,,,35.693,oom
+nextjs-export,javascript,100000,50,,,,,,,oom,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,48.174,oom
+nikola-mako,python,100000,50,,,,,,,timeout,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,49.886,timeout
+vitepress,javascript,100000,50,,,,,,,failed,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,40.668,SSGBERK_VERIFY_FAIL build exited 134
+zola,rust,100000,50,,,,,,,oom,GG,1,core,,8e17af3b158e,,,,,,,,,,,,,30.711,oom
