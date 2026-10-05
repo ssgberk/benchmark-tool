@@ -16,7 +16,6 @@ def _result(name, start, end, ok=True, mean=1.0):
         "completionTime": end,
         "numberOfFiles": "10",
         "contentSize": "0.500",
-        "minRuns": "1",
         "frameworks": [name],
         "duration": 15,
         "rawData": {"datarate": {name: [{"mean": mean, "stddev": 0.0, "median": mean,
@@ -24,7 +23,8 @@ def _result(name, start, end, ok=True, mean=1.0):
                                           "numberOfFiles": "10",
                                           "contentSize": "0.500", "minRuns": "1"}]
                                  if ok else []}},
-        "completed": {},
+        "completed": {name: "2026-10-04 00:00:00"},
+        "git": None,
         "succeeded": {"datarate": [name] if ok else []},
         "failed": {"datarate": [] if ok else [name]},
     }
@@ -98,3 +98,18 @@ def test_cli_module(tmp_path):
                         str(out)] + _two(tmp_path), capture_output=True, text=True)
     assert r.returncode == 0, r.stderr
     assert (out / "results.json").exists()
+
+
+def test_completed_union_and_git_first_non_null():
+    a, b, c = _result("a", 1, 2), _result("b", 1, 2), _result("c", 1, 2)
+    b["git"] = {"commitId": "abc"}
+    c["git"] = {"commitId": "def"}
+    merged = merge_results.merge([a, b, c])
+    assert set(merged["completed"]) == {"a", "b", "c"}
+    assert merged["git"] == {"commitId": "abc"}
+
+
+def test_duplicate_succeeded_deduplicated():
+    merged = merge_results.merge([_result("a", 1, 2), _result("a", 3, 4)])
+    assert merged["succeeded"]["datarate"] == ["a"]
+    assert merged["frameworks"] == ["a"]

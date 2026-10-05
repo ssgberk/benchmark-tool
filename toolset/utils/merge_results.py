@@ -21,8 +21,9 @@ def merge(results):
     for r in results:
         for key, value in r.items():
             merged.setdefault(key, value)
-    raw, ok, bad, names = {}, [], [], []
+    raw, ok, bad, names, completed = {}, [], [], [], {}
     for r in results:
+        completed.update(r.get('completed') or {})
         raw.update((r.get('rawData') or {}).get('datarate') or {})
         ok += (r.get('succeeded') or {}).get('datarate') or []
         bad += (r.get('failed') or {}).get('datarate') or []
@@ -30,6 +31,8 @@ def merge(results):
     starts = [r['startTime'] for r in results if r.get('startTime')]
     ends = [r['completionTime'] for r in results if r.get('completionTime')]
     merged.update({
+        'completed': completed,
+        'git': next((r['git'] for r in results if r.get('git')), None),
         'name': DESCRIPTION,
         'environmentDescription': DESCRIPTION,
         'frameworks': sorted(set(names) | set(raw)),
