@@ -65,3 +65,60 @@ def test_build_writes_stream_tokens_to_log(monkeypatch, tmp_path):
 def test_build_raises_on_error_detail(monkeypatch, tmp_path):
     with pytest.raises(Exception):
         _build_with_tokens(monkeypatch, [{'errorDetail': {'message': 'boom'}}], tmp_path / "build.log")
+
+
+import docker.errors  # noqa: E402
+
+
+def _helper(run_id="abc12345-0000"):
+    helper = docker_helper.DockerHelper.__new__(docker_helper.DockerHelper)
+    helper.benchmarker = mock.Mock()
+    helper.benchmarker.config.run_id = run_id
+    helper.benchmarker.config.network = "ssgberk"
+    helper.benchmarker.config.network_mode = None
+    helper.benchmarker.config.mode = "benchmark"
+    helper.server = mock.Mock()
+    return helper
+
+
+def test_run_labels_and_unique_name(tmp_path):
+    helper = _helper()
+    with mock.patch.object(docker_helper, "Thread"):
+        helper.run(types.SimpleNamespace(name="hugo"), str(tmp_path))
+    kw = helper.server.containers.run.call_args.kwargs
+    assert kw["labels"] == {"ssgberk.run": "abc12345-0000"}
+    assert kw["name"] == "ssgberk-abc12345-hugo"
+
+
+def test_benchmark_labels():
+    helper = _helper()
+    helper.server.containers.run.return_value.logs.return_value = iter([])
+    helper.benchmark(types.SimpleNamespace(name="hugo"), "b.sh", {}, "/dev/null")
+    kw = helper.server.containers.run.call_args.kwargs
+    assert kw["labels"] == {"ssgberk.run": "abc12345-0000"}
+
+
+def test_stop_all_scoped_to_run_label(monkeypatch):
+    monkeypatch.setattr(docker_helper.time, "sleep", lambda s: None)
+    helper = _helper()
+    mine = mock.Mock()
+    helper.server.containers.list.return_value = [mine]
+    helper.stop()
+    helper.server.containers.list.assert_called_once_with(
+        filters={"label": "ssgberk.run=abc12345-0000"})
+    mine.stop.assert_called_once()
+
+
+def test_stop_all_tolerates_not_found(monkeypatch):
+    monkeypatch.setattr(docker_helper.time, "sleep", lambda s: None)
+    helper = _helper()
+    gone = mock.Mock()
+    gone.stop.side_effect = docker.errors.NotFound("gone")
+    ok = mock.Mock()
+    helper.server.containers.list.return_value = [gone, ok]
+    helper.stop()
+    ok.stop.assert_called_once()
+    helper.server.containers.list.side_effect = docker.errors.ImageNotFound("x")
+    helper.stop()  # must not raise
+    helper.server.containers.list.side_effect = docker.errors.NotFound("x")
+    helper.stop()

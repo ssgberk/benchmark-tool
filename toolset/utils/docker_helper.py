@@ -16,6 +16,7 @@ from psutil import virtual_memory
 mem_limit = int(round(virtual_memory().total * .95))
 
 TEST_IMAGE_PREFIX = 'ssgberk/test.'
+RUN_LABEL = 'ssgberk.run'
 
 
 class DockerHelper:
@@ -29,6 +30,9 @@ class DockerHelper:
 
         self.server = docker.DockerClient(
             base_url=self.benchmarker.config.server_docker_host)
+
+    def _run_labels(self):
+        return {RUN_LABEL: str(self.benchmarker.config.run_id)}
 
     def __build(self, base_url, path, build_log_file, log_prefix, dockerfile,
                 tag, buildargs={}):
@@ -159,7 +163,9 @@ class DockerHelper:
                         log(line.decode('utf-8', 'replace'), prefix=log_prefix, file=run_log)
 
             extra_hosts = None
-            name = "ssgberk-server"
+            # Unique per run so concurrent runs do not collide on the name
+            name = "ssgberk-%s-%s" % (
+                str(self.benchmarker.config.run_id)[:8], test.name)
 
             if self.benchmarker.config.network is None:
                 extra_hosts = {
@@ -194,6 +200,7 @@ class DockerHelper:
             container = self.server.containers.run(
                 "%s%s" % (TEST_IMAGE_PREFIX, test.name),
                 name=name,
+                labels=self._run_labels(),
                 command=docker_cmd,
                 network=self.benchmarker.config.network,
                 network_mode=self.benchmarker.config.network_mode,
@@ -241,16 +248,20 @@ class DockerHelper:
             pass
 
     @staticmethod
-    def __stop_all(docker_client):
-        for container in docker_client.containers.list():
-            if len(container.image.tags) > 0 \
-                    and DockerHelper.is_ssgberk_test_image(container.image.tags[0]):
-                DockerHelper.__stop_container(container)
+    def __stop_all(docker_client, run_id):
+        try:
+            containers = docker_client.containers.list(
+                filters={'label': '%s=%s' % (RUN_LABEL, run_id)})
+        except (docker.errors.NotFound, docker.errors.ImageNotFound):
+            return
+        for container in containers:
+            DockerHelper.__stop_container(container)
 
     def stop(self, containers=None):
         '''
         Attempts to stop a container or list of containers.
-        If no containers are passed, stops all running containers.
+        If no containers are passed, stops the running containers of this run
+        (label ssgberk.run=<run_id>); other runs are left untouched.
         '''
 
         if containers:
@@ -259,7 +270,7 @@ class DockerHelper:
             for container in containers:
                 DockerHelper.__stop_container(container)
         else:
-            DockerHelper.__stop_all(self.server)
+            DockerHelper.__stop_all(self.server, self.benchmarker.config.run_id)
 
         self.server.containers.prune()
 
@@ -298,6 +309,7 @@ class DockerHelper:
                 "%s%s" % (TEST_IMAGE_PREFIX, framework_test.name),
                 "/bin/bash ./%s" % (script),
                 environment=variables,
+                labels=self._run_labels(),
                 network=self.benchmarker.config.network,
                 network_mode=self.benchmarker.config.network_mode,
                 #volumes=volume,

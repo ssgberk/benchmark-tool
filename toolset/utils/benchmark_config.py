@@ -1,5 +1,6 @@
 import os
 import time
+import uuid
 
 from toolset.benchmark.test_types import *
 from toolset.utils.output_helper import QuietOutputStream
@@ -21,6 +22,9 @@ class BenchmarkConfig:
             self.types = types
         else:
             self.types = {t: types[t] for t in args.type}
+
+        # Identifies this run (docker labels, results uuid)
+        self.run_id = str(uuid.uuid4())
 
         self.duration = args.duration
         self.exclude = args.exclude
@@ -69,6 +73,22 @@ class BenchmarkConfig:
         if hasattr(self, 'parse') and self.parse is not None:
             self.timestamp = self.parse
         else:
-            self.timestamp = time.strftime("%Y%m%d%H%M%S", time.localtime())
+            self.timestamp = self.__claim_results_dir(
+                time.strftime("%Y%m%d%H%M%S", time.localtime()))
 
         self.run_test_timeout_seconds = 7200
+
+    def __claim_results_dir(self, base):
+        '''
+        Atomically creates results/<base>, appending -2, -3, ... when it
+        already exists (e.g. two runs started in the same second).
+        '''
+        os.makedirs(self.results_root, exist_ok=True)
+        candidate, n = base, 1
+        while True:
+            try:
+                os.mkdir(os.path.join(self.results_root, candidate))
+                return candidate
+            except FileExistsError:
+                n += 1
+                candidate = "%s-%d" % (base, n)

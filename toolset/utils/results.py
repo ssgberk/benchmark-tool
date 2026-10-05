@@ -66,7 +66,7 @@ class Results:
             pass
         self.file = os.path.join(self.directory, "results.json")
 
-        self.uuid = str(uuid.uuid4())
+        self.uuid = getattr(self.config, 'run_id', None) or str(uuid.uuid4())
         self.name = datetime.now().strftime(self.config.results_name)
         self.environmentDescription = self.config.results_environment
         try:
