@@ -3,6 +3,11 @@ name: benchmark-round
 on:
   workflow_dispatch:
     inputs:
+      suite:
+        description: Named suite (one job per generator and cell, runs from suites.json); empty uses -nf/-cs/-mr below
+        type: choice
+        default: ""
+        options: ["", smoke, standard, stress, P, M, G, GG]
       number_of_files:
         description: Number of posts per build (-nf)
         type: string
@@ -11,7 +16,7 @@ on:
         description: Size of each post in KB (-cs)
         type: choice
         default: "0.500"
-        options: ["0.500", "500", "1000", "5000", "10000", "100000"]
+        options: ["0.500", "5", "50", "500", "1000", "5000", "10000", "100000"]
       min_runs:
         description: Timed hyperfine runs per build (-mr)
         type: string
@@ -28,7 +33,7 @@ jobs:
   list:
     runs-on: ubuntu-24.04
     outputs:
-      tests: ${{ steps.list.outputs.tests }}
+      matrix: ${{ steps.list.outputs.matrix }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -36,7 +41,9 @@ jobs:
       - id: list
         env:
           TESTS: ${{ inputs.tests }}
+          SUITE: ${{ inputs.suite }}
           NF: ${{ inputs.number_of_files }}
+          CS: ${{ inputs.content_size }}
           MR: ${{ inputs.min_runs }}
         run: |
           set -euo pipefail
@@ -57,18 +64,30 @@ jobs:
             echo "invalid test name" >&2
             exit 1
           fi
-          json=$(printf '%s\n' "$list" | sort -u | jq -Rsc 'split("\n") | map(select(length > 0))')
-          echo "tests=$json" >> "$GITHUB_OUTPUT"
-          echo "$json"
+          if [[ ! "$SUITE" =~ ^[A-Za-z0-9-]*$ ]]; then
+            echo "invalid suite" >&2
+            exit 1
+          fi
+          tests=$(printf '%s\n' "$list" | sort -u)
+          if [ -n "$SUITE" ]; then
+            # generator x cell matrix; runs come from suites.json
+            # shellcheck disable=SC2086
+            matrix=$(python3 -m toolset.github_actions.suite_matrix --suite "$SUITE" --tests $tests)
+          else
+            matrix=$(printf '%s\n' "$tests" | jq -Rsc --arg nf "$NF" --arg cs "$CS" --arg mr "$MR" \
+              'split("\n") | map(select(length > 0) | {test: ., suite: "", cell: 0, number_of_files: $nf, content_size: $cs, min_runs: $mr, key: .})')
+          fi
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+          echo "$matrix"
 
   run:
     needs: list
     runs-on: ubuntu-24.04
-    timeout-minutes: 300
+    timeout-minutes: 360
     strategy:
       fail-fast: false
       matrix:
-        test: ${{ fromJSON(needs.list.outputs.tests) }}
+        include: ${{ fromJSON(needs.list.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -76,9 +95,9 @@ jobs:
       - name: Run benchmark
         env:
           TEST: ${{ matrix.test }}
-          NF: ${{ inputs.number_of_files }}
-          CS: ${{ inputs.content_size }}
-          MR: ${{ inputs.min_runs }}
+          NF: ${{ matrix.number_of_files }}
+          CS: ${{ matrix.content_size }}
+          MR: ${{ matrix.min_runs }}
         run: ./ssgberk --test "$TEST" -nf "$NF" -cs "$CS" -mr "$MR"
       - name: Record runner environment
         if: always()
@@ -102,7 +121,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always() && env.RESULT_DIR != ''
         with:
-          name: result-${{ matrix.test }}
+          name: result-${{ matrix.key }}
           path: ${{ env.RESULT_DIR }}
           if-no-files-found: warn
 
@@ -117,12 +136,23 @@ jobs:
           pattern: result-*
           path: artifacts
       - name: Merge results
+        env:
+          SUITE: ${{ inputs.suite }}
         run: |
           set -euo pipefail
-          python3 -m toolset.utils.merge_results --out round artifacts/result-*/results.json
+          if [ -n "$SUITE" ]; then
+            # one results.json + summary per cell, plus suite-summary.csv/md
+            python3 -m toolset.utils.merge_results --by-cell --out round artifacts/result-*/results.json
+          else
+            python3 -m toolset.utils.merge_results --out round artifacts/result-*/results.json
+          fi
           mkdir -p round/runs
           for d in artifacts/result-*; do cp -r "$d" "round/runs/$(basename "$d")"; done
-          cat round/summary.md >> "$GITHUB_STEP_SUMMARY"
+          if [ -n "$SUITE" ]; then
+            cat round/suite-summary.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            cat round/summary.md >> "$GITHUB_STEP_SUMMARY"
+          fi
       - uses: actions/upload-artifact@v4
         with:
           name: benchmark-round
