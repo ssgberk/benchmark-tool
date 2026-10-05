@@ -366,7 +366,8 @@ class DockerHelper:
                 status = 'timeout'
             except requests.exceptions.ConnectionError as e:
                 # docker-py surfaces a read timeout as ConnectionError on some urllib3 versions
-                if 'timed out' not in str(e).lower():
+                if (isinstance(e, requests.exceptions.ConnectTimeout)
+                        or 'timed out' not in str(e).lower()):
                     raise
                 status = 'timeout'
             if status == 'timeout':
@@ -377,10 +378,12 @@ class DockerHelper:
             watcher.join(timeout=60)
             container.reload()
             state = container.attrs.get('State', {})
-            if status == 'ok' and state.get('OOMKilled'):
-                status = 'oom'
             if exit_code is None:
                 exit_code = state.get('ExitCode')
+            # R-19: OOMKilled, or exit 137 (SIGKILL) that we did not cause by
+            # stopping the container after a timeout
+            if status == 'ok' and (state.get('OOMKilled') or exit_code == 137):
+                status = 'oom'
         finally:
             try:
                 container.remove(force=True)

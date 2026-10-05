@@ -186,9 +186,13 @@ Per result (`rawData.datarate.<fw>[0]`), added keys:
   "cv": 0.021, "noisy": false,
   "postsPerSecond": 381.7, "inputMBPerSecond": 195.4,
   "status": "ok", "features": [],
+  "resources": {"cpus": 4.0, "memoryBytes": 8589934592, "swap": false, "cpuset": "4-7"},
+  "conformance": "ok",
   "attempts": [{"minRuns": 5, "mean": 2.61, "median": 2.62, "stddev": 0.055, "cv": 0.021}]
 }
 ```
+
+`resources` is the same dict as the top-level `resources` on every result; `conformance` is `ok` or `unchecked`.
 
 `status` ∈ `ok`, `failed`, `nonconformant`, `timeout`, `oom`, `unsupported`. Existing keys (`mean`, `stddev`, `median`, `min`, `max`, `times`, `numberOfFiles`, `contentSize`, `minRuns`, `startTime`, `endTime`) are unchanged.
 

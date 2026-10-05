@@ -361,6 +361,9 @@ class Results:
                 self.unsupported[test_type].append(framework_test.name)
         # If results has a size from the parse, then it succeeded.
         elif results:
+            resources = getattr(self.config, 'resources', None)
+            if resources is not None and isinstance(results[0], dict):
+                results[0]['resources'] = dict(resources)
             self.rawData[test_type][framework_test.name] = results
 
             # This may already be set for single-tests

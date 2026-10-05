@@ -56,6 +56,15 @@ class Benchmarker:
                     % ", ".join(others), color=Fore.RED)
                 return True
 
+        if self.config.mode == "benchmark":
+            # Usage errors (e.g. --cpus above the host's CPUs) must surface
+            # before any image is built or monitor started
+            try:
+                self.resolve_resources()
+            except ValueError as e:
+                log("ERROR: %s" % e, color=Fore.RED)
+                sys.exit(1)
+
         any_failed = False
         # Run tests
         log("Running Tests...", border='=')

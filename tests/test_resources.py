@@ -35,3 +35,11 @@ def test_resolve_rejects_too_many_cpus():
 def test_resolve_rejects_bad_cpuset(cpuset):
     with pytest.raises(ValueError):
         resources.resolve(2, 1, cpuset, 8)
+
+
+def test_resolve_rejects_cpuset_smaller_than_cpus():
+    with pytest.raises(ValueError):
+        resources.resolve(4, 1, "0-1", 8)
+    with pytest.raises(ValueError):
+        resources.resolve(2.5, 1, "0,1", 8)
+    assert resources.resolve(4, 1, "2-5", 8)["cpuset"] == "2-5"

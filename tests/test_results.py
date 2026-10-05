@@ -249,3 +249,15 @@ def test_failure_reason_stored_and_emitted(fake_benchmarker):
     out = res._Results__to_jsonable()
     assert out["failureReasons"] == {
         "gatsby": "nonconformant: SSGBERK_CONFORMANCE_FAIL profile=core missing=title"}
+
+
+def test_every_result_carries_identical_resources(fake_benchmarker):
+    fake_benchmarker.tests = []
+    fake_benchmarker.config.resources = {"cpus": 4.0, "memoryBytes": 1, "swap": False,
+                                         "cpuset": "4-7"}
+    res = Results(fake_benchmarker)
+    res.report_benchmark_results(_fw("a"), "datarate", [{"mean": 1.0}])
+    res.report_benchmark_results(_fw("b"), "datarate", [{"mean": 2.0}])
+    out = res._Results__to_jsonable()
+    assert out["rawData"]["datarate"]["a"][0]["resources"] == out["resources"]
+    assert out["rawData"]["datarate"]["b"][0]["resources"] == out["resources"]

@@ -219,7 +219,7 @@ def test_benchmark_removes_container_on_error(tmp_path):
     c.remove.assert_called_once_with(force=True)
 
 
-def test_benchmarker_resolves_resources_once_and_reports_oom(monkeypatch, tmp_path):
+def test_benchmarker_resolves_resources_once_and_caches_on_config(monkeypatch, tmp_path):
     from toolset.benchmark.benchmarker import Benchmarker
     b = Benchmarker.__new__(Benchmarker)
     b.config = types.SimpleNamespace(cpus=4.0, memory=8589934592, cpuset="auto",
@@ -230,3 +230,101 @@ def test_benchmarker_resolves_resources_once_and_reports_oom(monkeypatch, tmp_pa
     b.resolve_resources()
     b.docker_helper.server.info.assert_called_once()
     assert b.config.resources["swap"] is False
+
+
+def test_benchmark_exit_137_without_oomkilled_flag_is_oom(tmp_path):
+    helper = _helper()
+    c = _ok_container()
+    c.wait.return_value = {"StatusCode": 137}
+    c.attrs = {"State": {"OOMKilled": False, "ExitCode": 137}}
+    helper.server.containers.run.return_value = c
+    assert _bench(helper, tmp_path) == {"status": "oom", "exitCode": 137}
+
+
+def test_benchmark_timeout_stopped_137_stays_timeout(tmp_path):
+    import requests
+    helper = _helper()
+    c = _ok_container()
+    c.wait.side_effect = requests.exceptions.ReadTimeout("t")
+    c.attrs = {"State": {"OOMKilled": False, "ExitCode": 137}}
+    helper.server.containers.run.return_value = c
+    assert _bench(helper, tmp_path)["status"] == "timeout"
+
+
+def test_connect_timeout_is_not_a_generator_timeout(tmp_path):
+    import requests
+    helper = _helper()
+    c = _ok_container()
+    c.wait.side_effect = requests.exceptions.ConnectTimeout("Connection to x timed out")
+    helper.server.containers.run.return_value = c
+    with pytest.raises(requests.exceptions.ConnectTimeout):
+        _bench(helper, tmp_path)
+    c.stop.assert_not_called()
+    c.remove.assert_called_once_with(force=True)
+
+
+def _bm(**cfg):
+    from toolset.benchmark.benchmarker import Benchmarker
+    b = Benchmarker.__new__(Benchmarker)
+    base = dict(mode="benchmark", run_id="r", allow_concurrent=True, cpus=4.0,
+                memory=8589934592, cpuset="auto", resources=None,
+                quiet_out=mock.MagicMock())
+    base.update(cfg)
+    b.config = types.SimpleNamespace(**base)
+    b.metadata = mock.Mock()
+    b.tests = [mock.Mock()]
+    b.results = mock.Mock()
+    b.docker_helper = mock.Mock()
+    b.docker_helper.server.info.return_value = {"NCPU": 8}
+    b._Benchmarker__run_test = mock.Mock(return_value=False)
+    return b
+
+
+def test_run_rejects_too_many_cpus_before_any_test(tmp_path):
+    b = _bm(cpus=16.0)
+    b.results.directory = str(tmp_path)
+    with mock.patch("toolset.benchmark.benchmarker.log") as log:
+        with pytest.raises(SystemExit) as exc:
+            b.run()
+    assert exc.value.code == 1
+    assert any("exceeds" in str(c) for c in log.call_args_list)
+    b._Benchmarker__run_test.assert_not_called()
+    b.docker_helper.benchmark.assert_not_called()
+
+
+def test_run_resolves_resources_into_config_before_tests(tmp_path):
+    b = _bm()
+    b.results.directory = str(tmp_path)
+    seen = []
+    b._Benchmarker__run_test.side_effect = lambda *a: seen.append(b.config.resources) or False
+    b.run()
+    assert seen[0]["cpuset"] == "4-7"
+
+
+@pytest.mark.parametrize("status", ["oom", "timeout"])
+def test_benchmark_status_routes_to_failed_with_reason(fake_benchmarker, tmp_path, status):
+    import pathlib
+    from toolset.benchmark.benchmarker import Benchmarker
+    from toolset.utils.results import Results
+    fake_benchmarker.tests = []
+    res = Results(fake_benchmarker)
+    b = Benchmarker.__new__(Benchmarker)
+    b.config = fake_benchmarker.config
+    b.config.resources = dict(RES)
+    b.config.run_test_timeout_seconds = 60
+    b.config.types = {"datarate": mock.Mock()}
+    b.results = res
+    b.docker_helper = mock.Mock()
+    b.docker_helper.benchmark.return_value = {"status": status, "exitCode": 137}
+    b._Benchmarker__begin_logging = mock.Mock()
+    b._Benchmarker__end_logging = mock.Mock()
+    fw = types.SimpleNamespace(
+        name="gatsby", runTests={"datarate": types.SimpleNamespace(failed=False)})
+    # whatever the generator printed before dying must not count as a result
+    raw = pathlib.Path(res.get_raw_file("gatsby", "datarate"))
+    raw.write_text("SSGBERK_PROFILE_UNSUPPORTED extended\n")
+    b._Benchmarker__benchmark(fw, mock.MagicMock())
+    assert "gatsby" in res.failed["datarate"]
+    assert "gatsby" not in res.unsupported["datarate"]
+    assert res._Results__to_jsonable()["failureReasons"]["gatsby"] == status
+    assert "gatsby" not in res.rawData["datarate"]

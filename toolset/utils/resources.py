@@ -28,6 +28,14 @@ def _validate_cpuset(cpuset, ncpu):
             raise ValueError("cpuset %r is out of range for %d CPUs" % (cpuset, ncpu))
 
 
+def _cpuset_size(cpuset):
+    cpus = set()
+    for part in cpuset.split(','):
+        lo, _, hi = part.strip().partition('-')
+        cpus.update(range(int(lo), int(hi or lo) + 1))
+    return len(cpus)
+
+
 def resolve(cpus, memory, cpuset, ncpu):
     '''
     Resolves the run's container limits. cpuset is "auto" (the highest
@@ -45,6 +53,9 @@ def resolve(cpus, memory, cpuset, ncpu):
         resolved = None
     else:
         _validate_cpuset(cpuset, ncpu)
+        if _cpuset_size(cpuset) < c:
+            raise ValueError("--cpuset %r has fewer CPUs than --cpus %s requires (%d)"
+                             % (cpuset, cpus, c))
         resolved = cpuset
     return {'cpus': float(cpus), 'memoryBytes': int(memory), 'swap': False,
             'cpuset': resolved}

@@ -25,6 +25,7 @@ def _benchmarker(other_runs, directory, allow_concurrent=False):
     b = Benchmarker.__new__(Benchmarker)
     b.config = types.SimpleNamespace(mode="benchmark", run_id="own",
                                      allow_concurrent=allow_concurrent,
+                                     resources={"cpus": 4.0}, cpus=4.0,
                                      quiet_out=mock.MagicMock())
     b.metadata = mock.Mock()
     b.tests = [mock.Mock()]
