@@ -134,7 +134,7 @@ def test_suite_summary_files_written(tmp_path):
     shutil.copytree(FIX, out)
     summary.write_suite_summary(str(out), {"hugo": "Go"})
     rows = list(csv.DictReader((out / "suite-summary.csv").open()))
-    assert len(rows) == 15 and list(rows[0].keys()) == COLUMNS
+    assert len(rows) == 15 and list(rows[0].keys()) == ["cell"] + COLUMNS
     scaling = list(csv.DictReader((out / "scaling.csv").open()))
     assert list(scaling[0].keys()) == ["framework", "profile", "contentSize",
                                        "numberOfFiles", "median"]
@@ -158,3 +158,73 @@ def test_suite_summary_aborted_and_missing_cells(tmp_path):
     summary.write_suite_summary(str(out))
     md = (out / "suite-summary.md").read_text()
     assert "ABORTED: RuntimeError: boom" in md and "4 of 5" in md
+
+
+def _runner_input(name, fp):
+    res = _cell()
+    for other in list(res["rawData"]["datarate"]):
+        if other != name:
+            res["rawData"]["datarate"].pop(other)
+    res["frameworks"] = [name]
+    res["succeeded"] = {"datarate": [name]}
+    res["environment"]["fingerprint"] = fp
+    return res
+
+
+def test_merged_rounds_group_by_runner_fingerprint():
+    from toolset.utils.merge_results import merge
+    merged = merge([_runner_input("hugo", "aaa"), _runner_input("gatsby", "bbb")])
+    assert merged["fingerprints"] == {"hugo": "aaa", "gatsby": "bbb"}
+    rows = build_rows(merged, {})
+    assert all(r["rank"] == "1" for r in rows)
+    md = to_markdown(rows, merged)
+    assert md.count("### ") == 2
+    same = merge([_runner_input("hugo", "aaa"), _runner_input("gatsby", "aaa")])
+    rows = build_rows(same, {})
+    assert sorted(r["rank"] for r in rows) == ["1", "2"]
+    assert to_markdown(rows, same).count("### ") == 1
+    none = merge([_runner_input("hugo", None), _runner_input("gatsby", "aaa")])
+    ranks = {r["framework"]: r["rank"] for r in build_rows(none, {})}
+    assert ranks == {"hugo": "", "gatsby": "1"}
+
+
+def test_suite_summary_cell_column_and_failure_rows(tmp_path):
+    out = tmp_path / "run"
+    shutil.copytree(FIX, out)
+    path = out / "core" / "nf1000-cs500" / "results.json"
+    res = json.loads(path.read_text())
+    res["rawData"]["datarate"].pop("gatsby")
+    res["failureReasons"] = {"gatsby": "timeout"}
+    path.write_text(json.dumps(res))
+    summary.write_suite_summary(str(out))
+    rows = list(csv.DictReader((out / "suite-summary.csv").open()))
+    assert list(rows[0].keys()) == ["cell"] + COLUMNS
+    bad = [r for r in rows if r["status"] == "timeout"]
+    assert len(bad) == 1
+    assert bad[0]["cell"] == "nf1000-cs500" and bad[0]["numberOfFiles"] == "1000"
+    assert bad[0]["contentSize"] == "500" and bad[0]["median"] == ""
+
+
+def test_merge_results_suite_csv_same_layout(tmp_path):
+    from toolset.utils import merge_results
+    rows = [dict(r, cell="nf100-cs0.500") for r in build_rows(_cell(), {})]
+    merge_results.write_suite_summary(rows, str(tmp_path))
+    text = (tmp_path / "suite-summary.csv").read_text()
+    assert text == summary.suite_csv(rows)
+    assert text.splitlines()[0].split(",")[:2] == ["cell", "framework"]
+
+
+def test_suite_summary_zero_cells(tmp_path):
+    (tmp_path / "suite.json").write_text(json.dumps(
+        {"suite": "standard", "version": 1, "cells": [], "aborted": "x"}))
+    summary.write_suite_summary(str(tmp_path))
+    assert (tmp_path / "scaling.csv").exists() and (tmp_path / "suite-summary.csv").exists()
+
+
+def test_caveat_wording():
+    res = _cell()
+    res["rawData"]["datarate"]["hugo"][0]["noisy"] = True
+    res["protocol"]["cvThreshold"] = 0.2
+    res["protocol"]["concurrent"] = True
+    md = to_markdown(build_rows(res, {}), res)
+    assert "above 20%" in md and "may be affected" in md

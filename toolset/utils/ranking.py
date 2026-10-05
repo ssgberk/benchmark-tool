@@ -16,6 +16,14 @@ def fingerprint_of(results):
     return env.get('fingerprint') or ''
 
 
+def fingerprint_for(results, name):
+    '''Per-framework fingerprint (merged rounds) else the top-level one.'''
+    fps = results.get('fingerprints')
+    if isinstance(fps, dict):
+        return fps.get(name) or ''
+    return fingerprint_of(results)
+
+
 def not_ranked_reason(results):
     '''Returns why a results dict cannot be ranked, or None when it can.'''
     if not results.get('schemaVersion'):
@@ -25,7 +33,11 @@ def not_ranked_reason(results):
         return NOT_RANKED_SUITE
     if (results.get('protocol') or {}).get('concurrent'):
         return NOT_RANKED_CONCURRENT
-    if not fingerprint_of(results):
+    fps = results.get('fingerprints')
+    if isinstance(fps, dict):
+        if not any(fps.values()):
+            return NOT_RANKED_NO_FINGERPRINT
+    elif not fingerprint_of(results):
         return NOT_RANKED_NO_FINGERPRINT
     return None
 
@@ -48,7 +60,8 @@ def group_key(result_meta, row):
             str(row.get('numberOfFiles', '')),
             str(row.get('contentSize', '')),
             str(pick('profile', result_meta.get('profile') or '')),
-            str(pick('fingerprint', fingerprint_of(result_meta))),
+            str(row['fingerprint'] if 'fingerprints' in result_meta
+                else pick('fingerprint', fingerprint_of(result_meta))),
             str(row.get('features') or ''))
 
 

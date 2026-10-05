@@ -176,6 +176,8 @@ Top level (example values):
 }
 ```
 
+Merge-only key (written by `merge_results.merge()` when any input is `schemaVersion` 2): `"fingerprints": {"hugo": "3f9c1a7b20de", "gatsby": null}`, the `environment.fingerprint` of the input (one generator on one runner) that supplied each framework, or `null`. Summaries use it instead of the top-level fingerprint when present: equal fingerprints rank together, different ones go to separate tables, `null` is not ranked.
+
 Per result (`rawData.datarate.<fw>[0]`), added keys:
 
 ```json

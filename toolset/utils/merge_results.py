@@ -5,9 +5,7 @@ into a single results.json plus summary.csv and summary.md.
 Usage: python3 -m toolset.utils.merge_results --out DIR result1.json ...
 '''
 import argparse
-import csv
 import glob
-import io
 import json
 import os
 import uuid
@@ -58,6 +56,14 @@ def merge(results):
     for key in ('resources', 'protocol', 'environment', 'suite', 'profile'):
         if key in merged and merged[key] is None:
             merged[key] = next((r[key] for r in results if r.get(key) is not None), None)
+    if any(r.get('schemaVersion') == 2 for r in results):
+        # each CI input is one generator on one runner: remember its fingerprint
+        merged['fingerprints'] = {}
+        for r in results:
+            fp = (r.get('environment') or {}).get('fingerprint')
+            for name in set(r.get('frameworks') or []) | set(
+                    (r.get('rawData') or {}).get('datarate') or {}):
+                merged['fingerprints'][name] = fp
     merged.pop('schemaVersion', None)
     if any(r.get('schemaVersion') == 2 for r in results):
         merged['schemaVersion'] = 2
@@ -121,7 +127,7 @@ def main(argv=None):
 
 
 def cell_name(data):
-    return 'nf%s-cs%s' % (data.get('numberOfFiles'), data.get('contentSize'))
+    return summary.cell_name(data.get('numberOfFiles'), data.get('contentSize'))
 
 
 def write_outputs(merged, languages, environments, out):
@@ -140,14 +146,8 @@ def write_outputs(merged, languages, environments, out):
 def write_suite_summary(rows, out):
     '''One CSV and one Markdown table covering every cell of the suite.'''
     os.makedirs(out, exist_ok=True)
-    columns = ['cell'] + summary.COLUMNS
-    buf = io.StringIO()
-    writer = csv.DictWriter(buf, fieldnames=columns, lineterminator='\n',
-                            extrasaction='ignore')
-    writer.writeheader()
-    writer.writerows(rows)
     with open(os.path.join(out, 'suite-summary.csv'), 'w', newline='') as f:
-        f.write(buf.getvalue())
+        f.write(summary.suite_csv(rows))
     lines = ['# Suite summary', '',
              '| Cell | Framework | Language | Mean (s) | Median (s) | Status |',
              '|---|---|---|---|---|---|']

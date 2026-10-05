@@ -30,11 +30,10 @@ CAVEATS = {
           'never quote one small cell as the result.',
     'T7': 'T7: peak RSS is the largest single process, not the sum, so it '
           'under-reports multi-process generators.',
-    'T9': 'T9: oom means the generator hit the shared memory limit; it is an '
-          'outcome, not a time.',
-    'noisy': 'Noisy: results marked \u26a0 kept a CV above 10% after the re-run.',
-    'concurrent': 'Concurrent: another benchmark ran at the same time, so these '
-                  'results are not ranked.',
+    'T9': 'T9: oom means the generator exceeded the container memory limit, which is '
+          'the same for every generator; it is an outcome, not a time.',
+    'concurrent': 'Concurrent: other ssgberk benchmark containers were running when '
+                  'this run started, so its results may be affected and are not ranked.',
     'legacy-2019': 'Legacy: the legacy-2019 suite is for historical comparison '
                    'only and is never ranked against the others.',
 }
@@ -53,11 +52,10 @@ def _num(value, scale=1.0, digits=None):
 
 def _fill_method(row, data, results, name):
     suite = results.get('suite') if isinstance(results.get('suite'), dict) else {}
-    env = results.get('environment') if isinstance(results.get('environment'), dict) else {}
     row['suite'] = _blank(suite.get('name'))
     row['suiteVersion'] = _blank(suite.get('version'))
     row['profile'] = _blank(results.get('profile'))
-    row['fingerprint'] = _blank(env.get('fingerprint'))
+    row['fingerprint'] = ranking.fingerprint_for(results, name)
     build = (results.get('imageBuild') or {}).get(name) or {}
     row['imageBuildSeconds'] = _num(build.get('seconds'), digits=3)
     if data is None:
@@ -126,6 +124,9 @@ def build_rows(results, tests_metadata):
             else:
                 row['status'] = _failure_status(name, results, reasons)
             row['failureReason'] = _blank(reasons.get(name))
+            for key in ('numberOfFiles', 'contentSize'):
+                if row[key] == '':
+                    row[key] = _blank(results.get(key))
             failed.append(row)
 
     ok.sort(key=lambda r: (r['mean'] == '', r['mean'] or 0, r['framework']))
@@ -149,7 +150,8 @@ def _assign_ranks(rows, results):
         r['rank'] = ''
     if ranking.not_ranked_reason(results):
         return
-    for members in _groups(rows, results).values():
+    rankable = [r for r in rows if r['fingerprint']]
+    for members in _groups(rankable, results).values():
         for r, label in zip(members, ranking.rank(members)):
             r['rank'] = label
 
@@ -211,7 +213,11 @@ def _header_line(meta, rows):
         parts.append('(nf %s, cs %s)' % (nf, cs))
     if meta.get('profile') and (suite or meta.get('schemaVersion')):
         parts.append('profile %s' % meta['profile'])
-    fp = ranking.fingerprint_of(meta)
+    if isinstance(meta.get('fingerprints'), dict):
+        fps = {v for v in meta['fingerprints'].values() if v}
+        fp = fps.pop() if len(fps) == 1 and all(meta['fingerprints'].values()) else ''
+    else:
+        fp = ranking.fingerprint_of(meta)
     if fp:
         parts.append('fingerprint %s' % fp)
     res = meta.get('resources')
@@ -262,11 +268,16 @@ def _ranking_section(rows, reason):
 
 def _caveats(rows, meta):
     keys = []
+    texts = dict(CAVEATS)
     docker = (meta.get('environment') or {}).get('docker') or {}
     if 'Docker Desktop' in str(docker.get('operatingSystem') or ''):
         keys.append('T1')
     if any(r.get('noisy') == 'true' for r in rows):
         keys.append('noisy')
+        threshold = (meta.get('protocol') or {}).get('cvThreshold')
+        texts['noisy'] = ('Noisy: results marked \u26a0 had a CV above %g%% '
+                          '(protocol cvThreshold) on their last attempt.'
+                          % (100 * (0.10 if threshold is None else threshold)))
     if (meta.get('protocol') or {}).get('concurrent'):
         keys.append('concurrent')
     if (meta.get('suite') or {}).get('name') == 'legacy-2019':
@@ -281,7 +292,7 @@ def _caveats(rows, meta):
         keys.append('T7')
     if not keys:
         return []
-    return ['', '## Caveats', ''] + ['- ' + CAVEATS[k] for k in keys]
+    return ['', '## Caveats', ''] + ['- ' + texts[k] for k in keys]
 
 
 def _failed_section(rows):
@@ -336,6 +347,23 @@ def _read_json(path):
         return json.load(f)
 
 
+SUITE_COLUMNS = ['cell'] + COLUMNS
+
+
+def cell_name(number_of_files, content_size):
+    return 'nf%s-cs%s' % (number_of_files, content_size)
+
+
+def suite_csv(rows):
+    '''suite-summary.csv text; rows carry a `cell` key. Shared by both writers.'''
+    out = io.StringIO()
+    writer = csv.DictWriter(out, fieldnames=SUITE_COLUMNS, lineterminator='\n',
+                            extrasaction='ignore')
+    writer.writeheader()
+    writer.writerows(rows)
+    return out.getvalue()
+
+
 def suite_summary(suite_dir, tests_metadata=None):
     '''
     Builds the suite-level files for results/<ts>/ from suite.json and the
@@ -353,17 +381,17 @@ def suite_summary(suite_dir, tests_metadata=None):
             continue
         meta = meta or results
         rows = build_rows(results, tests_metadata)
+        name = cell_name(cell.get('numberOfFiles'), cell.get('contentSize'))
+        for r in rows:
+            r['cell'] = name
+            for key in ('numberOfFiles', 'contentSize'):
+                if r[key] == '' and r['status'] != 'excluded':
+                    r[key] = cell.get(key, '')
         reason = ranking.not_ranked_reason(results)
         if reason:
             reasons.add(reason)
         cells.append((cell, results, rows))
         all_rows += rows
-
-    out = io.StringIO()
-    writer = csv.DictWriter(out, fieldnames=COLUMNS, lineterminator='\n',
-                            extrasaction='ignore')
-    writer.writeheader()
-    writer.writerows(all_rows)
 
     scaling = _scaling(all_rows)
     scaling_out = io.StringIO()
@@ -389,7 +417,8 @@ def suite_summary(suite_dir, tests_metadata=None):
     for cell, results, rows in cells:
         lines += ['', '### nf %s, cs %s' % (cell.get('numberOfFiles'), cell.get('contentSize')),
                   '', '| Rank | Framework | Median (s) | CV | Status |', '|---|---|---|---|---|']
-        for r in rows:
+        for r in sorted(rows, key=lambda r: (r['status'] != 'ok', r['median'] == '',
+                                             r['median'] or 0, r['framework'])):
             if r['status'] != 'excluded':
                 lines.append('| %s | %s | %s | %s | %s |' % (
                     r.get('rank') or '\u2014', _name(r), _seconds(r['median']),
@@ -407,7 +436,7 @@ def suite_summary(suite_dir, tests_metadata=None):
         lines.append('| %s | %s | %s | %d | %s |' % (
             fw, profile or '\u2014', cs, len(points), '\u2014' if b is None else '%.2f' % b))
     lines += _caveats(all_rows, meta)
-    return out.getvalue(), '\n'.join(lines) + '\n', scaling_out.getvalue()
+    return suite_csv(all_rows), '\n'.join(lines) + '\n', scaling_out.getvalue()
 
 
 def _scaling(rows):
