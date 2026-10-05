@@ -2,7 +2,7 @@
 
 - **Repo:** `ssgberk/benchmark-tool`
 - **Date:** 2026-10-04
-- **Status:** proposed, awaiting review (approved design redistributed from `2026-10-04-modernize-ssgberk-design.md`)
+- **Status:** concluído (2026-10-05)
 - **Siblings:** `plan.md` (how), `tasks.md` (executable task list) in this directory; roadmap in `benchmark-tool/docs/specs/ROADMAP.md`
 
 ## Context

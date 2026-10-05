@@ -38,3 +38,10 @@ confidence intervals) is spec 008.
 
 `docs/results/example-2026-10.json` will be committed by the controller after
 the first round has run (`-nf 100 -cs 0.500 -mr 3`).
+
+## Example round (2026-10)
+
+- Workflow run: https://github.com/ssgberk/benchmark-tool/actions/runs/37249532656 (commit `79f0254`, ssg-frameworks `ff2a6a3`).
+- Parameters: `number_of_files=100`, `content_size=0.500`, `min_runs=3`; 17/17 generators succeeded.
+- Files: [`example-2026-10.json`](example-2026-10.json) (merged results), [`example-2026-10.csv`](example-2026-10.csv) and [`example-2026-10.md`](example-2026-10.md) (summary).
+- Indicative only: each generator ran on a different shared GitHub runner. Rankings for publication follow `docs/specs/008-benchmark-methodology` (fixed resources, one machine, noise control).
