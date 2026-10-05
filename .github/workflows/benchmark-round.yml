@@ -36,8 +36,17 @@ jobs:
       - id: list
         env:
           TESTS: ${{ inputs.tests }}
+          NF: ${{ inputs.number_of_files }}
+          MR: ${{ inputs.min_runs }}
         run: |
           set -euo pipefail
+          set -f
+          for v in NF MR; do
+            if ! [[ "${!v}" =~ ^[0-9]+$ ]]; then
+              echo "$v must be a non-negative integer" >&2
+              exit 1
+            fi
+          done
           if [ -n "${TESTS// /}" ]; then
             list=$(printf '%s\n' $TESTS)
           else
@@ -77,6 +86,8 @@ jobs:
         run: |
           R=$(ls -td results/*/ 2>/dev/null | head -1 || true)
           [ -n "$R" ] || exit 0
+          # the container creates results/ as root
+          sudo chown -R "$(id -u):$(id -g)" results
           {
             echo "## lscpu"; lscpu
             echo "## nproc"; nproc
@@ -84,7 +95,8 @@ jobs:
             echo "## docker version"
             docker version --format 'client {{.Client.Version}} server {{.Server.Version}}'
             echo "## uname -a"; uname -a
-          } > "${R}env-${TEST}.txt" 2>&1 || true
+          } > "${R}env-${TEST}.txt" 2>&1
+          test -s "${R}env-${TEST}.txt" || { echo "env file missing" >&2; exit 1; }
           echo "RESULT_DIR=$R" >> "$GITHUB_ENV"
       - uses: actions/upload-artifact@v4
         if: always() && env.RESULT_DIR != ''
