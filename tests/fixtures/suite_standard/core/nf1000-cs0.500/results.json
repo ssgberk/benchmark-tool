@@ -1,0 +1,233 @@
+{
+ "schemaVersion": 2,
+ "name": "fixture",
+ "environmentDescription": "fixture",
+ "startTime": 1790000000000,
+ "completionTime": 1790000100000,
+ "suite": {
+  "name": "standard",
+  "version": 1,
+  "cellIndex": 2,
+  "cellCount": 5,
+  "runs": 5,
+  "ranked": true
+ },
+ "profile": "core",
+ "resources": {
+  "cpus": 4.0,
+  "memoryBytes": 8589934592,
+  "swap": false,
+  "cpuset": "4-7"
+ },
+ "protocol": {
+  "concurrent": false,
+  "sequential": true
+ },
+ "environment": {
+  "fingerprint": "3f9c1a7b20de",
+  "cpuModel": "Test CPU",
+  "docker": {
+   "operatingSystem": "Ubuntu 24.04",
+   "ncpu": 8
+  }
+ },
+ "numberOfFiles": "1000",
+ "contentSize": "0.500",
+ "minRuns": "5",
+ "frameworks": [
+  "hugo",
+  "eleventy",
+  "gatsby"
+ ],
+ "rawData": {
+  "datarate": {
+   "hugo": [
+    {
+     "mean": 0.42,
+     "stddev": 0.0084,
+     "median": 0.42,
+     "min": 0.4074,
+     "max": 0.4326,
+     "times": [
+      0.42,
+      0.42,
+      0.42,
+      0.42,
+      0.42
+     ],
+     "numberOfFiles": "1000",
+     "contentSize": "0.500",
+     "minRuns": "5",
+     "startTime": 1,
+     "endTime": 2,
+     "user": 0.42,
+     "system": 0.1,
+     "cpuUtilization": 1.1,
+     "memoryUsageBytes": [
+      300000000
+     ],
+     "peakRssBytes": 300000000,
+     "inputFiles": 1000,
+     "inputBytes": 500000,
+     "outputFiles": 1004,
+     "outputBytes": 900000,
+     "cv": 0.02,
+     "noisy": false,
+     "postsPerSecond": 2380.95,
+     "inputMBPerSecond": 1.19,
+     "status": "ok",
+     "features": [],
+     "resources": {
+      "cpus": 4.0,
+      "memoryBytes": 8589934592,
+      "swap": false,
+      "cpuset": "4-7"
+     },
+     "conformance": "ok",
+     "attempts": [
+      {
+       "minRuns": 5,
+       "mean": 0.42,
+       "median": 0.42,
+       "stddev": 0.0084,
+       "cv": 0.02
+      }
+     ]
+    }
+   ],
+   "eleventy": [
+    {
+     "mean": 2.3,
+     "stddev": 0.046,
+     "median": 2.3,
+     "min": 2.231,
+     "max": 2.369,
+     "times": [
+      2.3,
+      2.3,
+      2.3,
+      2.3,
+      2.3
+     ],
+     "numberOfFiles": "1000",
+     "contentSize": "0.500",
+     "minRuns": "5",
+     "startTime": 1,
+     "endTime": 2,
+     "user": 2.3,
+     "system": 0.1,
+     "cpuUtilization": 1.1,
+     "memoryUsageBytes": [
+      300000000
+     ],
+     "peakRssBytes": 300000000,
+     "inputFiles": 1000,
+     "inputBytes": 500000,
+     "outputFiles": 1004,
+     "outputBytes": 900000,
+     "cv": 0.02,
+     "noisy": false,
+     "postsPerSecond": 434.78,
+     "inputMBPerSecond": 0.217,
+     "status": "ok",
+     "features": [],
+     "resources": {
+      "cpus": 4.0,
+      "memoryBytes": 8589934592,
+      "swap": false,
+      "cpuset": "4-7"
+     },
+     "conformance": "ok",
+     "attempts": [
+      {
+       "minRuns": 5,
+       "mean": 2.3,
+       "median": 2.3,
+       "stddev": 0.046,
+       "cv": 0.02
+      }
+     ]
+    }
+   ],
+   "gatsby": [
+    {
+     "mean": 6.5,
+     "stddev": 0.13,
+     "median": 6.5,
+     "min": 6.305,
+     "max": 6.695,
+     "times": [
+      6.5,
+      6.5,
+      6.5,
+      6.5,
+      6.5
+     ],
+     "numberOfFiles": "1000",
+     "contentSize": "0.500",
+     "minRuns": "5",
+     "startTime": 1,
+     "endTime": 2,
+     "user": 6.5,
+     "system": 0.1,
+     "cpuUtilization": 1.1,
+     "memoryUsageBytes": [
+      300000000
+     ],
+     "peakRssBytes": 300000000,
+     "inputFiles": 1000,
+     "inputBytes": 500000,
+     "outputFiles": 1004,
+     "outputBytes": 900000,
+     "cv": 0.02,
+     "noisy": false,
+     "postsPerSecond": 153.85,
+     "inputMBPerSecond": 0.077,
+     "status": "ok",
+     "features": [],
+     "resources": {
+      "cpus": 4.0,
+      "memoryBytes": 8589934592,
+      "swap": false,
+      "cpuset": "4-7"
+     },
+     "conformance": "ok",
+     "attempts": [
+      {
+       "minRuns": 5,
+       "mean": 6.5,
+       "median": 6.5,
+       "stddev": 0.13,
+       "cv": 0.02
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "succeeded": {
+  "datarate": [
+   "hugo",
+   "eleventy",
+   "gatsby"
+  ]
+ },
+ "failed": {
+  "datarate": []
+ },
+ "unsupported": {
+  "datarate": []
+ },
+ "failureReasons": {},
+ "imageBuild": {
+  "hugo": {
+   "seconds": 40.0
+  },
+  "eleventy": {
+   "seconds": 40.0
+  },
+  "gatsby": {
+   "seconds": 40.0
+  }
+ }
+}

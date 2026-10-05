@@ -142,7 +142,8 @@ def write_suite_summary(rows, out):
     os.makedirs(out, exist_ok=True)
     columns = ['cell'] + summary.COLUMNS
     buf = io.StringIO()
-    writer = csv.DictWriter(buf, fieldnames=columns, lineterminator='\n')
+    writer = csv.DictWriter(buf, fieldnames=columns, lineterminator='\n',
+                            extrasaction='ignore')
     writer.writeheader()
     writer.writerows(rows)
     with open(os.path.join(out, 'suite-summary.csv'), 'w', newline='') as f:

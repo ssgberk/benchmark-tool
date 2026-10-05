@@ -11,7 +11,7 @@ from toolset.benchmark import suites
 from toolset.benchmark.benchmarker import Benchmarker
 from toolset.utils.scaffolding import Scaffolding
 from toolset.utils.audit import Audit
-from toolset.utils import resources
+from toolset.utils import resources, summary
 from toolset.utils import cleaner
 from toolset.utils.benchmark_config import BenchmarkConfig
 from toolset.utils.output_helper import log
@@ -319,6 +319,12 @@ def run_suite(args):
             doc['aborted'] = aborted
         with open(out, 'w') as f:
             json.dump(doc, f, indent=2)
+        try:
+            languages = {t.name: getattr(t, 'language', '')
+                         for t in getattr(benchmarker, 'tests', [])}
+            summary.write_suite_summary(os.path.dirname(out), languages)
+        except Exception as e:  # a summary problem must not mask the suite result
+            log("Error writing suite summary: %s" % e)
 
     if aborted:
         log("Suite aborted: %s" % aborted, color=Fore.RED)

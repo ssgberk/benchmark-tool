@@ -1,0 +1,81 @@
+{
+ "schemaVersion": 1,
+ "suite": "standard",
+ "version": 1,
+ "profile": "core",
+ "startTime": 1790000000000,
+ "completionTime": 1790000100000,
+ "fingerprint": "3f9c1a7b20de",
+ "cells": [
+  {
+   "index": 0,
+   "numberOfFiles": 100,
+   "contentSize": "0.500",
+   "dir": "core/nf100-cs0.500",
+   "order": [
+    "hugo",
+    "eleventy",
+    "gatsby"
+   ],
+   "succeeded": 3,
+   "failed": 0,
+   "unsupported": 0
+  },
+  {
+   "index": 1,
+   "numberOfFiles": 100,
+   "contentSize": "500",
+   "dir": "core/nf100-cs500",
+   "order": [
+    "hugo",
+    "eleventy",
+    "gatsby"
+   ],
+   "succeeded": 3,
+   "failed": 0,
+   "unsupported": 0
+  },
+  {
+   "index": 2,
+   "numberOfFiles": 1000,
+   "contentSize": "0.500",
+   "dir": "core/nf1000-cs0.500",
+   "order": [
+    "hugo",
+    "eleventy",
+    "gatsby"
+   ],
+   "succeeded": 3,
+   "failed": 0,
+   "unsupported": 0
+  },
+  {
+   "index": 3,
+   "numberOfFiles": 1000,
+   "contentSize": "500",
+   "dir": "core/nf1000-cs500",
+   "order": [
+    "hugo",
+    "eleventy",
+    "gatsby"
+   ],
+   "succeeded": 3,
+   "failed": 0,
+   "unsupported": 0
+  },
+  {
+   "index": 4,
+   "numberOfFiles": 10000,
+   "contentSize": "0.500",
+   "dir": "core/nf10000-cs0.500",
+   "order": [
+    "hugo",
+    "eleventy",
+    "gatsby"
+   ],
+   "succeeded": 3,
+   "failed": 0,
+   "unsupported": 0
+  }
+ ]
+}
