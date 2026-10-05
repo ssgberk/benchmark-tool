@@ -41,6 +41,8 @@ azure.err
 php-kohana/application/logs/
 php-fuel/fuel/app/logs/
 results/
+!docs/results/
+!docs/results/**
 benchmark.cfg
 
 # Mac filesystem dust
