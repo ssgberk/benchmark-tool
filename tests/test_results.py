@@ -42,6 +42,19 @@ def test_parse_stats_reads_dool_csv(fake_benchmarker, tmp_path):
     assert any("cpu" in k for k in first)
 
 
+def test_parse_stats_skips_repeated_header_block(fake_benchmarker):
+    # dool appends to an existing file, so a noise re-run adds a second header
+    # block; parsing must skip it and keep the rows of the reported attempt.
+    fake_benchmarker.tests = []
+    res = Results(fake_benchmarker)
+    stats_file = res.get_stats_file("hugo", "datarate")
+    csv_text = (FIX / "dool.csv").read_text()
+    pathlib.Path(stats_file).write_text(csv_text + csv_text)
+    stats = res._Results__parse_stats(type("T", (), {"name": "hugo"})(), "datarate", 0, 10**10, 1)
+    assert stats, "expected sampled rows"
+    assert all(isinstance(t, float) for t in stats)
+
+
 def _fw(name):
     return type("T", (), {"name": name, "runTests": ["datarate"]})()
 

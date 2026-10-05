@@ -697,7 +697,9 @@ class Results:
         time_row = sub_header.index("epoch")
         int_counter = 0
         for row in rows[header_index + 1:]:
-            if len(row) != len(sub_header):
+            # dool appends to an existing file, so a noise re-run repeats the
+            # preamble and header rows; only numeric rows are samples
+            if len(row) != len(sub_header) or not is_number(row[time_row]):
                 continue
             time = float(row[time_row])
             int_counter += 1
