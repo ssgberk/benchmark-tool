@@ -133,7 +133,7 @@ def test_v1_raw_still_parses():
 def test_conformance_fail_is_failed_with_reason():
     text = (FIX / "raw_conformance_fail.txt").read_text()
     assert classify_build_output(text) == (
-        "nonconformant", "SSGBERK_CONFORMANCE_FAIL profile=core missing=title")
+        "nonconformant", "nonconformant: SSGBERK_CONFORMANCE_FAIL profile=core missing=title")
     assert parse_build_output(text + _v2(), "1", "1", "1") == []
 
 
@@ -161,11 +161,74 @@ def test_verify_ok_must_precede_starttime():
     assert classify_build_output(late_conf) == ("failed", reason)
 
 
-def test_transition_tolerates_missing_conformance():
-    text = "\n".join(l for l in _v2().splitlines() if "CONFORMANCE" not in l)
-    assert classify_build_output(text) == ("ok", None)
+def _no_conf():
+    return "\n".join(l for l in _v2().splitlines() if "CONFORMANCE" not in l)
+
+
+def test_missing_conformance_tolerated_by_default_and_recorded():
+    assert classify_build_output(_no_conf()) == ("ok", None)
+    [r] = parse_build_output(_no_conf(), "1000", "0.500", "3")
+    assert r["features"] is None and r["conformance"] == "unchecked"
+    [r] = parse_build_output(_v2(), "1000", "0.500", "3")
+    assert r["conformance"] == "ok"
+
+
+def test_require_conformance_fails_missing_marker():
+    assert classify_build_output(_no_conf(), require_conformance=True) == (
+        "nonconformant", "nonconformant: missing SSGBERK_CONFORMANCE_OK")
+    assert parse_build_output(_no_conf(), "1000", "0.500", "3",
+                              require_conformance=True) == []
+    assert classify_build_output(_v2(), require_conformance=True) == ("ok", None)
+
+
+def test_require_conformance_flows_through_config(fake_benchmarker):
+    fake_benchmarker.tests = []
+    fake_benchmarker.config.number_of_files = "1000"
+    fake_benchmarker.config.content_size = "0.500"
+    fake_benchmarker.config.min_runs = "3"
+    fake_benchmarker.config.require_conformance = True
+    res = Results(fake_benchmarker)
+    pathlib.Path(res.get_raw_file("hugo", "datarate")).write_text(_no_conf())
+    res.parse_all(_fw("hugo"))
+    assert res.failed["datarate"] == ["hugo"]
+    assert res._Results__to_jsonable()["failureReasons"] == {
+        "hugo": "nonconformant: missing SSGBERK_CONFORMANCE_OK"}
+
+
+def test_crlf_and_leading_whitespace_markers():
+    text = "\r\n".join("  " + l for l in _v2().splitlines()) + "\r\n"
     [r] = parse_build_output(text, "1000", "0.500", "3")
-    assert r["features"] is None
+    assert r["inputBytes"] == 512000 and r["outputFiles"] == 1004
+    assert r["features"] == [] and r["conformance"] == "ok"
+    assert r["startTime"] == 1790000000
+    fail = "  SSGBERK_CONFORMANCE_FAIL profile=core x=1\r\n"
+    assert classify_build_output(fail) == (
+        "nonconformant", "nonconformant: SSGBERK_CONFORMANCE_FAIL profile=core x=1")
+
+
+def test_conformance_fail_after_starttime():
+    text = _v2() + "SSGBERK_CONFORMANCE_FAIL late\n"
+    assert classify_build_output(text)[0] == "nonconformant"
+    assert parse_build_output(text, "1000", "0.500", "3") == []
+
+
+def test_missing_io_markers_give_none_metrics():
+    text = "\n".join(l for l in _v2().splitlines()
+                     if not l.startswith(("SSGBERK_INPUT", "SSGBERK_OUTPUT")))
+    [r] = parse_build_output(text, "1000", "0.500", "3")
+    for k in ("inputFiles", "inputBytes", "outputFiles", "outputBytes",
+              "inputMBPerSecond"):
+        assert r[k] is None, k
+    assert r["peakRssBytes"] == 514000000
+
+
+def test_memory_usage_scalar_and_absent():
+    scalar = _v2().replace('[512000000, 514000000, 513000000]', '512000000')
+    [r] = parse_build_output(scalar, "1000", "0.500", "3")
+    assert r["memoryUsageBytes"] == [512000000] and r["peakRssBytes"] == 512000000
+    absent = "\n".join(l for l in _v2().splitlines() if "memory_usage_byte" not in l)
+    [r] = parse_build_output(absent, "1000", "0.500", "3")
+    assert r["memoryUsageBytes"] is None and r["peakRssBytes"] is None
 
 
 def test_cv_null_for_single_run():
@@ -185,4 +248,4 @@ def test_failure_reason_stored_and_emitted(fake_benchmarker):
     assert res.failed["datarate"] == ["gatsby"]
     out = res._Results__to_jsonable()
     assert out["failureReasons"] == {
-        "gatsby": "SSGBERK_CONFORMANCE_FAIL profile=core missing=title"}
+        "gatsby": "nonconformant: SSGBERK_CONFORMANCE_FAIL profile=core missing=title"}

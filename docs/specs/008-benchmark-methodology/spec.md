@@ -71,7 +71,7 @@ This spec defines suites, profiles, metrics, the run protocol, statistics, the r
 
 ### Protocol
 
-- **R-15** Every timed run is a cold full rebuild. `build.sh` removes `output_folder` and `cache_folders` with hyperfine `--prepare` before each run (SF 001, unchanged). The toolset asserts that `SSGBERK_VERIFY_OK` and `SSGBERK_CONFORMANCE_OK` precede `STARTTIME`, and otherwise treats the result as failed.
+- **R-15** Every timed run is a cold full rebuild. `build.sh` removes `output_folder` and `cache_folders` with hyperfine `--prepare` before each run (SF 001, unchanged). The toolset asserts that `SSGBERK_VERIFY_OK` and `SSGBERK_CONFORMANCE_OK` precede `STARTTIME`, and otherwise treats the result as failed. A missing `SSGBERK_CONFORMANCE_OK` is governed by the `--require-conformance` switch (default off): when on, the run is `nonconformant` with reason `nonconformant: missing SSGBERK_CONFORMANCE_OK`; when off, it is tolerated and recorded as `conformance: "unchecked"`. SF 006 Task 27 flips the default on.
 - **R-16** The untimed verification build is the warm-up: it loads the generator's binaries, `node_modules` and gems into the OS page cache. Timed runs therefore measure "cold generator caches, warm OS page cache". hyperfine `--warmup` stays 0. The page cache is not dropped (no privileged containers).
 - **R-17** Resources: the benchmark container runs with `--cpus` (default 4), `--memory` (default `8g`) with swap disabled (`memswap_limit = mem_limit`), and `--cpuset` (default `auto`, see `plan.md` "Resources"). Values are identical for every generator in a run and recorded in `resources`. `--cpus` greater than the Docker host's `NCPU` is a usage error.
 - **R-18** Sequential execution: before benchmarking, the toolset lists running containers labelled `ssgberk.run` (BT 004). If any belong to another run id, it aborts with exit 1 and a message naming them, unless `--allow-concurrent` is given. In that case `protocol.concurrent` is `true` and summaries print "not ranked: concurrent run".
@@ -119,6 +119,7 @@ Decided by the maintainer on 2026-10-04:
 Decided by the maintainer on 2026-10-05:
 
 4. **2026-10-05 — site-size scenarios P/M/G/GG at 5 and 50 KB, decided by the maintainer.** Four suites model real site sizes, each with 2 cells at 5 KB and 50 KB per page: P (website pessoal, 50 pages), M (site corporativo, 1,000), G (grande portal, 10,000) and GG (portal massivo, 100,000). `-cs` accepts two new values, `5` and `50`. The canonical `build.sh` gets the matching mapping in ssg-frameworks spec 005: `5` = 10 blocks, `50` = 100 blocks. *Decided by the maintainer, 2026-10-05.*
+5. **2026-10-05 — conformance tolerance is an explicit switch, decided by the maintainer.** `--require-conformance` (default off) makes a missing `SSGBERK_CONFORMANCE_OK` a `nonconformant` failure. While off, the run is tolerated and its result records `conformance: "unchecked"`. ssg-frameworks spec 006 Task 27 flips the default on. Failure reasons follow R-29: `nonconformant: <SSGBERK_CONFORMANCE_FAIL line>`. *Decided by the maintainer, 2026-10-05.*
 
 ## Open questions
 

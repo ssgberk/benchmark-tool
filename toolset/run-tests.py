@@ -118,6 +118,14 @@ def build_parser():
         help='Benchmark profile; core and extended are separate result series'
     )
 
+    parser.add_argument(
+        '--require-conformance',
+        action='store_true',
+        default=False,
+        help='Treat a run without SSGBERK_CONFORMANCE_OK as nonconformant '
+             '(default off until ssg-frameworks spec 006 Task 27)'
+    )
+
     # Test options
     parser.add_argument(
         '--test',

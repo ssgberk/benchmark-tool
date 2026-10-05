@@ -17,43 +17,50 @@ RESULT_BEGIN = 'SSGBERK_RESULT_BEGIN'
 RESULT_END = 'SSGBERK_RESULT_END'
 PROFILE_UNSUPPORTED = 'SSGBERK_PROFILE_UNSUPPORTED'
 
+_BOL = r'^[ \t]*'
+
 PROTOCOL_REASON = 'protocol: verification markers missing before STARTTIME'
 
 
 def _first_line(marker, text):
-    m = re.search(r'^' + marker + r'.*$', text, re.M)
+    m = re.search(_BOL + marker + r'.*$', text, re.M)
     return m.group(0).strip() if m else None
 
 
-def classify_build_output(text):
+def classify_build_output(text, require_conformance=False):
     """
     Returns (status, reason) for a raw build.sh output. Status is one of
-    nonconformant, failed, unsupported or ok. reason is the first matching
-    failure line, a protocol message, or None.
+    nonconformant, failed, unsupported or ok. reason is the failure line
+    (prefixed 'nonconformant: ' for conformance failures), a protocol
+    message, or None. With require_conformance a missing
+    SSGBERK_CONFORMANCE_OK is nonconformant; otherwise it is tolerated
+    (the result is recorded as conformance 'unchecked').
     """
     line = _first_line('SSGBERK_CONFORMANCE_FAIL', text)
     if line:
-        return 'nonconformant', line
+        return 'nonconformant', 'nonconformant: ' + line
     line = _first_line('SSGBERK_VERIFY_FAIL', text)
     if line:
         return 'failed', line
     has_result = RESULT_BEGIN in text
-    if re.search(r'^' + PROFILE_UNSUPPORTED, text, re.M) and not has_result:
+    if re.search(_BOL + PROFILE_UNSUPPORTED, text, re.M) and not has_result:
         return 'unsupported', None
-    start = re.search(r'^STARTTIME ', text, re.M)
+    start = re.search(_BOL + r'STARTTIME ', text, re.M)
     if not start:
         # Nothing was timed: with a result block that is a protocol breach.
         return 'failed', (PROTOCOL_REASON if has_result else None)
-    verify = re.search(r'^SSGBERK_VERIFY_OK', text, re.M)
+    verify = re.search(_BOL + r'SSGBERK_VERIFY_OK', text, re.M)
     if not verify or verify.start() > start.start():
         return 'failed', PROTOCOL_REASON
-    conformance = re.search(r'^SSGBERK_CONFORMANCE_OK', text, re.M)
+    conformance = re.search(_BOL + r'SSGBERK_CONFORMANCE_OK', text, re.M)
     if conformance:
         if conformance.start() > start.start():
             return 'failed', PROTOCOL_REASON
-    elif re.search(r'^SSGBERK_CONFORMANCE_', text, re.M):
+    elif require_conformance:
+        return 'nonconformant', 'nonconformant: missing SSGBERK_CONFORMANCE_OK'
+    elif re.search(_BOL + r'SSGBERK_CONFORMANCE_', text, re.M):
         return 'failed', PROTOCOL_REASON
-    # else: transition window before SF 006 Task 9, no conformance output.
+    # else: tolerated until SF 006 Task 27 flips --require-conformance on.
     return 'ok', None
 
 
@@ -66,18 +73,19 @@ def _number(value):
 
 
 def _io_marker(name, text):
-    m = re.search(r'^' + name + r' files=(\d+) bytes=(\d+)', text, re.M)
+    m = re.search(_BOL + name + r' files=(\d+) bytes=(\d+)', text, re.M)
     return (int(m.group(1)), int(m.group(2))) if m else (None, None)
 
 
-def parse_build_output(text, number_of_files, content_size, min_runs):
+def parse_build_output(text, number_of_files, content_size, min_runs,
+                       require_conformance=False):
     """
     Extracts the hyperfine JSON printed by build.sh between the result
     markers plus the SSGBERK_INPUT/OUTPUT/CONFORMANCE_OK values. Returns []
     when the build did not classify as ok or produced no parseable result.
     Optional fields missing from old outputs are None.
     """
-    status, _ = classify_build_output(text)
+    status, _ = classify_build_output(text, require_conformance)
     if status != 'ok':
         return []
     start = text.find(RESULT_BEGIN)
@@ -88,8 +96,8 @@ def parse_build_output(text, number_of_files, content_size, min_runs):
         result = json.loads(text[start + len(RESULT_BEGIN):end])['results'][0]
     except (ValueError, KeyError, IndexError, TypeError):
         return []
-    start_time = re.search(r'^STARTTIME (\d+)', text, re.M)
-    end_time = re.search(r'^ENDTIME (\d+)', text, re.M)
+    start_time = re.search(_BOL + r'STARTTIME (\d+)', text, re.M)
+    end_time = re.search(_BOL + r'ENDTIME (\d+)', text, re.M)
     mean = result.get('mean')
     median = result.get('median')
     stddev = result.get('stddev')
@@ -102,7 +110,7 @@ def parse_build_output(text, number_of_files, content_size, min_runs):
     in_files, in_bytes = _io_marker('SSGBERK_INPUT', text)
     out_files, out_bytes = _io_marker('SSGBERK_OUTPUT', text)
     features = None
-    m = re.search(r'^SSGBERK_CONFORMANCE_OK\b.*?\bfeatures=(\S*)', text, re.M)
+    m = re.search(_BOL + r'SSGBERK_CONFORMANCE_OK\b.*?\bfeatures=(\S*)', text, re.M)
     if m:
         features = [f for f in m.group(1).split(',') if f and f != '-']
     try:
@@ -135,6 +143,8 @@ def parse_build_output(text, number_of_files, content_size, min_runs):
         'postsPerSecond': files / median if files is not None and median else None,
         'inputMBPerSecond': in_bytes / 1e6 / median if in_bytes is not None and median else None,
         'features': features,
+        'conformance': 'ok' if re.search(
+            _BOL + r'SSGBERK_CONFORMANCE_OK', text, re.M) else 'unchecked',
         'status': 'ok',
     }]
 
@@ -236,10 +246,11 @@ class Results:
         if os.path.exists(raw_file):
             with open(raw_file, encoding='utf-8', errors='replace') as raw_data:
                 text = raw_data.read()
+        require = bool(getattr(self.config, 'require_conformance', False))
         results = {'results': parse_build_output(
             text, self.config.number_of_files, self.config.content_size,
-            self.config.min_runs)}
-        status, reason = classify_build_output(text)
+            self.config.min_runs, require)}
+        status, reason = classify_build_output(text, require)
         results['status'] = status
         results['failureReason'] = reason
         results['unsupported'] = status == 'unsupported' and not results['results']

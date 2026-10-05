@@ -40,6 +40,7 @@ class BenchmarkConfig:
         self.content_size = args.content_size
         self.min_runs = args.min_runs
         self.profile = getattr(args, 'profile', 'core')
+        self.require_conformance = bool(getattr(args, 'require_conformance', False))
         self.verbose_build = args.verbose
         self.cpus = getattr(args, 'cpus', 4.0)
         self.memory = getattr(args, 'memory', 8 * 1024 ** 3)
