@@ -39,6 +39,7 @@ class BenchmarkConfig:
         self.number_of_files = args.number_of_files
         self.content_size = args.content_size
         self.min_runs = args.min_runs
+        self.profile = getattr(args, 'profile', 'core')
         self.verbose_build = args.verbose
         self.parse = args.parse
         self.results_environment = args.results_environment
@@ -94,7 +95,7 @@ class BenchmarkConfig:
                 n += 1
                 candidate = "%s-%d" % (base, n)
 
-    def for_cell(self, suite, cell, cell_index, profile):
+    def for_cell(self, suite, cell, cell_index):
         '''
         Returns a copy of this config for one cell of a suite. Results go to
         results/<ts>/<profile>/nf<nf>-cs<cs>/ (the timestamp gains a subdir).
@@ -109,7 +110,7 @@ class BenchmarkConfig:
         cfg.content_size = cell.content_size
         cfg.min_runs = str(suite.runs)
         cfg.run_test_timeout_seconds = suite.timeout_seconds
-        cfg.timestamp = "%s/%s" % (base, suites.cell_dir(profile, cell))
+        cfg.timestamp = "%s/%s" % (base, suites.cell_dir(self.profile, cell))
         # test types keep a reference to their config
         cfg.types = {k: type(v)(cfg) for k, v in self.types.items()}
         return cfg

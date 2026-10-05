@@ -40,3 +40,31 @@ def test_parse_stats_reads_dool_csv(fake_benchmarker, tmp_path):
     assert stats, "expected at least one sampled row"
     first = next(iter(stats.values()))
     assert any("cpu" in k for k in first)
+
+
+def _fw(name):
+    return type("T", (), {"name": name, "runTests": ["datarate"]})()
+
+
+def test_unsupported_recorded_not_failed(fake_benchmarker):
+    fake_benchmarker.tests = []
+    res = Results(fake_benchmarker)
+    fw = _fw("hugo")
+    raw = res.get_raw_file("hugo", "datarate")
+    pathlib.Path(raw).write_text("SSGBERK_PROFILE_UNSUPPORTED extended\n")
+    res.parse_all(fw)
+    assert res.unsupported["datarate"] == ["hugo"]
+    assert "hugo" not in res.failed["datarate"]
+    assert "hugo" not in res.succeeded["datarate"]
+    out = res._Results__to_jsonable()
+    assert out["unsupported"] == {"datarate": ["hugo"]}
+    assert out["profile"] == "core"
+
+
+def test_failed_still_failed_and_profile_recorded(fake_benchmarker):
+    fake_benchmarker.config.profile = "extended"
+    res = Results(fake_benchmarker)
+    pathlib.Path(res.get_raw_file("x", "datarate")).write_text("nothing\n")
+    res.parse_all(_fw("x"))
+    assert res.failed["datarate"] == ["x"] and res.unsupported["datarate"] == []
+    assert res._Results__to_jsonable()["profile"] == "extended"

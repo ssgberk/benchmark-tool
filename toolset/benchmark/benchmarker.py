@@ -206,7 +206,8 @@ class Benchmarker:
             # TODO move into log somehow
             #pprint(results)
 
-            self.results.report_benchmark_results(framework_test, test_type, results['results'])
+            self.results.report_benchmark_results(framework_test, test_type, results['results'],
+                                                  results.get('unsupported', False))
             log("Complete", file=benchmark_log)
 
         for test_type in framework_test.runTests:

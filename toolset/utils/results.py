@@ -16,6 +16,7 @@ from toolset.utils import summary
 RESULT_BEGIN = 'SSGBERK_RESULT_BEGIN'
 RESULT_END = 'SSGBERK_RESULT_END'
 VERIFY_FAIL = 'SSGBERK_VERIFY_FAIL'
+PROFILE_UNSUPPORTED = 'SSGBERK_PROFILE_UNSUPPORTED'
 
 
 def parse_build_output(text, number_of_files, content_size, min_runs):
@@ -82,6 +83,7 @@ class Results:
         self.numberOfFiles = self.config.number_of_files
         self.contentSize = self.config.content_size
         self.minRuns = self.config.min_runs
+        self.profile = getattr(self.config, 'profile', 'core')
         self.verboseBuild = self.config.verbose_build
         self.frameworks = [t.name for t in benchmarker.tests]
         self.duration = self.config.duration
@@ -92,6 +94,8 @@ class Results:
         self.succeeded['datarate'] = []
         self.failed = dict()
         self.failed['datarate'] = []
+        self.unsupported = dict()
+        self.unsupported['datarate'] = []
 
     #############################################################################
     # PUBLIC FUNCTIONS
@@ -147,6 +151,8 @@ class Results:
         results = {'results': parse_build_output(
             text, self.config.number_of_files, self.config.content_size,
             self.config.min_runs)}
+        # Simple marker check; replaced by the Task 3 parser status.
+        results['unsupported'] = PROFILE_UNSUPPORTED in text and not results['results']
 
         stats = []
         stats_path = self.get_stats_file(framework_test.name, test_type)
@@ -169,7 +175,8 @@ class Results:
                     self.get_raw_file(framework_test.name, test_type)):
                 results = self.parse_test(framework_test, test_type)
                 self.report_benchmark_results(framework_test, test_type,
-                                              results['results'])
+                                              results['results'],
+                                              results.get('unsupported', False))
 
     def write_intermediate(self, test_name, status_message):
         '''
@@ -234,7 +241,8 @@ class Results:
             pass
         return path
 
-    def report_benchmark_results(self, framework_test, test_type, results):
+    def report_benchmark_results(self, framework_test, test_type, results,
+                                 unsupported=False):
         '''
         Used by FrameworkTest to add benchmark data to this
 
@@ -244,8 +252,13 @@ class Results:
         if test_type not in self.rawData.keys():
             self.rawData[test_type] = dict()
 
+        if unsupported and not results:
+            # Not a failure: the generator does not support this profile.
+            self.unsupported.setdefault(test_type, [])
+            if framework_test.name not in self.unsupported[test_type]:
+                self.unsupported[test_type].append(framework_test.name)
         # If results has a size from the parse, then it succeeded.
-        if results:
+        elif results:
             self.rawData[test_type][framework_test.name] = results
 
             # This may already be set for single-tests
@@ -280,6 +293,8 @@ class Results:
         toRet['completed'] = self.completed
         toRet['succeeded'] = self.succeeded
         toRet['failed'] = self.failed
+        toRet['profile'] = self.profile
+        toRet['unsupported'] = self.unsupported
 
         return toRet
 

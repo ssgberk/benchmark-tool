@@ -125,3 +125,13 @@ def test_main_returns_1_when_run_raises(monkeypatch):
     seen, bench = _patched_main(monkeypatch)
     bench.run.side_effect = RuntimeError("boom")
     assert run_tests.main(["run-tests.py"]) == 1
+
+
+def test_profile_default_core():
+    assert parse().profile == "core"
+    assert parse("--profile", "extended").profile == "extended"
+
+
+def test_profile_rejects_unknown():
+    with pytest.raises(SystemExit):
+        parse("--profile", "bogus")

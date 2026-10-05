@@ -37,3 +37,27 @@ def test_parse_keeps_timestamp(monkeypatch, tmp_path):
     (tmp_path / 'results' / '2026').mkdir(parents=True)
     cfg = BenchmarkConfig(_args(parse='2026'))
     assert cfg.timestamp == '2026'
+
+
+def test_config_profile_default_and_flag(monkeypatch, tmp_path):
+    monkeypatch.setenv('FWROOT', str(tmp_path))
+    assert BenchmarkConfig(_args()).profile == 'core'
+    assert BenchmarkConfig(_args(profile='extended')).profile == 'extended'
+
+
+def test_profile_passed_to_script_variables(monkeypatch, tmp_path):
+    from toolset.benchmark.test_types.datarate_type import DatarateTestType
+    monkeypatch.setenv('FWROOT', str(tmp_path))
+    cfg = BenchmarkConfig(_args(profile='extended'))
+    assert DatarateTestType(cfg).get_script_variables()['profile'] == 'extended'
+
+
+def test_results_dir_includes_profile_for_suite(monkeypatch, tmp_path):
+    from toolset.benchmark import suites
+    monkeypatch.setenv('FWROOT', str(tmp_path))
+    cfg = BenchmarkConfig(_args(profile='extended'))
+    cell = suites.Cell(10, '0.500')
+    s = suites.load('smoke')
+    cc = cfg.for_cell(s, cell, 0)
+    assert cc.timestamp == cfg.timestamp + '/extended/nf10-cs0.500'
+    assert cc.profile == 'extended'

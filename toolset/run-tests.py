@@ -109,6 +109,13 @@ def build_parser():
         help='Parses the results of the given timestamp and merges that with the latest results'
     )
 
+    parser.add_argument(
+        '--profile',
+        choices=['core', 'extended'],
+        default='core',
+        help='Benchmark profile; core and extended are separate result series'
+    )
+
     # Test options
     parser.add_argument(
         '--test',
@@ -207,7 +214,7 @@ def run_suite(args):
     Runs every cell of the suite, one Benchmarker per cell, then writes suite.json.
     '''
     suite = suites.load(args.suite)
-    profile = os.getenv('SSGBERK_PROFILE', 'core')
+    profile = args.profile
     base = BenchmarkConfig(args)
     start = int(round(time.time() * 1000))
     cells = []
@@ -226,7 +233,7 @@ def run_suite(args):
         for index, cell in enumerate(suite.cells):
             if interrupted:
                 break
-            config = base.for_cell(suite, cell, index, profile)
+            config = base.for_cell(suite, cell, index)
             benchmarker = Benchmarker(config)
             order = suites.rotate([t.name for t in benchmarker.tests], index)
             benchmarker.tests.sort(key=lambda t: order.index(t.name))

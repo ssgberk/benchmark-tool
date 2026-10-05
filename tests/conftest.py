@@ -16,6 +16,7 @@ def fake_config(tmp_path):
         number_of_files="10",
         content_size="0.500",
         min_runs="1",
+        profile="core",
         verbose_build=False,
         duration=15,
         test=None,

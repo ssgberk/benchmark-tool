@@ -23,4 +23,6 @@ class DatarateTestType(FrameworkTestType):
             self.config.min_runs,
             'verbose_build':
             self.config.verbose_build,
+            'profile':
+            self.config.profile,
         }
