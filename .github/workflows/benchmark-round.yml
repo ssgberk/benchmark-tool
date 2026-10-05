@@ -40,7 +40,6 @@ jobs:
           MR: ${{ inputs.min_runs }}
         run: |
           set -euo pipefail
-          set -f
           for v in NF MR; do
             if ! [[ "${!v}" =~ ^[0-9]+$ ]]; then
               echo "$v must be a non-negative integer" >&2
@@ -48,7 +47,9 @@ jobs:
             fi
           done
           if [ -n "${TESTS// /}" ]; then
-            list=$(printf '%s\n' $TESTS)
+            # read -ra splits on whitespace without glob expansion
+            read -ra requested <<< "$TESTS"
+            list=$(printf '%s\n' "${requested[@]}")
           else
             list=$(jq -r '.framework' frameworks/*/*/benchmark_config.json)
           fi
