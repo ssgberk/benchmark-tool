@@ -68,3 +68,24 @@ def test_failed_still_failed_and_profile_recorded(fake_benchmarker):
     res.parse_all(_fw("x"))
     assert res.failed["datarate"] == ["x"] and res.unsupported["datarate"] == []
     assert res._Results__to_jsonable()["profile"] == "extended"
+
+
+def test_unsupported_marker_with_valid_result_counts_as_succeeded(fake_benchmarker):
+    fake_benchmarker.config.number_of_files = "10"
+    fake_benchmarker.config.content_size = "0.500"
+    fake_benchmarker.config.min_runs = "1"
+    res = Results(fake_benchmarker)
+    text = "SSGBERK_PROFILE_UNSUPPORTED extended\n" + (FIX / "raw_ok.txt").read_text()
+    pathlib.Path(res.get_raw_file("hugo", "datarate")).write_text(text)
+    res.parse_all(_fw("hugo"))
+    assert res.unsupported["datarate"] == []
+    assert res.failed["datarate"] == []
+    assert res.succeeded["datarate"] == ["hugo"]
+
+
+def test_results_json_profile_matches_cell_dir(fake_benchmarker):
+    fake_benchmarker.config.profile = "extended"
+    fake_benchmarker.config.timestamp = "20261004000000/extended/nf10-cs0.500"
+    res = Results(fake_benchmarker)
+    assert res.directory.endswith("extended/nf10-cs0.500")
+    assert res._Results__to_jsonable()["profile"] == "extended"

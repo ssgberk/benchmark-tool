@@ -105,7 +105,8 @@ def test_for_cell_and_suite_loop(monkeypatch, tmp_path):
             self.config = config
             self.tests = [types.SimpleNamespace(name=n) for n in "cab"]
             self.results = types.SimpleNamespace(
-                succeeded={'datarate': ['a']}, failed={'datarate': []})
+                succeeded={'datarate': ['a']}, failed={'datarate': []},
+                unsupported={'datarate': []})
 
         def run(self):
             seen.append((self.config.number_of_files, self.config.content_size,
@@ -151,9 +152,10 @@ def _fake(monkeypatch, tmp_path, run_result=False, run_raises=None, stop_exits=T
             self.config = config
             import os
             os.makedirs(os.path.join(config.results_root, config.timestamp))
-            self.tests = [types.SimpleNamespace(name='a')]
+            self.tests = [types.SimpleNamespace(name=n) for n in 'abc']
             self.results = types.SimpleNamespace(
-                succeeded={'datarate': []}, failed={'datarate': ['a']})
+                succeeded={'datarate': ['b']}, failed={'datarate': ['a']},
+                unsupported={'datarate': ['c']})
 
         def run(self):
             if run_raises:
@@ -196,3 +198,14 @@ def test_suite_profile_consistent(monkeypatch, tmp_path):
     assert out['profile'] == 'extended'
     assert out['cells'][0]['dir'] == 'extended/nf10-cs0.500'
     assert (suite_json.parent / out['cells'][0]['dir']).is_dir()
+
+
+def test_suite_json_counts_add_up(monkeypatch, tmp_path):
+    import json
+    _fake(monkeypatch, tmp_path)
+    args = run_tests.build_parser().parse_args(['--suite', 'smoke'])
+    run_tests.run_suite(args)
+    (suite_json,) = (tmp_path / 'results').glob('*/suite.json')
+    cell = json.loads(suite_json.read_text())['cells'][0]
+    assert (cell['succeeded'], cell['failed'], cell['unsupported']) == (1, 1, 1)
+    assert cell['succeeded'] + cell['failed'] + cell['unsupported'] == len(cell['order'])

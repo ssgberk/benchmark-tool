@@ -250,6 +250,7 @@ def run_suite(args):
                 'order': order,
                 'succeeded': len(results.succeeded.get('datarate', [])),
                 'failed': len(results.failed.get('datarate', [])),
+                'unsupported': len(results.unsupported.get('datarate', [])),
             })
             if index < len(suite.cells) - 1 and suite.cooldown_seconds:
                 time.sleep(suite.cooldown_seconds)
