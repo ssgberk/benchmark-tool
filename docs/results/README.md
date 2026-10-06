@@ -2,6 +2,7 @@
 
 ## Published rounds
 
+- [2026-10-06](./2026-10-06/): suites P and M with all 35 generators (the 18 new ones from ssg-frameworks spec 007), Node generators with the 6 GB heap cap.
 - [2026-10-05](./2026-10-05/): site-size suites P, M, G and GG (50 to 100,000 pages × 5 KB and 50 KB), 17 generators, GitHub Actions hosted runners.
 - [example-2026-10](./example-2026-10.md): first round after the modernization (100 posts × 0.5 KB, pre-spec-008 schema).
 
