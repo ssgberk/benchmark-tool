@@ -1,0 +1,1332 @@
+{
+  "uuid": "80d7f189-f51a-4b24-aaa7-a74dbeea860c",
+  "name": "GitHub Actions ubuntu-24.04, one runner per generator",
+  "environmentDescription": "GitHub Actions ubuntu-24.04, one runner per generator",
+  "git": {
+    "commitId": "4818dd2d1738f4f837fa5d80799b0beef5a92605",
+    "repositoryUrl": "https://github.com/ssgberk/benchmark-tool",
+    "branchName": "master"
+  },
+  "startTime": 1791297274108,
+  "completionTime": 1791323154284,
+  "contentSize": "5",
+  "numberOfFiles": "100000",
+  "frameworks": [
+    "analog",
+    "astro",
+    "docfx",
+    "docusaurus",
+    "dumi",
+    "eleventy",
+    "gatsby",
+    "hakyll",
+    "hexo",
+    "hugo",
+    "jekyll",
+    "jigsaw",
+    "lektor",
+    "mdbook",
+    "metalsmith-handlebars",
+    "metalsmith-nunjucks",
+    "middleman",
+    "mkdocs",
+    "nanoc",
+    "nextjs-export",
+    "nextra",
+    "nikola-mako",
+    "nuxt-content",
+    "observable-framework",
+    "pelican",
+    "publish",
+    "quarto",
+    "quartz",
+    "sphinx",
+    "starlight",
+    "sveltekit",
+    "vitepress",
+    "vuepress",
+    "zensical",
+    "zola"
+  ],
+  "duration": 15,
+  "rawData": {
+    "datarate": {
+      "astro": [
+        {
+          "mean": 143.36985378079999,
+          "stddev": null,
+          "median": 143.36985378079999,
+          "min": 143.36985378079999,
+          "max": 143.36985378079999,
+          "times": [
+            143.36985378079999
+          ],
+          "numberOfFiles": "100000",
+          "contentSize": "5",
+          "minRuns": "1",
+          "startTime": 1791297483,
+          "endTime": 1791297652,
+          "user": 234.18906607999998,
+          "system": 20.92475504,
+          "cpuUtilization": 1.779,
+          "memoryUsageBytes": [
+            6730502144
+          ],
+          "peakRssBytes": 6730502144,
+          "inputFiles": 100000,
+          "inputBytes": 533537500,
+          "outputFiles": 100001,
+          "outputBytes": 1042800129,
+          "cv": null,
+          "postsPerSecond": 697.4967007561526,
+          "inputMBPerSecond": 3.721406459796858,
+          "features": null,
+          "conformance": "unchecked",
+          "status": "ok",
+          "attempts": [
+            {
+              "minRuns": 1,
+              "mean": 143.36985378079999,
+              "median": 143.36985378079999,
+              "stddev": null,
+              "cv": null
+            }
+          ],
+          "resources": {
+            "cpus": 4.0,
+            "memoryBytes": 8589934592,
+            "swap": false,
+            "cpuset": null
+          }
+        }
+      ],
+      "hugo": [
+        {
+          "mean": 145.50208500041998,
+          "stddev": null,
+          "median": 145.50208500041998,
+          "min": 145.50208500041998,
+          "max": 145.50208500041998,
+          "times": [
+            145.50208500041998
+          ],
+          "numberOfFiles": "100000",
+          "contentSize": "5",
+          "minRuns": "1",
+          "startTime": 1791299653,
+          "endTime": 1791299811,
+          "user": 440.51746998,
+          "system": 44.8316495,
+          "cpuUtilization": 3.336,
+          "memoryUsageBytes": [
+            6983385088
+          ],
+          "peakRssBytes": 6983385088,
+          "inputFiles": 100000,
+          "inputBytes": 533537500,
+          "outputFiles": 100003,
+          "outputBytes": 1231277107,
+          "cv": null,
+          "postsPerSecond": 687.2753747804463,
+          "inputMBPerSecond": 3.666871852719224,
+          "features": null,
+          "conformance": "unchecked",
+          "status": "ok",
+          "attempts": [
+            {
+              "minRuns": 1,
+              "mean": 145.50208500041998,
+              "median": 145.50208500041998,
+              "stddev": null,
+              "cv": null
+            }
+          ],
+          "resources": {
+            "cpus": 4.0,
+            "memoryBytes": 8589934592,
+            "swap": false,
+            "cpuset": null
+          }
+        }
+      ],
+      "jekyll": [
+        {
+          "mean": 81.43939854568,
+          "stddev": null,
+          "median": 81.43939854568,
+          "min": 81.43939854568,
+          "max": 81.43939854568,
+          "times": [
+            81.43939854568
+          ],
+          "numberOfFiles": "100000",
+          "contentSize": "5",
+          "minRuns": "1",
+          "startTime": 1791297703,
+          "endTime": 1791297799,
+          "user": 63.75876074,
+          "system": 16.71122956,
+          "cpuUtilization": 0.988,
+          "memoryUsageBytes": [
+            2282139648
+          ],
+          "peakRssBytes": 2282139648,
+          "inputFiles": 100000,
+          "inputBytes": 534837500,
+          "outputFiles": 100001,
+          "outputBytes": 1117700117,
+          "cv": null,
+          "postsPerSecond": 1227.9069072926563,
+          "inputMBPerSecond": 6.567306605291361,
+          "features": null,
+          "conformance": "unchecked",
+          "status": "ok",
+          "attempts": [
+            {
+              "minRuns": 1,
+              "mean": 81.43939854568,
+              "median": 81.43939854568,
+              "stddev": null,
+              "cv": null
+            }
+          ],
+          "resources": {
+            "cpus": 4.0,
+            "memoryBytes": 8589934592,
+            "swap": false,
+            "cpuset": null
+          }
+        }
+      ],
+      "jigsaw": [
+        {
+          "mean": 268.45913078812004,
+          "stddev": null,
+          "median": 268.45913078812004,
+          "min": 268.45913078812004,
+          "max": 268.45913078812004,
+          "times": [
+            268.45913078812004
+          ],
+          "numberOfFiles": "100000",
+          "contentSize": "5",
+          "minRuns": "1",
+          "startTime": 1791303948,
+          "endTime": 1791304236,
+          "user": 203.89138086,
+          "system": 45.88608712,
+          "cpuUtilization": 0.93,
+          "memoryUsageBytes": [
+            3655389184
+          ],
+          "peakRssBytes": 3655389184,
+          "inputFiles": 100000,
+          "inputBytes": 535837500,
+          "outputFiles": 100003,
+          "outputBytes": 929902882,
+          "cv": null,
+          "postsPerSecond": 372.4961773750377,
+          "inputMBPerSecond": 1.9959742044419675,
+          "features": null,
+          "conformance": "unchecked",
+          "status": "ok",
+          "attempts": [
+            {
+              "minRuns": 1,
+              "mean": 268.45913078812004,
+              "median": 268.45913078812004,
+              "stddev": null,
+              "cv": null
+            }
+          ],
+          "resources": {
+            "cpus": 4.0,
+            "memoryBytes": 8589934592,
+            "swap": false,
+            "cpuset": null
+          }
+        }
+      ],
+      "lektor": [
+        {
+          "mean": 951.36518011404,
+          "stddev": null,
+          "median": 951.36518011404,
+          "min": 951.36518011404,
+          "max": 951.36518011404,
+          "times": [
+            951.36518011404
+          ],
+          "numberOfFiles": "100000",
+          "contentSize": "5",
+          "minRuns": "1",
+          "startTime": 1791305053,
+          "endTime": 1791306019,
+          "user": 800.22670006,
+          "system": 133.69088388,
+          "cpuUtilization": 0.982,
+          "memoryUsageBytes": [
+            1143701504
+          ],
+          "peakRssBytes": 1143701504,
+          "inputFiles": 100000,
+          "inputBytes": 512000000,
+          "outputFiles": 100004,
+          "outputBytes": 831403600,
+          "cv": null,
+          "postsPerSecond": 105.112108462928,
+          "inputMBPerSecond": 0.5381739953301914,
+          "features": null,
+          "conformance": "unchecked",
+          "status": "ok",
+          "attempts": [
+            {
+              "minRuns": 1,
+              "mean": 951.36518011404,
+              "median": 951.36518011404,
+              "stddev": null,
+              "cv": null
+            }
+          ],
+          "resources": {
+            "cpus": 4.0,
+            "memoryBytes": 8589934592,
+            "swap": false,
+            "cpuset": null
+          }
+        }
+      ],
+      "middleman": [
+        {
+          "mean": 723.06135658692,
+          "stddev": null,
+          "median": 723.06135658692,
+          "min": 723.06135658692,
+          "max": 723.06135658692,
+          "times": [
+            723.06135658692
+          ],
+          "numberOfFiles": "100000",
+          "contentSize": "5",
+          "minRuns": "1",
+          "startTime": 1791302447,
+          "endTime": 1791303186,
+          "user": 2129.4342206,
+          "system": 41.551528680000004,
+          "cpuUtilization": 3.002,
+          "memoryUsageBytes": [
+            2246680576
+          ],
+          "peakRssBytes": 2246680576,
+          "inputFiles": 100000,
+          "inputBytes": 533537500,
+          "outputFiles": 100002,
+          "outputBytes": 1002200152,
+          "cv": null,
+          "postsPerSecond": 138.30084969833246,
+          "inputMBPerSecond": 0.7378868959592406,
+          "features": null,
+          "conformance": "unchecked",
+          "status": "ok",
+          "attempts": [
+            {
+              "minRuns": 1,
+              "mean": 723.06135658692,
+              "median": 723.06135658692,
+              "stddev": null,
+              "cv": null
+            }
+          ],
+          "resources": {
+            "cpus": 4.0,
+            "memoryBytes": 8589934592,
+            "swap": false,
+            "cpuset": null
+          }
+        }
+      ],
+      "mkdocs": [
+        {
+          "mean": 813.9227298468201,
+          "stddev": null,
+          "median": 813.9227298468201,
+          "min": 813.9227298468201,
+          "max": 813.9227298468201,
+          "times": [
+            813.9227298468201
+          ],
+          "numberOfFiles": "100000",
+          "contentSize": "5",
+          "minRuns": "1",
+          "startTime": 1791300063,
+          "endTime": 1791300895,
+          "user": 793.40800784,
+          "system": 12.8776061,
+          "cpuUtilization": 0.991,
+          "memoryUsageBytes": [
+            2689695744
+          ],
+          "peakRssBytes": 2689695744,
+          "inputFiles": 100000,
+          "inputBytes": 512000000,
+          "outputFiles": 100001,
+          "outputBytes": 904100160,
+          "cv": null,
+          "postsPerSecond": 122.86178568673216,
+          "inputMBPerSecond": 0.6290523427160687,
+          "features": null,
+          "conformance": "unchecked",
+          "status": "ok",
+          "attempts": [
+            {
+              "minRuns": 1,
+              "mean": 813.9227298468201,
+              "median": 813.9227298468201,
+              "stddev": null,
+              "cv": null
+            }
+          ],
+          "resources": {
+            "cpus": 4.0,
+            "memoryBytes": 8589934592,
+            "swap": false,
+            "cpuset": null
+          }
+        }
+      ],
+      "nanoc": [
+        {
+          "mean": 3390.8172391604203,
+          "stddev": null,
+          "median": 3390.8172391604203,
+          "min": 3390.8172391604203,
+          "max": 3390.8172391604203,
+          "times": [
+            3390.8172391604203
+          ],
+          "numberOfFiles": "100000",
+          "contentSize": "5",
+          "minRuns": "1",
+          "startTime": 1791304400,
+          "endTime": 1791307804,
+          "user": 3339.8827064399998,
+          "system": 41.58235438,
+          "cpuUtilization": 0.997,
+          "memoryUsageBytes": [
+            5372059648
+          ],
+          "peakRssBytes": 5372059648,
+          "inputFiles": 100000,
+          "inputBytes": 535537500,
+          "outputFiles": 100001,
+          "outputBytes": 1008700160,
+          "cv": null,
+          "postsPerSecond": 29.491415475037634,
+          "inputMBPerSecond": 0.15793758914962966,
+          "features": null,
+          "conformance": "unchecked",
+          "status": "ok",
+          "attempts": [
+            {
+              "minRuns": 1,
+              "mean": 3390.8172391604203,
+              "median": 3390.8172391604203,
+              "stddev": null,
+              "cv": null
+            }
+          ],
+          "resources": {
+            "cpus": 4.0,
+            "memoryBytes": 8589934592,
+            "swap": false,
+            "cpuset": null
+          }
+        }
+      ],
+      "nikola-mako": [
+        {
+          "mean": 1910.1095071068,
+          "stddev": null,
+          "median": 1910.1095071068,
+          "min": 1910.1095071068,
+          "max": 1910.1095071068,
+          "times": [
+            1910.1095071068
+          ],
+          "numberOfFiles": "100000",
+          "contentSize": "5",
+          "minRuns": "1",
+          "startTime": 1791302129,
+          "endTime": 1791304075,
+          "user": 1844.42390046,
+          "system": 48.26176764,
+          "cpuUtilization": 0.991,
+          "memoryUsageBytes": [
+            3831361536
+          ],
+          "peakRssBytes": 3831361536,
+          "inputFiles": 100000,
+          "inputBytes": 535437500,
+          "outputFiles": 100025,
+          "outputBytes": 861041855,
+          "cv": null,
+          "postsPerSecond": 52.35301935723452,
+          "inputMBPerSecond": 0.2803176980208926,
+          "features": null,
+          "conformance": "unchecked",
+          "status": "ok",
+          "attempts": [
+            {
+              "minRuns": 1,
+              "mean": 1910.1095071068,
+              "median": 1910.1095071068,
+              "stddev": null,
+              "cv": null
+            }
+          ],
+          "resources": {
+            "cpus": 4.0,
+            "memoryBytes": 8589934592,
+            "swap": false,
+            "cpuset": null
+          }
+        }
+      ],
+      "pelican": [
+        {
+          "mean": 1001.94447753494,
+          "stddev": null,
+          "median": 1001.94447753494,
+          "min": 1001.94447753494,
+          "max": 1001.94447753494,
+          "times": [
+            1001.94447753494
+          ],
+          "numberOfFiles": "100000",
+          "contentSize": "5",
+          "minRuns": "1",
+          "startTime": 1791304648,
+          "endTime": 1791305664,
+          "user": 983.95051736,
+          "system": 18.297868459999997,
+          "cpuUtilization": 1.0,
+          "memoryUsageBytes": [
+            1054076928
+          ],
+          "peakRssBytes": 1054076928,
+          "inputFiles": 100000,
+          "inputBytes": 533537500,
+          "outputFiles": 100001,
+          "outputBytes": 744400160,
+          "cv": null,
+          "postsPerSecond": 99.80592961201563,
+          "inputMBPerSecond": 0.532502061703708,
+          "features": null,
+          "conformance": "unchecked",
+          "status": "ok",
+          "attempts": [
+            {
+              "minRuns": 1,
+              "mean": 1001.94447753494,
+              "median": 1001.94447753494,
+              "stddev": null,
+              "cv": null
+            }
+          ],
+          "resources": {
+            "cpus": 4.0,
+            "memoryBytes": 8589934592,
+            "swap": false,
+            "cpuset": null
+          }
+        }
+      ],
+      "publish": [
+        {
+          "mean": 2399.5251569887796,
+          "stddev": null,
+          "median": 2399.5251569887796,
+          "min": 2399.5251569887796,
+          "max": 2399.5251569887796,
+          "times": [
+            2399.5251569887796
+          ],
+          "numberOfFiles": "100000",
+          "contentSize": "5",
+          "minRuns": "1",
+          "startTime": 1791302534,
+          "endTime": 1791304948,
+          "user": 2320.34869486,
+          "system": 111.19692932,
+          "cpuUtilization": 1.013,
+          "memoryUsageBytes": [
+            2253058048
+          ],
+          "peakRssBytes": 2253058048,
+          "inputFiles": 100000,
+          "inputBytes": 533537500,
+          "outputFiles": 100004,
+          "outputBytes": 947242513,
+          "cv": null,
+          "postsPerSecond": 41.67491210031419,
+          "inputMBPerSecond": 0.22235128414721383,
+          "features": null,
+          "conformance": "unchecked",
+          "status": "ok",
+          "attempts": [
+            {
+              "minRuns": 1,
+              "mean": 2399.5251569887796,
+              "median": 2399.5251569887796,
+              "stddev": null,
+              "cv": null
+            }
+          ],
+          "resources": {
+            "cpus": 4.0,
+            "memoryBytes": 8589934592,
+            "swap": false,
+            "cpuset": null
+          }
+        }
+      ],
+      "zola": [
+        {
+          "mean": 41.859509408120005,
+          "stddev": null,
+          "median": 41.859509408120005,
+          "min": 41.859509408120005,
+          "max": 41.859509408120005,
+          "times": [
+            41.859509408120005
+          ],
+          "numberOfFiles": "100000",
+          "contentSize": "5",
+          "minRuns": "1",
+          "startTime": 1791305123,
+          "endTime": 1791305183,
+          "user": 29.63132894,
+          "system": 25.6396344,
+          "cpuUtilization": 1.32,
+          "memoryUsageBytes": [
+            7195185152
+          ],
+          "peakRssBytes": 7195185152,
+          "inputFiles": 100000,
+          "inputBytes": 534737500,
+          "outputFiles": 100008,
+          "outputBytes": 892700452,
+          "cv": null,
+          "postsPerSecond": 2388.943430392946,
+          "inputMBPerSecond": 12.774576376097478,
+          "features": null,
+          "conformance": "unchecked",
+          "status": "ok",
+          "attempts": [
+            {
+              "minRuns": 1,
+              "mean": 41.859509408120005,
+              "median": 41.859509408120005,
+              "stddev": null,
+              "cv": null
+            }
+          ],
+          "resources": {
+            "cpus": 4.0,
+            "memoryBytes": 8589934592,
+            "swap": false,
+            "cpuset": null
+          }
+        }
+      ]
+    }
+  },
+  "completed": {
+    "analog": "20261006143825",
+    "astro": "20261006144149",
+    "docfx": "20261006151008",
+    "docusaurus": "20261006144410",
+    "dumi": "20261006162153",
+    "eleventy": "20261006144701",
+    "gatsby": "20261006194535",
+    "hakyll": "error during test: UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=60)",
+    "hexo": "20261006152130",
+    "hugo": "20261006151717",
+    "jekyll": "20261006144346",
+    "jigsaw": "20261006163109",
+    "lektor": "20261006170058",
+    "mdbook": "20261006154320",
+    "metalsmith-handlebars": "20261006144524",
+    "metalsmith-nunjucks": "20261006152357",
+    "middleman": "20261006161340",
+    "mkdocs": "20261006153533",
+    "nanoc": "20261006173027",
+    "nextjs-export": "error during test: UnixHTTPConnectionPool(host='localhost', port=None): Read timed out. (read timeout=60)",
+    "nextra": "20261006143840",
+    "nikola-mako": "20261006162854",
+    "nuxt-content": "20261006152117",
+    "observable-framework": "20261006195253",
+    "pelican": "20261006165448",
+    "publish": "20261006164255",
+    "quarto": "20261006162629",
+    "quartz": "20261006164543",
+    "sphinx": "20261006161910",
+    "starlight": "20261006155734",
+    "sveltekit": "20261006153524",
+    "vitepress": "20261006162013",
+    "vuepress": "20261006165110",
+    "zensical": "20261006214554",
+    "zola": "20261006164701"
+  },
+  "succeeded": {
+    "datarate": [
+      "astro",
+      "hugo",
+      "jekyll",
+      "jigsaw",
+      "lektor",
+      "middleman",
+      "mkdocs",
+      "nanoc",
+      "nikola-mako",
+      "pelican",
+      "publish",
+      "zola"
+    ]
+  },
+  "failed": {
+    "datarate": [
+      "analog",
+      "docfx",
+      "docusaurus",
+      "dumi",
+      "eleventy",
+      "gatsby",
+      "hexo",
+      "mdbook",
+      "metalsmith-handlebars",
+      "metalsmith-nunjucks",
+      "nextra",
+      "nuxt-content",
+      "observable-framework",
+      "quarto",
+      "quartz",
+      "sphinx",
+      "starlight",
+      "sveltekit",
+      "vitepress",
+      "vuepress",
+      "zensical"
+    ]
+  },
+  "suite": {
+    "name": "GG",
+    "version": 1,
+    "cellIndex": 0,
+    "cellCount": 2,
+    "runs": 1,
+    "ranked": true
+  },
+  "profile": "core",
+  "unsupported": {
+    "datarate": []
+  },
+  "failureReasons": {
+    "analog": "oom",
+    "docfx": "SSGBERK_VERIFY_FAIL build exited 255",
+    "docusaurus": "oom",
+    "dumi": "SSGBERK_VERIFY_FAIL build exited 134",
+    "eleventy": "SSGBERK_VERIFY_FAIL build exited 134",
+    "gatsby": "timeout",
+    "hexo": "SSGBERK_VERIFY_FAIL build exited 134",
+    "mdbook": "oom",
+    "metalsmith-handlebars": "SSGBERK_VERIFY_FAIL build exited 1",
+    "metalsmith-nunjucks": "SSGBERK_VERIFY_FAIL build exited 1",
+    "nextra": "oom",
+    "nuxt-content": "SSGBERK_VERIFY_FAIL build exited 1",
+    "observable-framework": "timeout",
+    "quarto": "oom",
+    "quartz": "oom",
+    "sphinx": "oom",
+    "starlight": "SSGBERK_VERIFY_FAIL build exited 134",
+    "sveltekit": "oom",
+    "vitepress": "SSGBERK_VERIFY_FAIL build exited 134",
+    "vuepress": "SSGBERK_VERIFY_FAIL build exited 134",
+    "zensical": "timeout"
+  },
+  "resources": {
+    "cpus": 4.0,
+    "memoryBytes": 8589934592,
+    "swap": false,
+    "cpuset": null
+  },
+  "protocol": {
+    "coldRebuild": true,
+    "warmupBuilds": 1,
+    "sequential": true,
+    "concurrent": false,
+    "allowConcurrent": false,
+    "cooldownSeconds": 60,
+    "timeoutSeconds": 18000,
+    "cvThreshold": 0.1
+  },
+  "environment": {
+    "cpuModel": "AMD EPYC 7763 64-Core Processor",
+    "cpuModelSource": "launcher",
+    "host": {
+      "os": "Linux 6.17.0-1022-azure x86_64"
+    },
+    "docker": {
+      "serverVersion": "28.0.4",
+      "apiVersion": "1.48",
+      "operatingSystem": "Ubuntu 24.04.5 LTS",
+      "osType": "linux",
+      "kernelVersion": "6.17.0-1022-azure",
+      "architecture": "x86_64",
+      "ncpu": 4,
+      "memTotalBytes": 16766406656,
+      "cgroupVersion": "2",
+      "storageDriver": "overlay2"
+    },
+    "toolset": {
+      "commit": "4818dd2",
+      "python": "3.12.3",
+      "dockerPy": "7.1.0"
+    },
+    "fingerprint": "e2d6f2db677c"
+  },
+  "generators": {
+    "analog": {
+      "version": "2.8.0",
+      "versionSource": "generators.json",
+      "imageId": "sha256:8b9ce8e708b59ffe775612493d45ce0da80b181fb318936baa1c91e1ddb2f9a8",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "astro": {
+      "version": "7.3.5",
+      "versionSource": "generators.json",
+      "imageId": "sha256:3945237d15e4ded9b5ef19eb1bdb69d3a0fddcf39525c82fceb45694b2441479",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "docfx": {
+      "version": "2.81.0",
+      "versionSource": "generators.json",
+      "imageId": "sha256:eeb9548c11abd4f893d8648ae2c4f851de9edcca2a592383bd7b64612a4f9faa",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "docusaurus": {
+      "version": "3.10.2",
+      "versionSource": "generators.json",
+      "imageId": "sha256:892eb7250f171ccb50a53542866c0033942c71cff98807e58d2b616bb13afb5b",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "dumi": {
+      "version": "2.4.50",
+      "versionSource": "generators.json",
+      "imageId": "sha256:54ac9288266972a70de1551f650259f1fcb22bdac4ad2a5c873d0275b21b3b8e",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "eleventy": {
+      "version": "3.1.6",
+      "versionSource": "generators.json",
+      "imageId": "sha256:202a9ccc5c8c1b12d3979f8e9d4839f848b0efaa58f40494c79997317c2accef",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "gatsby": {
+      "version": "5.16.1",
+      "versionSource": "generators.json",
+      "imageId": "sha256:4af6c90b5d1aa8db40107b041092be00abca7c1d62b4576cb2cc339711294f31",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "hakyll": {
+      "version": "4.17.0.0",
+      "versionSource": "generators.json",
+      "imageId": "sha256:bd7e728429bb73a707ce6e126b05b695adf9fc3ad4146d811e145c510858d7ce",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "hexo": {
+      "version": "8.1.2",
+      "versionSource": "generators.json",
+      "imageId": "sha256:b1a45f295f0312f38c95b51370e896ff5042cbe1d32aaa3261a1a8c77cd8325b",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "hugo": {
+      "version": "0.167.0",
+      "versionSource": "generators.json",
+      "imageId": "sha256:eb912412bdd31dd2122d02e18848eabb982b97767373e4bd2796f95d8c9e7b63",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "jekyll": {
+      "version": "4.4.1",
+      "versionSource": "generators.json",
+      "imageId": "sha256:6e8d49b6f9937d47402a41fffde0b8e6cbfa135d02bbf5b60f60cdb169e6d9e0",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "jigsaw": {
+      "version": "1.8.8",
+      "versionSource": "generators.json",
+      "imageId": "sha256:2e97a69336c6b8cc4644930e51df4dfb7e83db5f4f2014002da79cd26a908077",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "lektor": {
+      "version": "3.3.14",
+      "versionSource": "generators.json",
+      "imageId": "sha256:77e4844f7fb4242df61d8bd9a975b2caa17158550bc8a0848145e4966bc5e6aa",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "mdbook": {
+      "version": "0.5.4",
+      "versionSource": "generators.json",
+      "imageId": "sha256:52f3183cf0edf8a6dda6702c98a6e149caa661cadd169830e664b2a63e787c62",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "metalsmith-handlebars": {
+      "version": "2.7.0",
+      "versionSource": "generators.json",
+      "imageId": "sha256:655f0f461dab9de3eec2fa002c90d49cc61cb13e021d5dc96ea507125111b8aa",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "metalsmith-nunjucks": {
+      "version": "2.7.0",
+      "versionSource": "generators.json",
+      "imageId": "sha256:890440766a756e322b603694b5ff31c9161ab5f6a843b4dca031a9cdda2910ae",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "middleman": {
+      "version": "4.6.3",
+      "versionSource": "generators.json",
+      "imageId": "sha256:9dd89a5778e0a294a1ed8222b1485c60756370acd3166efb09e712410283ab00",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "mkdocs": {
+      "version": "1.6.1",
+      "versionSource": "generators.json",
+      "imageId": "sha256:43fe44b9b8f141c27485e1c4d40c8fe7992aa5209583ca117bb6cfbfce51c76b",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "nanoc": {
+      "version": "4.14.8",
+      "versionSource": "generators.json",
+      "imageId": "sha256:72a42bcf328b335a50ee9f5b1e3f69d6385604eb0b83e6fb6c256f9ae516fc00",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "nextjs-export": {
+      "version": "16.3.8",
+      "versionSource": "generators.json",
+      "imageId": "sha256:0f0b428b10792558b7c52c50abb74224e4af0b62579a5136456fb622452e1dcd",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "nextra": {
+      "version": "4.6.1",
+      "versionSource": "generators.json",
+      "imageId": "sha256:2beab06a34759a877b36b54fc0c079a8992d80020959da9a1d006f9960df28e7",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "nikola-mako": {
+      "version": "8.3.3",
+      "versionSource": "generators.json",
+      "imageId": "sha256:03bdfe040ebd9f81d760ca21add711a3b8dfe38b35b6009a206b98fb8dda2842",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "nuxt-content": {
+      "version": "4.5.2",
+      "versionSource": "generators.json",
+      "imageId": "sha256:eaf73e965e27d8c831642890f7483081faac343d49c2f719b47c354f16991d0d",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "observable-framework": {
+      "version": "1.13.4",
+      "versionSource": "generators.json",
+      "imageId": "sha256:8976e5a600c2c46013a38ce694c64b4c676b44683d48b5e588f9f63111c0533c",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "pelican": {
+      "version": "4.12.0",
+      "versionSource": "generators.json",
+      "imageId": "sha256:eee6fe44352f7708a1613709c7b66731cda1145b69cc8ad05d87bef6770e20db",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "publish": {
+      "version": "0.9.0",
+      "versionSource": "generators.json",
+      "imageId": "sha256:3239805cdc3d9eaa38695be9bc4252f346320eb2c340e254e6eb50c52e161999",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "quarto": {
+      "version": "1.10.18",
+      "versionSource": "generators.json",
+      "imageId": "sha256:5e77ec6a251be25cc6b6c9d2864bce18436a16b4dd370ab1dc5c4a70773471c8",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "quartz": {
+      "version": "5.0.0",
+      "versionSource": "generators.json",
+      "imageId": "sha256:3a26222ce1a3f9777f5e659467b3d0d2fcf8693bb8758bf844a3d8523bb07cd1",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "sphinx": {
+      "version": "9.1.0",
+      "versionSource": "generators.json",
+      "imageId": "sha256:604fa12a751f2a98b79dbd4c2e57a9ebe7e1fd4a1cd5881baa62a0a099134f53",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "starlight": {
+      "version": "0.42.5",
+      "versionSource": "generators.json",
+      "imageId": "sha256:bde7098cbe3a9fa3b00193a0b6fbfddbab2311f02a13c36225ac9b8dc1116eda",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "sveltekit": {
+      "version": "3.0.0",
+      "versionSource": "generators.json",
+      "imageId": "sha256:cf004649df7c69f4a5e32b17eb0c9e8e06203bd085f718fd50ec8edb197ce1d6",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "vitepress": {
+      "version": "1.6.4",
+      "versionSource": "generators.json",
+      "imageId": "sha256:508acf10f01ad40749192d713339ba6e2e97a3355215f6f3fbb81e2ad3b09b5d",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "vuepress": {
+      "version": "2.0.0-rc.31",
+      "versionSource": "generators.json",
+      "imageId": "sha256:a0cb7aab37993295148d927769ab64d4d10e43274129e80f9c7b4d7e28423fb3",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "zensical": {
+      "version": "0.0.68",
+      "versionSource": "generators.json",
+      "imageId": "sha256:408903b7f1f9bb974d399df9a67473d93d0cd6f9e01eb67d1e14a0a65304ce8e",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    },
+    "zola": {
+      "version": "0.23.6",
+      "versionSource": "generators.json",
+      "imageId": "sha256:2854406839b60160f12c0e9a0cb462a316362a07aed74f6ee810c444cba3d002",
+      "baseImage": "ubuntu:24.04",
+      "baseImageDigest": "ubuntu@sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55"
+    }
+  },
+  "imageBuild": {
+    "analog": {
+      "seconds": 70.152259797,
+      "imageId": "sha256:8b9ce8e708b59ffe775612493d45ce0da80b181fb318936baa1c91e1ddb2f9a8",
+      "sizeBytes": 1025802144,
+      "noCache": false
+    },
+    "astro": {
+      "seconds": 45.957487784,
+      "imageId": "sha256:3945237d15e4ded9b5ef19eb1bdb69d3a0fddcf39525c82fceb45694b2441479",
+      "sizeBytes": 783768645,
+      "noCache": false
+    },
+    "docfx": {
+      "seconds": 52.90785646999999,
+      "imageId": "sha256:eeb9548c11abd4f893d8648ae2c4f851de9edcca2a592383bd7b64612a4f9faa",
+      "sizeBytes": 1557131903,
+      "noCache": false
+    },
+    "docusaurus": {
+      "seconds": 104.20082048900001,
+      "imageId": "sha256:892eb7250f171ccb50a53542866c0033942c71cff98807e58d2b616bb13afb5b",
+      "sizeBytes": 886598003,
+      "noCache": false
+    },
+    "dumi": {
+      "seconds": 85.290894225,
+      "imageId": "sha256:54ac9288266972a70de1551f650259f1fcb22bdac4ad2a5c873d0275b21b3b8e",
+      "sizeBytes": 1295359146,
+      "noCache": false
+    },
+    "eleventy": {
+      "seconds": 41.331833582,
+      "imageId": "sha256:202a9ccc5c8c1b12d3979f8e9d4839f848b0efaa58f40494c79997317c2accef",
+      "sizeBytes": 635363902,
+      "noCache": false
+    },
+    "gatsby": {
+      "seconds": 175.60166427399997,
+      "imageId": "sha256:4af6c90b5d1aa8db40107b041092be00abca7c1d62b4576cb2cc339711294f31",
+      "sizeBytes": 1375436334,
+      "noCache": false
+    },
+    "hakyll": {
+      "seconds": 2196.168987867,
+      "imageId": "sha256:bd7e728429bb73a707ce6e126b05b695adf9fc3ad4146d811e145c510858d7ce",
+      "sizeBytes": 194190545,
+      "noCache": false
+    },
+    "hexo": {
+      "seconds": 41.054029629000006,
+      "imageId": "sha256:b1a45f295f0312f38c95b51370e896ff5042cbe1d32aaa3261a1a8c77cd8325b",
+      "sizeBytes": 664766198,
+      "noCache": false
+    },
+    "hugo": {
+      "seconds": 27.427519796000013,
+      "imageId": "sha256:eb912412bdd31dd2122d02e18848eabb982b97767373e4bd2796f95d8c9e7b63",
+      "sizeBytes": 471547255,
+      "noCache": false
+    },
+    "jekyll": {
+      "seconds": 47.88105654500001,
+      "imageId": "sha256:6e8d49b6f9937d47402a41fffde0b8e6cbfa135d02bbf5b60f60cdb169e6d9e0",
+      "sizeBytes": 510533680,
+      "noCache": false
+    },
+    "jigsaw": {
+      "seconds": 63.146824134999996,
+      "imageId": "sha256:2e97a69336c6b8cc4644930e51df4dfb7e83db5f4f2014002da79cd26a908077",
+      "sizeBytes": 591050004,
+      "noCache": false
+    },
+    "lektor": {
+      "seconds": 51.696081233,
+      "imageId": "sha256:77e4844f7fb4242df61d8bd9a975b2caa17158550bc8a0848145e4966bc5e6aa",
+      "sizeBytes": 560516558,
+      "noCache": false
+    },
+    "mdbook": {
+      "seconds": 21.796066361,
+      "imageId": "sha256:52f3183cf0edf8a6dda6702c98a6e149caa661cadd169830e664b2a63e787c62",
+      "sizeBytes": 421396402,
+      "noCache": false
+    },
+    "metalsmith-handlebars": {
+      "seconds": 38.69783455599999,
+      "imageId": "sha256:655f0f461dab9de3eec2fa002c90d49cc61cb13e021d5dc96ea507125111b8aa",
+      "sizeBytes": 621384593,
+      "noCache": false
+    },
+    "metalsmith-nunjucks": {
+      "seconds": 39.052398127000004,
+      "imageId": "sha256:890440766a756e322b603694b5ff31c9161ab5f6a843b4dca031a9cdda2910ae",
+      "sizeBytes": 617295288,
+      "noCache": false
+    },
+    "middleman": {
+      "seconds": 89.493567988,
+      "imageId": "sha256:9dd89a5778e0a294a1ed8222b1485c60756370acd3166efb09e712410283ab00",
+      "sizeBytes": 517562358,
+      "noCache": false
+    },
+    "mkdocs": {
+      "seconds": 44.53550014800001,
+      "imageId": "sha256:43fe44b9b8f141c27485e1c4d40c8fe7992aa5209583ca117bb6cfbfce51c76b",
+      "sizeBytes": 519738700,
+      "noCache": false
+    },
+    "nanoc": {
+      "seconds": 46.872164293000004,
+      "imageId": "sha256:72a42bcf328b335a50ee9f5b1e3f69d6385604eb0b83e6fb6c256f9ae516fc00",
+      "sizeBytes": 476961385,
+      "noCache": false
+    },
+    "nextjs-export": {
+      "seconds": 50.219165425,
+      "imageId": "sha256:0f0b428b10792558b7c52c50abb74224e4af0b62579a5136456fb622452e1dcd",
+      "sizeBytes": 1014581971,
+      "noCache": false
+    },
+    "nextra": {
+      "seconds": 73.043259479,
+      "imageId": "sha256:2beab06a34759a877b36b54fc0c079a8992d80020959da9a1d006f9960df28e7",
+      "sizeBytes": 1358410867,
+      "noCache": false
+    },
+    "nikola-mako": {
+      "seconds": 57.243337838,
+      "imageId": "sha256:03bdfe040ebd9f81d760ca21add711a3b8dfe38b35b6009a206b98fb8dda2842",
+      "sizeBytes": 614094919,
+      "noCache": false
+    },
+    "nuxt-content": {
+      "seconds": 57.499874946,
+      "imageId": "sha256:eaf73e965e27d8c831642890f7483081faac343d49c2f719b47c354f16991d0d",
+      "sizeBytes": 913232410,
+      "noCache": false
+    },
+    "observable-framework": {
+      "seconds": 50.394963735,
+      "imageId": "sha256:8976e5a600c2c46013a38ce694c64b4c676b44683d48b5e588f9f63111c0533c",
+      "sizeBytes": 706278261,
+      "noCache": false
+    },
+    "pelican": {
+      "seconds": 48.39825965200001,
+      "imageId": "sha256:eee6fe44352f7708a1613709c7b66731cda1145b69cc8ad05d87bef6770e20db",
+      "sizeBytes": 531219464,
+      "noCache": false
+    },
+    "publish": {
+      "seconds": 136.533920549,
+      "imageId": "sha256:3239805cdc3d9eaa38695be9bc4252f346320eb2c340e254e6eb50c52e161999",
+      "sizeBytes": 512357541,
+      "noCache": false
+    },
+    "quarto": {
+      "seconds": 41.995002088999996,
+      "imageId": "sha256:5e77ec6a251be25cc6b6c9d2864bce18436a16b4dd370ab1dc5c4a70773471c8",
+      "sizeBytes": 870139188,
+      "noCache": false
+    },
+    "quartz": {
+      "seconds": 278.787287381,
+      "imageId": "sha256:3a26222ce1a3f9777f5e659467b3d0d2fcf8693bb8758bf844a3d8523bb07cd1",
+      "sizeBytes": 1591570572,
+      "noCache": false
+    },
+    "sphinx": {
+      "seconds": 47.39311968700001,
+      "imageId": "sha256:604fa12a751f2a98b79dbd4c2e57a9ebe7e1fd4a1cd5881baa62a0a099134f53",
+      "sizeBytes": 579942275,
+      "noCache": false
+    },
+    "starlight": {
+      "seconds": 45.87306016800001,
+      "imageId": "sha256:bde7098cbe3a9fa3b00193a0b6fbfddbab2311f02a13c36225ac9b8dc1116eda",
+      "sizeBytes": 907550366,
+      "noCache": false
+    },
+    "sveltekit": {
+      "seconds": 42.74915268100001,
+      "imageId": "sha256:cf004649df7c69f4a5e32b17eb0c9e8e06203bd085f718fd50ec8edb197ce1d6",
+      "sizeBytes": 672370305,
+      "noCache": false
+    },
+    "vitepress": {
+      "seconds": 51.243755953999994,
+      "imageId": "sha256:508acf10f01ad40749192d713339ba6e2e97a3355215f6f3fbb81e2ad3b09b5d",
+      "sizeBytes": 728595992,
+      "noCache": false
+    },
+    "vuepress": {
+      "seconds": 38.329813744999996,
+      "imageId": "sha256:a0cb7aab37993295148d927769ab64d4d10e43274129e80f9c7b4d7e28423fb3",
+      "sizeBytes": 698572035,
+      "noCache": false
+    },
+    "zensical": {
+      "seconds": 55.345021075999995,
+      "imageId": "sha256:408903b7f1f9bb974d399df9a67473d93d0cd6f9e01eb67d1e14a0a65304ce8e",
+      "sizeBytes": 557846767,
+      "noCache": false
+    },
+    "zola": {
+      "seconds": 30.358399621999993,
+      "imageId": "sha256:2854406839b60160f12c0e9a0cb462a316362a07aed74f6ee810c444cba3d002",
+      "sizeBytes": 459382469,
+      "noCache": false
+    }
+  },
+  "fingerprints": {
+    "analog": "e2d6f2db677c",
+    "astro": "d9fc9f362ed7",
+    "docfx": "3f2f1aaf006c",
+    "docusaurus": "ae30efe0efb4",
+    "dumi": "8e17af3b158e",
+    "eleventy": "8e17af3b158e",
+    "gatsby": "ebe58c534103",
+    "hakyll": "8e17af3b158e",
+    "hexo": "3f2f1aaf006c",
+    "hugo": "8e17af3b158e",
+    "jekyll": "3f2f1aaf006c",
+    "jigsaw": "90616b2b906d",
+    "lektor": "3f2f1aaf006c",
+    "mdbook": "fe502e5b5baa",
+    "metalsmith-handlebars": "a61b0287f1ae",
+    "metalsmith-nunjucks": "3f2f1aaf006c",
+    "middleman": "32b3f23116a6",
+    "mkdocs": "8e17af3b158e",
+    "nanoc": "8e17af3b158e",
+    "nextjs-export": "4f6fd13ef728",
+    "nextra": "ba134637a49c",
+    "nikola-mako": "2f62636d600c",
+    "nuxt-content": "3f2f1aaf006c",
+    "observable-framework": "8e17af3b158e",
+    "pelican": "3f2f1aaf006c",
+    "publish": "ae30efe0efb4",
+    "quarto": "8e17af3b158e",
+    "quartz": "3f2f1aaf006c",
+    "sphinx": "fe502e5b5baa",
+    "starlight": "de731ab3b8a5",
+    "sveltekit": "e2d6f2db677c",
+    "vitepress": "8e17af3b158e",
+    "vuepress": "c5ccc7094d75",
+    "zensical": "8e17af3b158e",
+    "zola": "2bb7b205c77e"
+  },
+  "schemaVersion": 2,
+  "environments": {
+    "analog": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 9V45 96-Core Processor\nCPU family:                              26\nModel:                                   2\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                5192.19\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves user_shstk avx_vnni avx512_bf16 clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid fsrm avx512_vp2intersect\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               96 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                2 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1224       11043          46        4114       14765\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervmmprz5 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "astro": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 57 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               GenuineIntel\nModel name:                              INTEL(R) XEON(R) PLATINUM 8573C\nCPU family:                              6\nModel:                                   207\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                2\nCPU(s) scaling MHz:                      135%\nCPU max MHz:                             2300.0000\nCPU min MHz:                             800.0000\nBogoMIPS:                                4600.00\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology tsc_reliable nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq vmx ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch tpr_shadow ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves vnmi avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq la57 rdpid fsrm arch_capabilities\nVirtualization:                          VT-x\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               96 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                4 MiB (2 instances)\nL3 cache:                                260 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Mitigation; Aligned branch/return thunks\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Vulnerable\nVulnerability Spec rstack overflow:      Not affected\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Retpoline\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Vulnerable: Clear CPU buffers attempted, no microcode; SMT Host state unknown\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15988        1325       13981          45        1232       14662\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervm8df0l 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "docfx": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 9V74 80-Core Processor\nCPU family:                              25\nModel:                                   17\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                5192.29\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves user_shstk avx512_bf16 clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid fsrm\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               64 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                2 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Vulnerable: No microcode\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1127       10685          44        4567       14861\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervm8df0l 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "docusaurus": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 57 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               GenuineIntel\nModel name:                              Intel(R) Xeon(R) 6973P-C\nCPU family:                              6\nModel:                                   173\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nCPU(s) scaling MHz:                      144%\nCPU max MHz:                             2600.0000\nCPU min MHz:                             800.0000\nBogoMIPS:                                5199.99\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology tsc_reliable nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq vmx ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch tpr_shadow ept vpid ept_ad fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves user_shstk avx_vnni avx512_bf16 vnmi avx512vbmi umip waitpkg avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq la57 rdpid cldemote movdiri movdir64b fsrm serialize tsxldtrk ibt amx_bf16 avx512_fp16 amx_tile amx_int8 arch_capabilities\nVirtualization:                          VT-x\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               96 KiB (2 instances)\nL1i cache:                               128 KiB (2 instances)\nL2 cache:                                4 MiB (2 instances)\nL3 cache:                                480 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Mitigation; Aligned branch/return thunks\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Vulnerable\nVulnerability Spec rstack overflow:      Not affected\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Retpoline\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15988        1161       11078          45        4139       14826\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervm8df0l 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "dumi": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 9V45 96-Core Processor\nCPU family:                              26\nModel:                                   2\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                5192.20\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves user_shstk avx_vnni avx512_bf16 clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid fsrm avx512_vp2intersect\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               96 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                2 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1200       13729          48        1455       14789\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervmmprz5 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "eleventy": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 9V74 80-Core Processor\nCPU family:                              25\nModel:                                   17\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                5192.26\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves user_shstk clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid fsrm\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               64 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                2 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Vulnerable: No microcode\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1276       11475          44        3628       14713\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervm8df0l 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "gatsby": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 7763 64-Core Processor\nCPU family:                              25\nModel:                                   1\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                4890.85\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves user_shstk clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid fsrm\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               64 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                1 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Vulnerable: No microcode\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1388       10135          49        4861       14600\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervm8df0l 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "hakyll": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 7763 64-Core Processor\nCPU family:                              25\nModel:                                   1\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                4890.85\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves user_shstk clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid fsrm\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               64 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                1 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Vulnerable: No microcode\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15993        1304        8868          50        6218       14689\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervm8df0l 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "hexo": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 7763 64-Core Processor\nCPU family:                              25\nModel:                                   1\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                4890.85\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves user_shstk clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid fsrm\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               64 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                1 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Vulnerable: No microcode\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1264       11452          45        3664       14725\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervm8df0l 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "hugo": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 7763 64-Core Processor\nCPU family:                              25\nModel:                                   1\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                4890.85\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves user_shstk clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid fsrm\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               64 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                1 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Vulnerable: No microcode\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1311       10857          47        4214       14677\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervm8df0l 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "jekyll": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 9V45 96-Core Processor\nCPU family:                              26\nModel:                                   2\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                5192.24\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves user_shstk avx_vnni avx512_bf16 clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid fsrm avx512_vp2intersect\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               96 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                2 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1399       11501          44        3479       14589\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervm8df0l 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "jigsaw": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 7763 64-Core Processor\nCPU family:                              25\nModel:                                   1\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                4890.86\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves user_shstk clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid fsrm\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               64 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                1 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Vulnerable: No microcode\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1286       11297          47        3798       14702\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervmmprz5 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "lektor": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 7763 64-Core Processor\nCPU family:                              25\nModel:                                   1\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                4890.85\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves user_shstk clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid fsrm\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               64 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                1 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Vulnerable: No microcode\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1348       10562          49        4475       14641\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervmmprz5 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "mdbook": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 7763 64-Core Processor\nCPU family:                              25\nModel:                                   1\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                4890.85\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves user_shstk clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid fsrm\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               64 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                1 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Vulnerable: No microcode\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1281       11768          44        3330       14708\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervmmprz5 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "metalsmith-handlebars": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           46 bits physical, 57 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               GenuineIntel\nModel name:                              Intel(R) Xeon(R) Platinum 8370C CPU @ 2.80GHz\nCPU family:                              6\nModel:                                   106\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                6\nCPU(s) scaling MHz:                      125%\nCPU max MHz:                             2800.0000\nCPU min MHz:                             800.0000\nBogoMIPS:                                5586.87\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology tsc_reliable nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq vmx ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch tpr_shadow ept vpid ept_ad fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves vnmi avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq la57 rdpid fsrm arch_capabilities\nVirtualization:                          VT-x\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               96 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                2.5 MiB (2 instances)\nL3 cache:                                48 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Mitigation; Aligned branch/return thunks\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Vulnerable: Clear CPU buffers attempted, no microcode; SMT Host state unknown\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Vulnerable\nVulnerability Spec rstack overflow:      Not affected\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Retpoline\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15988        2232       10551          44        3595       13755\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervmmprz5 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "metalsmith-nunjucks": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 7763 64-Core Processor\nCPU family:                              25\nModel:                                   1\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                4890.86\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves user_shstk clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid fsrm\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               64 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                1 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Vulnerable: No microcode\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1751       10988          44        3640       14238\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervm8df0l 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "middleman": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 7763 64-Core Processor\nCPU family:                              25\nModel:                                   1\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                4890.85\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves user_shstk clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid fsrm\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               64 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                1 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Vulnerable: No microcode\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1319       11552          46        3511       14670\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervm8df0l 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "mkdocs": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 7763 64-Core Processor\nCPU family:                              25\nModel:                                   1\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                4890.85\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves user_shstk clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid fsrm\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               64 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                1 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Vulnerable: No microcode\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1230       11672          47        3481       14759\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervm8df0l 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "nanoc": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 9V74 80-Core Processor\nCPU family:                              25\nModel:                                   17\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                5192.25\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves user_shstk clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid fsrm\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               64 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                2 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Vulnerable: No microcode\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1215       11678          46        3489       14774\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervm8df0l 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "nextjs-export": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 57 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               GenuineIntel\nModel name:                              INTEL(R) XEON(R) PLATINUM 8573C\nCPU family:                              6\nModel:                                   207\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                2\nCPU(s) scaling MHz:                      131%\nCPU max MHz:                             2300.0000\nCPU min MHz:                             800.0000\nBogoMIPS:                                4599.99\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology tsc_reliable nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq vmx ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch tpr_shadow ept vpid ept_ad fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves user_shstk avx_vnni avx512_bf16 vnmi avx512vbmi umip waitpkg avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq la57 rdpid cldemote movdiri movdir64b fsrm serialize tsxldtrk ibt amx_bf16 avx512_fp16 amx_tile amx_int8 arch_capabilities\nVirtualization:                          VT-x\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               96 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                4 MiB (2 instances)\nL3 cache:                                260 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Mitigation; Aligned branch/return thunks\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Vulnerable\nVulnerability Spec rstack overflow:      Not affected\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Retpoline\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15988        1174       10553          45        4652       14813\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervmmprz5 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "nextra": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 7763 64-Core Processor\nCPU family:                              25\nModel:                                   1\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                4890.86\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves user_shstk clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid fsrm\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               64 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                1 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Vulnerable: No microcode\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1345       10455          46        4582       14644\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervm8df0l 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "nikola-mako": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 57 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               GenuineIntel\nModel name:                              INTEL(R) XEON(R) PLATINUM 8573C\nCPU family:                              6\nModel:                                   207\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                2\nCPU(s) scaling MHz:                      135%\nCPU max MHz:                             2300.0000\nCPU min MHz:                             800.0000\nBogoMIPS:                                4599.99\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology tsc_reliable nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq vmx ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch tpr_shadow ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves vnmi avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq la57 rdpid fsrm arch_capabilities\nVirtualization:                          VT-x\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               96 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                4 MiB (2 instances)\nL3 cache:                                260 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Mitigation; Aligned branch/return thunks\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Vulnerable\nVulnerability Spec rstack overflow:      Not affected\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Retpoline\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Vulnerable: Clear CPU buffers attempted, no microcode; SMT Host state unknown\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15988        1213       10996          50        4174       14775\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervm8df0l 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "nuxt-content": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 7763 64-Core Processor\nCPU family:                              25\nModel:                                   1\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                4890.85\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves user_shstk clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid fsrm\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               64 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                1 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Vulnerable: No microcode\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1347       13925          48        1111       14642\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervmmprz5 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "observable-framework": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 9V45 96-Core Processor\nCPU family:                              26\nModel:                                   2\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                5192.20\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves user_shstk avx_vnni avx512_bf16 clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid fsrm avx512_vp2intersect\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               96 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                2 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1273       11369          48        3741       14716\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervmmprz5 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "pelican": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 7763 64-Core Processor\nCPU family:                              25\nModel:                                   1\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                4890.86\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves user_shstk clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid fsrm\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               64 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                1 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Vulnerable: No microcode\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1367       10978          49        4039       14622\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervm8df0l 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "publish": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 9V45 96-Core Processor\nCPU family:                              26\nModel:                                   2\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                5192.24\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves user_shstk avx_vnni avx512_bf16 clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid fsrm avx512_vp2intersect\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               96 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                2 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1124        8918          49        6342       14865\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervmmprz5 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "quarto": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 9V74 80-Core Processor\nCPU family:                              25\nModel:                                   17\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                5192.29\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves user_shstk clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid fsrm\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               64 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                2 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Vulnerable: No microcode\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1379       11223          45        3778       14610\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervmmprz5 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "quartz": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 9V74 80-Core Processor\nCPU family:                              25\nModel:                                   17\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                5192.27\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves user_shstk clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid fsrm\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               64 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                2 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Vulnerable: No microcode\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1379       10272          45        4729       14610\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervmmprz5 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "sphinx": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 7763 64-Core Processor\nCPU family:                              25\nModel:                                   1\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                4890.86\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves user_shstk clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid fsrm\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               64 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                1 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Vulnerable: No microcode\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1352       11516          45        3512       14636\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervmmprz5 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "starlight": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 9V74 80-Core Processor\nCPU family:                              25\nModel:                                   17\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                5192.28\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves user_shstk avx512_bf16 clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid fsrm\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               64 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                2 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Vulnerable: No microcode\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1182       14187          45        1011       14806\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervm8df0l 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "sveltekit": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           46 bits physical, 57 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               GenuineIntel\nModel name:                              Intel(R) Xeon(R) Platinum 8370C CPU @ 2.80GHz\nCPU family:                              6\nModel:                                   106\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                6\nCPU(s) scaling MHz:                      124%\nCPU max MHz:                             2800.0000\nCPU min MHz:                             800.0000\nBogoMIPS:                                5587.10\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology tsc_reliable nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclmulqdq vmx ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch tpr_shadow ept vpid ept_ad fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves vnmi avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq la57 rdpid fsrm arch_capabilities\nVirtualization:                          VT-x\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               96 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                2.5 MiB (2 instances)\nL3 cache:                                48 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Mitigation; Aligned branch/return thunks\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Vulnerable: Clear CPU buffers attempted, no microcode; SMT Host state unknown\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Vulnerable\nVulnerability Spec rstack overflow:      Not affected\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Retpoline\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15988        1245       11497          46        3638       14743\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervm8df0l 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "vitepress": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 7763 64-Core Processor\nCPU family:                              25\nModel:                                   1\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                4890.86\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves user_shstk clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid fsrm\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               64 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                1 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Vulnerable: No microcode\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1444       13906          45        1031       14545\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervm8df0l 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "vuepress": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 7763 64-Core Processor\nCPU family:                              25\nModel:                                   1\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                4890.86\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves user_shstk clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid fsrm\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               64 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                1 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Vulnerable: No microcode\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1274       11425          45        3681       14715\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervm8df0l 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "zensical": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 9V45 96-Core Processor\nCPU family:                              26\nModel:                                   2\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                5192.20\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl xtopology tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid avx512f avx512dq rdseed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves user_shstk avx_vnni avx512_bf16 clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload avx512vbmi umip avx512_vbmi2 gfni vaes vpclmulqdq avx512_vnni avx512_bitalg avx512_vpopcntdq rdpid fsrm avx512_vp2intersect\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               96 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                2 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Not affected\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1146       11559          48        3678       14843\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervmmprz5 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n",
+    "zola": "## lscpu\nArchitecture:                            x86_64\nCPU op-mode(s):                          32-bit, 64-bit\nAddress sizes:                           48 bits physical, 48 bits virtual\nByte Order:                              Little Endian\nCPU(s):                                  4\nOn-line CPU(s) list:                     0-3\nVendor ID:                               AuthenticAMD\nModel name:                              AMD EPYC 7763 64-Core Processor\nCPU family:                              25\nModel:                                   1\nThread(s) per core:                      2\nCore(s) per socket:                      2\nSocket(s):                               1\nStepping:                                1\nBogoMIPS:                                4890.85\nFlags:                                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl tsc_reliable nonstop_tsc cpuid extd_apicid aperfmperf tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cmp_legacy svm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw topoext vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves user_shstk clzero xsaveerptr rdpru arat npt nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold v_vmsave_vmload umip vaes vpclmulqdq rdpid fsrm\nVirtualization:                          AMD-V\nHypervisor vendor:                       Microsoft\nVirtualization type:                     full\nL1d cache:                               64 KiB (2 instances)\nL1i cache:                               64 KiB (2 instances)\nL2 cache:                                1 MiB (2 instances)\nL3 cache:                                32 MiB (1 instance)\nNUMA node(s):                            1\nNUMA node0 CPU(s):                       0-3\nVulnerability Gather data sampling:      Not affected\nVulnerability Ghostwrite:                Not affected\nVulnerability Indirect target selection: Not affected\nVulnerability Itlb multihit:             Not affected\nVulnerability L1tf:                      Not affected\nVulnerability Mds:                       Not affected\nVulnerability Meltdown:                  Not affected\nVulnerability Mmio stale data:           Not affected\nVulnerability Old microcode:             Not affected\nVulnerability Reg file data sampling:    Not affected\nVulnerability Retbleed:                  Not affected\nVulnerability Spec rstack overflow:      Vulnerable: Safe RET, no microcode\nVulnerability Spec store bypass:         Vulnerable\nVulnerability Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization\nVulnerability Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected\nVulnerability Srbds:                     Not affected\nVulnerability Tsa:                       Vulnerable: No microcode\nVulnerability Tsx async abort:           Not affected\nVulnerability Vmscape:                   Not affected\n## nproc\n4\n## free -m\n               total        used        free      shared  buff/cache   available\nMem:           15989        1432       11606          44        3342       14557\nSwap:           3071           0        3071\n## docker version\nclient 28.0.4 server 28.0.4\n## uname -a\nLinux runnervmmprz5 6.17.0-1022-azure #22-Ubuntu SMP Mon Jul 27 17:24:03 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux\n"
+  }
+}

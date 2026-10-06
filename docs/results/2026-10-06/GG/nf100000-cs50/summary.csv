@@ -1,0 +1,36 @@
+framework,language,numberOfFiles,contentSize,minRuns,mean,stddev,median,min,max,status,suite,suiteVersion,profile,features,fingerprint,cv,noisy,attempts,user,system,cpuUtilization,peakRssMB,inputMB,outputFiles,outputMB,postsPerSecond,inputMBPerSecond,imageBuildSeconds,failureReason
+hugo,go,100000,50,1,1131.0057102344601,,1131.0057102344601,1131.0057102344601,1131.0057102344601,ok,GG,1,core,,3f2f1aaf006c,,,1,4099.345321139999,59.22698272,3.677,7344.39,5141.54,100003,11437.28,88.41688339422244,4.54598721604522,30.661,
+lektor,python,100000,50,1,6644.82415354722,,6644.82415354722,6644.82415354722,6644.82415354722,ok,GG,1,core,,3f2f1aaf006c,,,1,6186.508283579999,239.98418561999998,0.967,7136.95,5120.0,100004,8112.4,15.04930720350467,0.7705245288194391,52.1,
+pelican,python,100000,50,1,7845.08952834598,,7845.08952834598,7845.08952834598,7845.08952834598,ok,GG,1,core,,3f2f1aaf006c,,,1,7711.90122904,36.664772559999996,0.988,7534.65,5141.54,100001,7224.4,12.746827125258251,0.655382896705325,53.314,
+analog,javascript,100000,50,,,,,,,oom,GG,1,core,,ebe58c534103,,,,,,,,,,,,,59.083,oom
+astro,javascript,100000,50,,,,,,,failed,GG,1,core,,32b3f23116a6,,,,,,,,,,,,,48.884,SSGBERK_VERIFY_FAIL build exited 134
+docfx,c#,100000,50,,,,,,,failed,GG,1,core,,8e17af3b158e,,,,,,,,,,,,,66.943,SSGBERK_VERIFY_FAIL build exited 255
+docusaurus,javascript,100000,50,,,,,,,failed,GG,1,core,,fe92e3e10f7a,,,,,,,,,,,,,98.494,SSGBERK_VERIFY_FAIL build exited 1
+dumi,javascript,100000,50,,,,,,,failed,GG,1,core,,ebe58c534103,,,,,,,,,,,,,79.465,SSGBERK_VERIFY_FAIL build exited 134
+eleventy,javascript,100000,50,,,,,,,oom,GG,1,core,,8e17af3b158e,,,,,,,,,,,,,51.057,oom
+gatsby,javascript,100000,50,,,,,,,timeout,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,235.179,timeout
+hakyll,haskell,100000,50,,,,,,,failed,GG,1,core,,fe502e5b5baa,,,,,,,,,,,,,2686.131,
+hexo,javascript,100000,50,,,,,,,oom,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,50.01,oom
+jekyll,ruby,100000,50,,,,,,,oom,GG,1,core,,ebe58c534103,,,,,,,,,,,,,50.277,oom
+jigsaw,php,100000,50,,,,,,,oom,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,64.486,oom
+mdbook,rust,100000,50,,,,,,,oom,GG,1,core,,e2d6f2db677c,,,,,,,,,,,,,25.932,oom
+metalsmith-handlebars,javascript,100000,50,,,,,,,failed,GG,1,core,,c5ccc7094d75,,,,,,,,,,,,,35.978,SSGBERK_VERIFY_FAIL build exited 1
+metalsmith-nunjucks,javascript,100000,50,,,,,,,failed,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,32.527,SSGBERK_VERIFY_FAIL build exited 1
+middleman,ruby,100000,50,,,,,,,oom,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,104.049,oom
+mkdocs,python,100000,50,,,,,,,oom,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,44.812,oom
+nanoc,ruby,100000,50,,,,,,,oom,GG,1,core,,8e17af3b158e,,,,,,,,,,,,,41.635,oom
+nextjs-export,javascript,100000,50,,,,,,,failed,GG,1,core,,ba134637a49c,,,,,,,,,,,,,57.096,
+nextra,javascript,100000,50,,,,,,,oom,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,77.603,oom
+nikola-mako,python,100000,50,,,,,,,timeout,GG,1,core,,ba134637a49c,,,,,,,,,,,,,67.991,timeout
+nuxt-content,javascript,100000,50,,,,,,,failed,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,58.502,SSGBERK_VERIFY_FAIL build exited 134
+observable-framework,javascript,100000,50,,,,,,,timeout,GG,1,core,,90616b2b906d,,,,,,,,,,,,,42.23,timeout
+publish,swift,100000,50,,,,,,,oom,GG,1,core,,90616b2b906d,,,,,,,,,,,,,118.265,oom
+quarto,typescript,100000,50,,,,,,,oom,GG,1,core,,8e17af3b158e,,,,,,,,,,,,,37.781,oom
+quartz,javascript,100000,50,,,,,,,oom,GG,1,core,,2bb7b205c77e,,,,,,,,,,,,,265.262,oom
+sphinx,python,100000,50,,,,,,,oom,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,46.901,oom
+starlight,javascript,100000,50,,,,,,,failed,GG,1,core,,8e17af3b158e,,,,,,,,,,,,,50.411,SSGBERK_VERIFY_FAIL build exited 134
+sveltekit,javascript,100000,50,,,,,,,oom,GG,1,core,,de731ab3b8a5,,,,,,,,,,,,,39.915,oom
+vitepress,javascript,100000,50,,,,,,,failed,GG,1,core,,e2d6f2db677c,,,,,,,,,,,,,40.895,SSGBERK_VERIFY_FAIL build exited 134
+vuepress,javascript,100000,50,,,,,,,oom,GG,1,core,,ae30efe0efb4,,,,,,,,,,,,,38.619,oom
+zensical,python,100000,50,,,,,,,timeout,GG,1,core,,ebe58c534103,,,,,,,,,,,,,57.452,timeout
+zola,rust,100000,50,,,,,,,oom,GG,1,core,,e2d6f2db677c,,,,,,,,,,,,,23.708,oom

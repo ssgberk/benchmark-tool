@@ -1,0 +1,36 @@
+framework,language,numberOfFiles,contentSize,minRuns,mean,stddev,median,min,max,status,suite,suiteVersion,profile,features,fingerprint,cv,noisy,attempts,user,system,cpuUtilization,peakRssMB,inputMB,outputFiles,outputMB,postsPerSecond,inputMBPerSecond,imageBuildSeconds,failureReason
+zola,rust,100000,5,1,41.859509408120005,,41.859509408120005,41.859509408120005,41.859509408120005,ok,GG,1,core,,2bb7b205c77e,,,1,29.63132894,25.6396344,1.32,7195.19,534.74,100008,892.7,2388.943430392946,12.774576376097478,30.358,
+jekyll,ruby,100000,5,1,81.43939854568,,81.43939854568,81.43939854568,81.43939854568,ok,GG,1,core,,3f2f1aaf006c,,,1,63.75876074,16.71122956,0.988,2282.14,534.84,100001,1117.7,1227.9069072926563,6.567306605291361,47.881,
+astro,javascript,100000,5,1,143.36985378079999,,143.36985378079999,143.36985378079999,143.36985378079999,ok,GG,1,core,,d9fc9f362ed7,,,1,234.18906607999998,20.92475504,1.779,6730.5,533.54,100001,1042.8,697.4967007561526,3.721406459796858,45.957,
+hugo,go,100000,5,1,145.50208500041998,,145.50208500041998,145.50208500041998,145.50208500041998,ok,GG,1,core,,8e17af3b158e,,,1,440.51746998,44.8316495,3.336,6983.39,533.54,100003,1231.28,687.2753747804463,3.666871852719224,27.428,
+jigsaw,php,100000,5,1,268.45913078812004,,268.45913078812004,268.45913078812004,268.45913078812004,ok,GG,1,core,,90616b2b906d,,,1,203.89138086,45.88608712,0.93,3655.39,535.84,100003,929.9,372.4961773750377,1.9959742044419675,63.147,
+middleman,ruby,100000,5,1,723.06135658692,,723.06135658692,723.06135658692,723.06135658692,ok,GG,1,core,,32b3f23116a6,,,1,2129.4342206,41.551528680000004,3.002,2246.68,533.54,100002,1002.2,138.30084969833246,0.7378868959592406,89.494,
+mkdocs,python,100000,5,1,813.9227298468201,,813.9227298468201,813.9227298468201,813.9227298468201,ok,GG,1,core,,8e17af3b158e,,,1,793.40800784,12.8776061,0.991,2689.7,512.0,100001,904.1,122.86178568673216,0.6290523427160687,44.536,
+lektor,python,100000,5,1,951.36518011404,,951.36518011404,951.36518011404,951.36518011404,ok,GG,1,core,,3f2f1aaf006c,,,1,800.22670006,133.69088388,0.982,1143.7,512.0,100004,831.4,105.112108462928,0.5381739953301914,51.696,
+pelican,python,100000,5,1,1001.94447753494,,1001.94447753494,1001.94447753494,1001.94447753494,ok,GG,1,core,,3f2f1aaf006c,,,1,983.95051736,18.297868459999997,1.0,1054.08,533.54,100001,744.4,99.80592961201563,0.532502061703708,48.398,
+nikola-mako,python,100000,5,1,1910.1095071068,,1910.1095071068,1910.1095071068,1910.1095071068,ok,GG,1,core,,2f62636d600c,,,1,1844.42390046,48.26176764,0.991,3831.36,535.44,100025,861.04,52.35301935723452,0.2803176980208926,57.243,
+publish,swift,100000,5,1,2399.5251569887796,,2399.5251569887796,2399.5251569887796,2399.5251569887796,ok,GG,1,core,,ae30efe0efb4,,,1,2320.34869486,111.19692932,1.013,2253.06,533.54,100004,947.24,41.67491210031419,0.22235128414721383,136.534,
+nanoc,ruby,100000,5,1,3390.8172391604203,,3390.8172391604203,3390.8172391604203,3390.8172391604203,ok,GG,1,core,,8e17af3b158e,,,1,3339.8827064399998,41.58235438,0.997,5372.06,535.54,100001,1008.7,29.491415475037634,0.15793758914962966,46.872,
+analog,javascript,100000,5,,,,,,,oom,GG,1,core,,e2d6f2db677c,,,,,,,,,,,,,70.152,oom
+docfx,c#,100000,5,,,,,,,failed,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,52.908,SSGBERK_VERIFY_FAIL build exited 255
+docusaurus,javascript,100000,5,,,,,,,oom,GG,1,core,,ae30efe0efb4,,,,,,,,,,,,,104.201,oom
+dumi,javascript,100000,5,,,,,,,failed,GG,1,core,,8e17af3b158e,,,,,,,,,,,,,85.291,SSGBERK_VERIFY_FAIL build exited 134
+eleventy,javascript,100000,5,,,,,,,failed,GG,1,core,,8e17af3b158e,,,,,,,,,,,,,41.332,SSGBERK_VERIFY_FAIL build exited 134
+gatsby,javascript,100000,5,,,,,,,timeout,GG,1,core,,ebe58c534103,,,,,,,,,,,,,175.602,timeout
+hakyll,haskell,100000,5,,,,,,,failed,GG,1,core,,8e17af3b158e,,,,,,,,,,,,,2196.169,
+hexo,javascript,100000,5,,,,,,,failed,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,41.054,SSGBERK_VERIFY_FAIL build exited 134
+mdbook,rust,100000,5,,,,,,,oom,GG,1,core,,fe502e5b5baa,,,,,,,,,,,,,21.796,oom
+metalsmith-handlebars,javascript,100000,5,,,,,,,failed,GG,1,core,,a61b0287f1ae,,,,,,,,,,,,,38.698,SSGBERK_VERIFY_FAIL build exited 1
+metalsmith-nunjucks,javascript,100000,5,,,,,,,failed,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,39.052,SSGBERK_VERIFY_FAIL build exited 1
+nextjs-export,javascript,100000,5,,,,,,,failed,GG,1,core,,4f6fd13ef728,,,,,,,,,,,,,50.219,
+nextra,javascript,100000,5,,,,,,,oom,GG,1,core,,ba134637a49c,,,,,,,,,,,,,73.043,oom
+nuxt-content,javascript,100000,5,,,,,,,failed,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,57.5,SSGBERK_VERIFY_FAIL build exited 1
+observable-framework,javascript,100000,5,,,,,,,timeout,GG,1,core,,8e17af3b158e,,,,,,,,,,,,,50.395,timeout
+quarto,typescript,100000,5,,,,,,,oom,GG,1,core,,8e17af3b158e,,,,,,,,,,,,,41.995,oom
+quartz,javascript,100000,5,,,,,,,oom,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,278.787,oom
+sphinx,python,100000,5,,,,,,,oom,GG,1,core,,fe502e5b5baa,,,,,,,,,,,,,47.393,oom
+starlight,javascript,100000,5,,,,,,,failed,GG,1,core,,de731ab3b8a5,,,,,,,,,,,,,45.873,SSGBERK_VERIFY_FAIL build exited 134
+sveltekit,javascript,100000,5,,,,,,,oom,GG,1,core,,e2d6f2db677c,,,,,,,,,,,,,42.749,oom
+vitepress,javascript,100000,5,,,,,,,failed,GG,1,core,,8e17af3b158e,,,,,,,,,,,,,51.244,SSGBERK_VERIFY_FAIL build exited 134
+vuepress,javascript,100000,5,,,,,,,failed,GG,1,core,,c5ccc7094d75,,,,,,,,,,,,,38.33,SSGBERK_VERIFY_FAIL build exited 134
+zensical,python,100000,5,,,,,,,timeout,GG,1,core,,8e17af3b158e,,,,,,,,,,,,,55.345,timeout

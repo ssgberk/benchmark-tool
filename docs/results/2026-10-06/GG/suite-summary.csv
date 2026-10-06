@@ -1,0 +1,71 @@
+cell,framework,language,numberOfFiles,contentSize,minRuns,mean,stddev,median,min,max,status,suite,suiteVersion,profile,features,fingerprint,cv,noisy,attempts,user,system,cpuUtilization,peakRssMB,inputMB,outputFiles,outputMB,postsPerSecond,inputMBPerSecond,imageBuildSeconds,failureReason
+nf100000-cs5,zola,rust,100000,5,1,41.859509408120005,,41.859509408120005,41.859509408120005,41.859509408120005,ok,GG,1,core,,2bb7b205c77e,,,1,29.63132894,25.6396344,1.32,7195.19,534.74,100008,892.7,2388.943430392946,12.774576376097478,30.358,
+nf100000-cs5,jekyll,ruby,100000,5,1,81.43939854568,,81.43939854568,81.43939854568,81.43939854568,ok,GG,1,core,,3f2f1aaf006c,,,1,63.75876074,16.71122956,0.988,2282.14,534.84,100001,1117.7,1227.9069072926563,6.567306605291361,47.881,
+nf100000-cs5,astro,javascript,100000,5,1,143.36985378079999,,143.36985378079999,143.36985378079999,143.36985378079999,ok,GG,1,core,,d9fc9f362ed7,,,1,234.18906607999998,20.92475504,1.779,6730.5,533.54,100001,1042.8,697.4967007561526,3.721406459796858,45.957,
+nf100000-cs5,hugo,go,100000,5,1,145.50208500041998,,145.50208500041998,145.50208500041998,145.50208500041998,ok,GG,1,core,,8e17af3b158e,,,1,440.51746998,44.8316495,3.336,6983.39,533.54,100003,1231.28,687.2753747804463,3.666871852719224,27.428,
+nf100000-cs5,jigsaw,php,100000,5,1,268.45913078812004,,268.45913078812004,268.45913078812004,268.45913078812004,ok,GG,1,core,,90616b2b906d,,,1,203.89138086,45.88608712,0.93,3655.39,535.84,100003,929.9,372.4961773750377,1.9959742044419675,63.147,
+nf100000-cs5,middleman,ruby,100000,5,1,723.06135658692,,723.06135658692,723.06135658692,723.06135658692,ok,GG,1,core,,32b3f23116a6,,,1,2129.4342206,41.551528680000004,3.002,2246.68,533.54,100002,1002.2,138.30084969833246,0.7378868959592406,89.494,
+nf100000-cs5,mkdocs,python,100000,5,1,813.9227298468201,,813.9227298468201,813.9227298468201,813.9227298468201,ok,GG,1,core,,8e17af3b158e,,,1,793.40800784,12.8776061,0.991,2689.7,512.0,100001,904.1,122.86178568673216,0.6290523427160687,44.536,
+nf100000-cs5,lektor,python,100000,5,1,951.36518011404,,951.36518011404,951.36518011404,951.36518011404,ok,GG,1,core,,3f2f1aaf006c,,,1,800.22670006,133.69088388,0.982,1143.7,512.0,100004,831.4,105.112108462928,0.5381739953301914,51.696,
+nf100000-cs5,pelican,python,100000,5,1,1001.94447753494,,1001.94447753494,1001.94447753494,1001.94447753494,ok,GG,1,core,,3f2f1aaf006c,,,1,983.95051736,18.297868459999997,1.0,1054.08,533.54,100001,744.4,99.80592961201563,0.532502061703708,48.398,
+nf100000-cs5,nikola-mako,python,100000,5,1,1910.1095071068,,1910.1095071068,1910.1095071068,1910.1095071068,ok,GG,1,core,,2f62636d600c,,,1,1844.42390046,48.26176764,0.991,3831.36,535.44,100025,861.04,52.35301935723452,0.2803176980208926,57.243,
+nf100000-cs5,publish,swift,100000,5,1,2399.5251569887796,,2399.5251569887796,2399.5251569887796,2399.5251569887796,ok,GG,1,core,,ae30efe0efb4,,,1,2320.34869486,111.19692932,1.013,2253.06,533.54,100004,947.24,41.67491210031419,0.22235128414721383,136.534,
+nf100000-cs5,nanoc,ruby,100000,5,1,3390.8172391604203,,3390.8172391604203,3390.8172391604203,3390.8172391604203,ok,GG,1,core,,8e17af3b158e,,,1,3339.8827064399998,41.58235438,0.997,5372.06,535.54,100001,1008.7,29.491415475037634,0.15793758914962966,46.872,
+nf100000-cs5,analog,javascript,100000,5,,,,,,,oom,GG,1,core,,e2d6f2db677c,,,,,,,,,,,,,70.152,oom
+nf100000-cs5,docfx,c#,100000,5,,,,,,,failed,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,52.908,SSGBERK_VERIFY_FAIL build exited 255
+nf100000-cs5,docusaurus,javascript,100000,5,,,,,,,oom,GG,1,core,,ae30efe0efb4,,,,,,,,,,,,,104.201,oom
+nf100000-cs5,dumi,javascript,100000,5,,,,,,,failed,GG,1,core,,8e17af3b158e,,,,,,,,,,,,,85.291,SSGBERK_VERIFY_FAIL build exited 134
+nf100000-cs5,eleventy,javascript,100000,5,,,,,,,failed,GG,1,core,,8e17af3b158e,,,,,,,,,,,,,41.332,SSGBERK_VERIFY_FAIL build exited 134
+nf100000-cs5,gatsby,javascript,100000,5,,,,,,,timeout,GG,1,core,,ebe58c534103,,,,,,,,,,,,,175.602,timeout
+nf100000-cs5,hakyll,haskell,100000,5,,,,,,,failed,GG,1,core,,8e17af3b158e,,,,,,,,,,,,,2196.169,
+nf100000-cs5,hexo,javascript,100000,5,,,,,,,failed,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,41.054,SSGBERK_VERIFY_FAIL build exited 134
+nf100000-cs5,mdbook,rust,100000,5,,,,,,,oom,GG,1,core,,fe502e5b5baa,,,,,,,,,,,,,21.796,oom
+nf100000-cs5,metalsmith-handlebars,javascript,100000,5,,,,,,,failed,GG,1,core,,a61b0287f1ae,,,,,,,,,,,,,38.698,SSGBERK_VERIFY_FAIL build exited 1
+nf100000-cs5,metalsmith-nunjucks,javascript,100000,5,,,,,,,failed,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,39.052,SSGBERK_VERIFY_FAIL build exited 1
+nf100000-cs5,nextjs-export,javascript,100000,5,,,,,,,failed,GG,1,core,,4f6fd13ef728,,,,,,,,,,,,,50.219,
+nf100000-cs5,nextra,javascript,100000,5,,,,,,,oom,GG,1,core,,ba134637a49c,,,,,,,,,,,,,73.043,oom
+nf100000-cs5,nuxt-content,javascript,100000,5,,,,,,,failed,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,57.5,SSGBERK_VERIFY_FAIL build exited 1
+nf100000-cs5,observable-framework,javascript,100000,5,,,,,,,timeout,GG,1,core,,8e17af3b158e,,,,,,,,,,,,,50.395,timeout
+nf100000-cs5,quarto,typescript,100000,5,,,,,,,oom,GG,1,core,,8e17af3b158e,,,,,,,,,,,,,41.995,oom
+nf100000-cs5,quartz,javascript,100000,5,,,,,,,oom,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,278.787,oom
+nf100000-cs5,sphinx,python,100000,5,,,,,,,oom,GG,1,core,,fe502e5b5baa,,,,,,,,,,,,,47.393,oom
+nf100000-cs5,starlight,javascript,100000,5,,,,,,,failed,GG,1,core,,de731ab3b8a5,,,,,,,,,,,,,45.873,SSGBERK_VERIFY_FAIL build exited 134
+nf100000-cs5,sveltekit,javascript,100000,5,,,,,,,oom,GG,1,core,,e2d6f2db677c,,,,,,,,,,,,,42.749,oom
+nf100000-cs5,vitepress,javascript,100000,5,,,,,,,failed,GG,1,core,,8e17af3b158e,,,,,,,,,,,,,51.244,SSGBERK_VERIFY_FAIL build exited 134
+nf100000-cs5,vuepress,javascript,100000,5,,,,,,,failed,GG,1,core,,c5ccc7094d75,,,,,,,,,,,,,38.33,SSGBERK_VERIFY_FAIL build exited 134
+nf100000-cs5,zensical,python,100000,5,,,,,,,timeout,GG,1,core,,8e17af3b158e,,,,,,,,,,,,,55.345,timeout
+nf100000-cs50,hugo,go,100000,50,1,1131.0057102344601,,1131.0057102344601,1131.0057102344601,1131.0057102344601,ok,GG,1,core,,3f2f1aaf006c,,,1,4099.345321139999,59.22698272,3.677,7344.39,5141.54,100003,11437.28,88.41688339422244,4.54598721604522,30.661,
+nf100000-cs50,lektor,python,100000,50,1,6644.82415354722,,6644.82415354722,6644.82415354722,6644.82415354722,ok,GG,1,core,,3f2f1aaf006c,,,1,6186.508283579999,239.98418561999998,0.967,7136.95,5120.0,100004,8112.4,15.04930720350467,0.7705245288194391,52.1,
+nf100000-cs50,pelican,python,100000,50,1,7845.08952834598,,7845.08952834598,7845.08952834598,7845.08952834598,ok,GG,1,core,,3f2f1aaf006c,,,1,7711.90122904,36.664772559999996,0.988,7534.65,5141.54,100001,7224.4,12.746827125258251,0.655382896705325,53.314,
+nf100000-cs50,analog,javascript,100000,50,,,,,,,oom,GG,1,core,,ebe58c534103,,,,,,,,,,,,,59.083,oom
+nf100000-cs50,astro,javascript,100000,50,,,,,,,failed,GG,1,core,,32b3f23116a6,,,,,,,,,,,,,48.884,SSGBERK_VERIFY_FAIL build exited 134
+nf100000-cs50,docfx,c#,100000,50,,,,,,,failed,GG,1,core,,8e17af3b158e,,,,,,,,,,,,,66.943,SSGBERK_VERIFY_FAIL build exited 255
+nf100000-cs50,docusaurus,javascript,100000,50,,,,,,,failed,GG,1,core,,fe92e3e10f7a,,,,,,,,,,,,,98.494,SSGBERK_VERIFY_FAIL build exited 1
+nf100000-cs50,dumi,javascript,100000,50,,,,,,,failed,GG,1,core,,ebe58c534103,,,,,,,,,,,,,79.465,SSGBERK_VERIFY_FAIL build exited 134
+nf100000-cs50,eleventy,javascript,100000,50,,,,,,,oom,GG,1,core,,8e17af3b158e,,,,,,,,,,,,,51.057,oom
+nf100000-cs50,gatsby,javascript,100000,50,,,,,,,timeout,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,235.179,timeout
+nf100000-cs50,hakyll,haskell,100000,50,,,,,,,failed,GG,1,core,,fe502e5b5baa,,,,,,,,,,,,,2686.131,
+nf100000-cs50,hexo,javascript,100000,50,,,,,,,oom,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,50.01,oom
+nf100000-cs50,jekyll,ruby,100000,50,,,,,,,oom,GG,1,core,,ebe58c534103,,,,,,,,,,,,,50.277,oom
+nf100000-cs50,jigsaw,php,100000,50,,,,,,,oom,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,64.486,oom
+nf100000-cs50,mdbook,rust,100000,50,,,,,,,oom,GG,1,core,,e2d6f2db677c,,,,,,,,,,,,,25.932,oom
+nf100000-cs50,metalsmith-handlebars,javascript,100000,50,,,,,,,failed,GG,1,core,,c5ccc7094d75,,,,,,,,,,,,,35.978,SSGBERK_VERIFY_FAIL build exited 1
+nf100000-cs50,metalsmith-nunjucks,javascript,100000,50,,,,,,,failed,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,32.527,SSGBERK_VERIFY_FAIL build exited 1
+nf100000-cs50,middleman,ruby,100000,50,,,,,,,oom,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,104.049,oom
+nf100000-cs50,mkdocs,python,100000,50,,,,,,,oom,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,44.812,oom
+nf100000-cs50,nanoc,ruby,100000,50,,,,,,,oom,GG,1,core,,8e17af3b158e,,,,,,,,,,,,,41.635,oom
+nf100000-cs50,nextjs-export,javascript,100000,50,,,,,,,failed,GG,1,core,,ba134637a49c,,,,,,,,,,,,,57.096,
+nf100000-cs50,nextra,javascript,100000,50,,,,,,,oom,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,77.603,oom
+nf100000-cs50,nikola-mako,python,100000,50,,,,,,,timeout,GG,1,core,,ba134637a49c,,,,,,,,,,,,,67.991,timeout
+nf100000-cs50,nuxt-content,javascript,100000,50,,,,,,,failed,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,58.502,SSGBERK_VERIFY_FAIL build exited 134
+nf100000-cs50,observable-framework,javascript,100000,50,,,,,,,timeout,GG,1,core,,90616b2b906d,,,,,,,,,,,,,42.23,timeout
+nf100000-cs50,publish,swift,100000,50,,,,,,,oom,GG,1,core,,90616b2b906d,,,,,,,,,,,,,118.265,oom
+nf100000-cs50,quarto,typescript,100000,50,,,,,,,oom,GG,1,core,,8e17af3b158e,,,,,,,,,,,,,37.781,oom
+nf100000-cs50,quartz,javascript,100000,50,,,,,,,oom,GG,1,core,,2bb7b205c77e,,,,,,,,,,,,,265.262,oom
+nf100000-cs50,sphinx,python,100000,50,,,,,,,oom,GG,1,core,,3f2f1aaf006c,,,,,,,,,,,,,46.901,oom
+nf100000-cs50,starlight,javascript,100000,50,,,,,,,failed,GG,1,core,,8e17af3b158e,,,,,,,,,,,,,50.411,SSGBERK_VERIFY_FAIL build exited 134
+nf100000-cs50,sveltekit,javascript,100000,50,,,,,,,oom,GG,1,core,,de731ab3b8a5,,,,,,,,,,,,,39.915,oom
+nf100000-cs50,vitepress,javascript,100000,50,,,,,,,failed,GG,1,core,,e2d6f2db677c,,,,,,,,,,,,,40.895,SSGBERK_VERIFY_FAIL build exited 134
+nf100000-cs50,vuepress,javascript,100000,50,,,,,,,oom,GG,1,core,,ae30efe0efb4,,,,,,,,,,,,,38.619,oom
+nf100000-cs50,zensical,python,100000,50,,,,,,,timeout,GG,1,core,,ebe58c534103,,,,,,,,,,,,,57.452,timeout
+nf100000-cs50,zola,rust,100000,50,,,,,,,oom,GG,1,core,,e2d6f2db677c,,,,,,,,,,,,,23.708,oom
