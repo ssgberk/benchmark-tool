@@ -119,6 +119,27 @@ def test_stop_all_scoped_to_run_label(monkeypatch):
     mine.stop.assert_called_once()
 
 
+def test_stop_prunes_only_this_runs_containers(monkeypatch):
+    # Other projects share the Docker host: never prune their stopped containers.
+    monkeypatch.setattr(docker_helper.time, "sleep", lambda s: None)
+    helper = _helper()
+    helper.server.containers.list.return_value = []
+    helper.stop()
+    helper.server.containers.prune.assert_called_once_with(
+        filters={"label": "ssgberk.run=abc12345-0000"})
+
+
+def test_clean_removes_only_ssgberk_test_images():
+    helper = _helper()
+    ours = types.SimpleNamespace(id="i1", tags=["ssgberk/test.hugo:latest"])
+    theirs = types.SimpleNamespace(id="i2", tags=["postgres:16"])
+    untagged = types.SimpleNamespace(id="i3", tags=[])
+    helper.server.images.list.return_value = [ours, theirs, untagged]
+    helper.clean()
+    helper.server.images.remove.assert_called_once_with("i1", force=True)
+    helper.server.images.prune.assert_not_called()
+
+
 def test_stop_all_tolerates_not_found(monkeypatch):
     monkeypatch.setattr(docker_helper.time, "sleep", lambda s: None)
     helper = _helper()

@@ -104,15 +104,15 @@ class DockerHelper:
 
     def clean(self):
         '''
-        Cleans all the docker images from the system
+        Removes the ssgberk/test.* generator images. Other images (and the dangling
+        images of other projects on a shared Docker host) are left alone; removing a
+        tagged image already deletes its unused layers.
         '''
 
-        self.server.images.prune()
         for image in self.server.images.list():
             if len(image.tags) > 0:
                 if DockerHelper.is_ssgberk_test_image(image.tags[0]):
                     self.server.images.remove(image.id, force=True)
-        self.server.images.prune()
 
     def build(self, test, build_log_dir=os.devnull):
         '''
@@ -315,7 +315,9 @@ class DockerHelper:
         else:
             DockerHelper.__stop_all(self.server, self.benchmarker.config.run_id)
 
-        self.server.containers.prune()
+        # Only this run's stopped containers: the Docker host is shared with other projects.
+        self.server.containers.prune(
+            filters={"label": "%s=%s" % (RUN_LABEL, self.benchmarker.config.run_id)})
 
     def server_container_exists(self, container_id_or_name):
         '''
