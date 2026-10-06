@@ -13,7 +13,7 @@ First rounds of spec 008 on GitHub Actions (`ubuntu-24.04` hosted runners, one r
 
 - **Rankings are per runner.** Hosted runners differ in CPU model, so the per-cell `summary.md` ranks only generators that shared a runner fingerprint (6 fingerprints in P). The tables below show medians side by side for reading, not as a ranking.
 - **Node heap.** These rounds used Node's default V8 heap. astro, eleventy, hexo and vitepress failed with `JavaScript heap out of memory` (exit 134) in M/G/GG well below the 8 GB limit. Since spec 008 decision 6 every Node generator runs with `--max-old-space-size=6144`; those cells are re-run in a later round.
-- **gatsby, G 10,000 × 5 KB** was lost to a stats-parsing bug after a noise re-run (fixed in #16; re-run pending).
+- **gatsby, G** was re-run after a stats-parsing bug lost its 10,000 × 5 KB cell (fixed in #16; re-run: workflow run 37364276814, both gatsby G cells replaced).
 - **GG 50 KB** is about 5.1 GB of markdown; most generators hit the 8 GB memory limit (`oom`).
 
 ## P: 50 pages
@@ -111,7 +111,7 @@ Failed: vitepress (Node heap out of memory, exit 134).
 
 ## G: 10,000 pages
 
-### 10,000 pages × 5 KB (15/17 ok)
+### 10,000 pages × 5 KB (16/17 ok)
 
 | Generator | Language | Median (s) | CV | Posts/s | Peak RSS (MB) |
 |---|---|---|---|---|---|
@@ -129,9 +129,10 @@ Failed: vitepress (Node heap out of memory, exit 134).
 | pelican | python | 83.9 | 0.7% | 119 | 142 |
 | middleman | ruby | 87.9 | 0.7% | 114 | 317 |
 | nanoc | ruby | 117.6 | 1.3% | 85 | 632 |
+| gatsby | javascript | 145.0 | 6.4% | 69 | 1,658 |
 | nikola-mako | python | 218.5 | 1.8% | 46 | 440 |
 
-Failed: gatsby (stats parsing bug, fixed in #16); vitepress (Node heap out of memory, exit 134).
+Failed: vitepress (Node heap out of memory, exit 134).
 
 ### 10,000 pages × 50 KB (13/17 ok)
 
@@ -149,7 +150,7 @@ Failed: gatsby (stats parsing bug, fixed in #16); vitepress (Node heap out of me
 | nanoc | ruby | 840.5 | 1.8% | 12 | 3,489 |
 | mkdocs | python | 1,142.9 | 1.9% | 9 | 2,551 |
 | nikola-mako | python | 1,768.8 | 1.9% | 6 | 448 |
-| gatsby | javascript | 2,004.4 | 2.0% | 5 | 4,102 |
+| gatsby | javascript | 2,096.8 | 1.8% | 5 | 4,147 |
 
 Failed: astro (Node heap out of memory, exit 134); eleventy (Node heap out of memory, exit 134); hexo (Node heap out of memory, exit 134); vitepress (Node heap out of memory, exit 134).
 

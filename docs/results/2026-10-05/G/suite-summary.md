@@ -16,8 +16,8 @@
 | nf10000-cs5 | pelican | python | 83.584 | 83.873 | ok |
 | nf10000-cs5 | middleman | ruby | 87.979 | 87.861 | ok |
 | nf10000-cs5 | nanoc | ruby | 117.232 | 117.563 | ok |
+| nf10000-cs5 | gatsby | javascript | 143.136 | 144.994 | ok |
 | nf10000-cs5 | nikola-mako | python | 218.411 | 218.475 | ok |
-| nf10000-cs5 | gatsby | javascript | — | — | failed |
 | nf10000-cs5 | vitepress | javascript | — | — | failed |
 | nf10000-cs50 | jekyll | ruby | 11.832 | 11.814 | ok |
 | nf10000-cs50 | zola | rust | 25.535 | 25.512 | ok |
@@ -31,7 +31,7 @@
 | nf10000-cs50 | nanoc | ruby | 846.091 | 840.495 | ok |
 | nf10000-cs50 | mkdocs | python | 1130.836 | 1142.891 | ok |
 | nf10000-cs50 | nikola-mako | python | 1768.702 | 1768.797 | ok |
-| nf10000-cs50 | gatsby | javascript | 1996.154 | 2004.427 | ok |
+| nf10000-cs50 | gatsby | javascript | 2103.688 | 2096.804 | ok |
 | nf10000-cs50 | astro | javascript | — | — | failed |
 | nf10000-cs50 | eleventy | javascript | — | — | failed |
 | nf10000-cs50 | hexo | javascript | — | — | failed |

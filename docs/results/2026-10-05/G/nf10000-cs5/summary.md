@@ -2,7 +2,7 @@
 
 - Environment: GitHub Actions ubuntu-24.04, one runner per generator
 - Started: 2026-10-05 14:29:28 UTC
-- Completed: 2026-10-05 15:19:05 UTC
+- Completed: 2026-10-05 22:12:54 UTC
 - Commit: 6735176945599059d76c29e2692bcdc20e82b911
 
 Suite: G v1 · cell 1/2 (nf 10000, cs 5) · profile core · resources 4 CPU / 8.0 GB
@@ -23,8 +23,8 @@ Suite: G v1 · cell 1/2 (nf 10000, cs 5) · profile core · resources 4 CPU / 8.
 | pelican | python | 10000 | 5 | 3 | 83.584 | 0.613 | 83.873 | 82.880 | 83.998 | ok | 3 | 0.7% | 119.2 | 0.6 | 1.00 | 142.1 | 74.4 / 10001 | 48.5 |
 | middleman | ruby | 10000 | 5 | 3 | 87.979 | 0.576 | 87.861 | 87.471 | 88.605 | ok | 4 | 0.7% | 113.8 | 0.6 | 3.07 | 316.8 | 100.2 / 10002 | 105.9 |
 | nanoc | ruby | 10000 | 5 | 3 | 117.232 | 1.533 | 117.563 | 115.560 | 118.572 | ok | 4 | 1.3% | 85.1 | 0.5 | 1.00 | 631.9 | 100.8 / 10001 | 38.0 |
+| gatsby | javascript | 10000 | 5 | 3 | 143.136 | 9.107 | 144.994 | 133.244 | 151.171 | ok | 5 | 6.4% | 69.0 | 0.4 | 1.52 | 1658.5 | 197.0 / 20030 | 204.5 |
 | nikola-mako | python | 10000 | 5 | 3 | 218.411 | 3.826 | 218.475 | 214.553 | 222.204 | ok | 5 | 1.8% | 45.8 | 0.2 | 0.98 | 440.4 | 86.3 / 10025 | 81.9 |
-| gatsby | javascript | 10000 | 5 | — | — | — | — | — | — | failed | — | — | — | — | — | — | — | 230.3 |
 | vitepress | javascript | 10000 | 5 | — | — | — | — | — | — | failed | — | — | — | — | — | — | — | 38.8 |
 
 ## Ranking
@@ -63,6 +63,7 @@ Ordered by median; generators whose min–max ranges overlap share a rank (`=n`)
 | 2 | hexo | 25.815 | 0.5% | 25.755–25.989 |
 | 3 | jigsaw | 26.681 | 0.4% | 26.593–26.828 |
 | 4 | nanoc | 117.563 | 1.3% | 115.560–118.572 |
+| 5 | gatsby | 144.994 | 6.4% | 133.244–151.171 |
 
 ### G v1 · nf 10000, cs 5 · profile core · fingerprint ae30efe0efb4
 
@@ -78,5 +79,4 @@ Ordered by median; generators whose min–max ranges overlap share a rank (`=n`)
 
 ## Failed / timeout / oom / nonconformant / unsupported
 
-- gatsby (failed)
 - vitepress (failed): SSGBERK_VERIFY_FAIL build exited 134

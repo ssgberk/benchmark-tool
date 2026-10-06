@@ -2,7 +2,7 @@
 
 - Environment: GitHub Actions ubuntu-24.04, one runner per generator
 - Started: 2026-10-05 14:29:37 UTC
-- Completed: 2026-10-05 16:53:56 UTC
+- Completed: 2026-10-06 00:25:14 UTC
 - Commit: 6735176945599059d76c29e2692bcdc20e82b911
 
 Suite: G v1 · cell 2/2 (nf 10000, cs 50) · profile core · resources 4 CPU / 8.0 GB
@@ -21,7 +21,7 @@ Suite: G v1 · cell 2/2 (nf 10000, cs 50) · profile core · resources 4 CPU / 8
 | nanoc | ruby | 10000 | 50 | 3 | 846.091 | 14.871 | 840.495 | 834.830 | 862.949 | ok | 6 | 1.8% | 11.9 | 0.6 | 1.00 | 3489.5 | 981.0 / 10001 | 38.3 |
 | mkdocs | python | 10000 | 50 | 3 | 1130.836 | 21.791 | 1142.891 | 1105.681 | 1143.936 | ok | 7 | 1.9% | 8.7 | 0.4 | 1.00 | 2551.1 | 884.2 / 10001 | 41.5 |
 | nikola-mako | python | 10000 | 50 | 3 | 1768.702 | 33.469 | 1768.797 | 1735.185 | 1802.123 | ok | 8 | 1.9% | 5.7 | 0.3 | 1.00 | 448.3 | 837.8 / 10025 | 54.3 |
-| gatsby | javascript | 10000 | 50 | 3 | 1996.154 | 40.898 | 2004.427 | 1951.752 | 2032.282 | ok | 2 | 2.0% | 5.0 | 0.3 | 1.41 | 4102.2 | 1702.7 / 20030 | 231.3 |
+| gatsby | javascript | 10000 | 50 | 3 | 2103.688 | 38.587 | 2096.804 | 2069.006 | 2145.253 | ok | 9 | 1.8% | 4.8 | 0.2 | 1.37 | 4146.8 | 1702.7 / 20030 | 222.0 |
 | astro | javascript | 10000 | 50 | — | — | — | — | — | — | failed | — | — | — | — | — | — | — | 50.3 |
 | eleventy | javascript | 10000 | 50 | — | — | — | — | — | — | failed | — | — | — | — | — | — | — | 37.9 |
 | hexo | javascript | 10000 | 50 | — | — | — | — | — | — | failed | — | — | — | — | — | — | — | 41.8 |
@@ -36,7 +36,6 @@ Ordered by median; generators whose min–max ranges overlap share a rank (`=n`)
 | Rank | Framework | Median (s) | CV | Min–Max (s) |
 |---|---|---|---|---|
 | 1 | jekyll | 11.814 | 0.8% | 11.750–11.933 |
-| 2 | gatsby | 2004.427 | 2.0% | 1951.752–2032.282 |
 
 ### G v1 · nf 10000, cs 50 · profile core · fingerprint 3f2f1aaf006c
 
@@ -50,6 +49,7 @@ Ordered by median; generators whose min–max ranges overlap share a rank (`=n`)
 | 6 | nanoc | 840.495 | 1.8% | 834.830–862.949 |
 | 7 | mkdocs | 1142.891 | 1.9% | 1105.681–1143.936 |
 | 8 | nikola-mako | 1768.797 | 1.9% | 1735.185–1802.123 |
+| 9 | gatsby | 2096.804 | 1.8% | 2069.006–2145.253 |
 
 ### G v1 · nf 10000, cs 50 · profile core · fingerprint 8e17af3b158e
 
