@@ -96,8 +96,25 @@ def test_run_quality_isolated_and_cleaned_up(tmp_path):
     assert kwargs["command"][:4] == ["node", "/quality/run.mjs", "--site", "/work/public"]
     assert json.loads(kwargs["command"][kwargs["command"].index("--pages") + 1]) == pages
     c.put_archive.assert_called_once_with("/work", b"site-tar")
-    c.get_archive.assert_called_once_with("/work/out/raw.json")
+    c.get_archive.assert_called_once_with("/quality-out/raw.json")
     c.remove.assert_called_once_with(force=True)
+
+
+def test_run_quality_out_dir_never_inside_site(tmp_path):
+    helper = _helper()
+    helper._quality_image = "sha256:q"
+    c = mock.Mock()
+    c.wait.return_value = {"StatusCode": 0}
+    c.get_archive.return_value = (iter([_raw_tar({})]), {})
+    helper.server.containers.create.return_value = c
+    (tmp_path / "site.tar").write_bytes(b"x")
+    helper.run_quality(str(tmp_path / "site.tar"), "out", {})
+    command = helper.server.containers.create.call_args[1]["command"]
+    site = command[command.index("--site") + 1]
+    out = command[command.index("--out") + 1]
+    assert site == "/work/out"
+    assert out != site and not out.startswith(site + "/")
+    assert out == docker_helper.QUALITY_OUT and not out.startswith("/work")
 
 
 def test_run_quality_without_raw_json_raises_and_cleans_up(tmp_path):

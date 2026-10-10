@@ -47,7 +47,8 @@ jobs:
           docker run --rm --network none \
             -v "$PWD/tests/fixtures/quality/site:/fixture:ro" -v "$PWD/quality/test:/test:ro" \
             ssgberk/quality sh -c 'node /quality/run.mjs --site /fixture --pages "$(cat /test/pages.json)" --out /tmp/out \
-              && node /test/check-shape.mjs /tmp/out/raw.json /test/expected-shape.json'
+              && node /test/check-shape.mjs /tmp/out/raw.json /test/expected-shape.json \
+              && node /test/bad-url.mjs'
 
   quality:
     needs: quality-image
@@ -68,6 +69,8 @@ jobs:
           for s in lighthouse seo html a11y links weight js extra; do
             jq -e --arg s "$s" '.quality.hugo[$s].status == "ok"' "$R/results.json"
           done
+          jq -e '[.quality.hugo.lighthouse.mobile[], .quality.hugo.lighthouse.desktop[]]
+                  | length == 6 and all(.status == "ok")' "$R/results.json"
           jq -e '[.quality.hugo.lighthouse.mobile[], .quality.hugo.lighthouse.desktop[]
                   | .scores[] | .median | select(. < 0 or . > 1)] | length == 0' "$R/results.json"
           jq -e '.environment.quality.lighthouse and .environment.quality.chromium' "$R/results.json"

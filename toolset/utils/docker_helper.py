@@ -25,6 +25,9 @@ RUN_LABEL = 'ssgberk.run'
 QUALITY_IMAGE = 'ssgberk/quality'
 QUALITY_TIMEOUT_SECONDS = 1800
 QUALITY_MEMORY = '4g'
+# collector output dir: outside /work so it can never land inside the site (a site
+# folder named "out" is /work/out)
+QUALITY_OUT = '/quality-out'
 
 
 class DockerHelper:
@@ -466,7 +469,7 @@ class DockerHelper:
         '''
         image = self.build_quality_image()
         command = ['node', '/quality/run.mjs', '--site', '/work/' + site_name,
-                   '--pages', json.dumps(pages), '--out', '/work/out']
+                   '--pages', json.dumps(pages), '--out', QUALITY_OUT]
         container = self.server.containers.create(
             image, command=command, labels=self._run_labels(), network_mode='none',
             mem_limit=QUALITY_MEMORY, working_dir='/work')
@@ -476,7 +479,7 @@ class DockerHelper:
             container.start()
             result = container.wait(timeout=timeout_seconds)
             try:
-                bits, _ = container.get_archive('/work/out/raw.json')
+                bits, _ = container.get_archive(QUALITY_OUT + '/raw.json')
             except docker.errors.NotFound:
                 logs = container.logs().decode('utf-8', 'replace')
                 raise RuntimeError('collector wrote no raw.json (exit %s): %s' % (

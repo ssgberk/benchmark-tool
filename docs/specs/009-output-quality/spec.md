@@ -1,7 +1,7 @@
 # 009 Output Quality
 
 - **Date:** 2026-10-10
-- **Status:** proposed, awaiting review
+- **Status:** implemented
 - **Repo:** `ssgberk/benchmark-tool` (BT). No change to `ssgberk/ssg-frameworks` (SF).
 - **Issue:** #22
 - **Related:** BT `008-benchmark-methodology` (suites, `results.json`, environment fingerprint), BT `006-results-summary` (`summary.md`), SF `005-reference-site-design` (what is built, R-14 page set), SF `006-layout-conformance` (post page resolved from the index).

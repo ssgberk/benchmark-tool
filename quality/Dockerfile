@@ -29,5 +29,5 @@ RUN npm ci --omit=dev \
  && npx playwright install --with-deps chromium \
  && rm -rf /root/.npm /var/lib/apt/lists/*
 COPY run.mjs ./
-RUN mkdir -p /work/out
+RUN mkdir -p /work /quality-out
 WORKDIR /work

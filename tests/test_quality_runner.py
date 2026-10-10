@@ -168,3 +168,52 @@ def test_reparse_keeps_quality(fake_benchmarker, monkeypatch):
     res.reparse([])
     with open(res.file) as f:
         assert json.load(f)["quality"] == {"hugo": {"status": "ok"}}
+
+
+def test_run_pass_write_failure_still_returns(tmp_path, monkeypatch):
+    test, results_dir = _generator(tmp_path), tmp_path / "results"
+    tar_path = _archive(results_dir)
+    helper = mock.Mock()
+    helper.run_quality.return_value = json.loads((FIX / "raw.json").read_text())
+    real_open = open
+
+    def fake_open(path, *a, **kw):
+        if str(path).endswith("quality.json"):
+            raise OSError("disk full")
+        return real_open(path, *a, **kw)
+
+    monkeypatch.setattr("builtins.open", fake_open)
+    q = runner.run_pass(helper, test, str(results_dir))
+    assert isinstance(q, dict) and q["status"] == "ok"
+    assert not tar_path.exists()
+
+
+def test_quality_failure_never_changes_build_result(tmp_path, monkeypatch):
+    def boom(*a):
+        raise RuntimeError("kaboom")
+
+    outcomes = []
+    for quality in (False, True):
+        b, ft, _ = _bm(tmp_path / str(quality), quality=quality)
+        if quality:
+            monkeypatch.setattr(runner, "run_pass", boom)
+        ret = b._Benchmarker__benchmark(ft, open(tmp_path / ("log%s" % quality), "w"))
+        outcomes.append((ret, b.results.report_benchmark_results.call_args[0][1:]))
+        if quality:
+            name, q, image = b.results.add_quality.call_args[0]
+            assert name == "hugo" and q == {"status": "error", "error": "RuntimeError: kaboom"}
+            assert image is None
+    assert outcomes[0] == outcomes[1]
+
+
+def test_unused_export_tar_removed(tmp_path, monkeypatch):
+    called = []
+    monkeypatch.setattr(runner, "run_pass", lambda *a: called.append(a) or {"status": "ok"})
+    for i, kw in enumerate(({"results": []}, {"failure": "nonconformant: index"})):
+        b, ft, _ = _bm(tmp_path / str(i), **kw)
+        tar_path = pathlib.Path(runner.archive_path(b.results.directory, "hugo"))
+        tar_path.parent.mkdir(parents=True)
+        tar_path.write_bytes(b"x")
+        b._Benchmarker__benchmark(ft, open(tmp_path / "log", "w"))
+        assert not tar_path.exists()
+    assert called == []

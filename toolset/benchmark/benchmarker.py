@@ -277,9 +277,12 @@ class Benchmarker:
             self.results.report_benchmark_results(framework_test, test_type, results['results'],
                                                   results.get('unsupported', False),
                                                   results.get('failureReason'))
-            if export and results['results'] and not results.get('failureReason') \
-                    and not results.get('unsupported'):
-                self.__quality_pass(framework_test, benchmark_log)
+            if export:
+                if results['results'] and not results.get('failureReason') \
+                        and not results.get('unsupported'):
+                    self.__quality_pass(framework_test, benchmark_log)
+                else:
+                    self.__discard_export(export[1])
             log("Complete", file=benchmark_log)
             return bool(results['results']) or bool(results.get('unsupported', False))
 
@@ -306,11 +309,27 @@ class Benchmarker:
 
     def __quality_pass(self, framework_test, benchmark_log):
         '''Untimed; never changes the build result (spec 009 R-2).'''
-        log("QUALITY PASS %s (untimed)" % framework_test.name, file=benchmark_log, border='*')
-        quality = quality_runner.run_pass(self.docker_helper, framework_test, self.results.directory)
-        self.results.add_quality(framework_test.name, quality,
-                                 getattr(self.docker_helper, '_quality_image', None))
-        log("quality: %s" % quality.get('status'), file=benchmark_log)
+        try:
+            log("QUALITY PASS %s (untimed)" % framework_test.name, file=benchmark_log, border='*')
+            quality = quality_runner.run_pass(self.docker_helper, framework_test, self.results.directory)
+            self.results.add_quality(framework_test.name, quality,
+                                     getattr(self.docker_helper, '_quality_image', None))
+            log("quality: %s" % quality.get('status'), file=benchmark_log)
+        except Exception as e:
+            error = "%s: %s" % (type(e).__name__, e)
+            try:
+                log("quality: pass failed: %s" % error)
+                self.results.add_quality(framework_test.name, {'status': 'error', 'error': error}, None)
+            except Exception:
+                pass
+
+    def __discard_export(self, tar_path):
+        '''The pass will not run: drop the exported site so it does not linger (spec 009 R-2).'''
+        try:
+            if os.path.exists(tar_path):
+                os.remove(tar_path)
+        except Exception as e:
+            log("quality: could not remove %s: %s" % (tar_path, e))
 
     def __noise_control(self, framework_test, test_type, script,
                         script_variables, raw_file, results, benchmark_log):

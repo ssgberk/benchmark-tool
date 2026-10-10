@@ -5,6 +5,7 @@ import json
 import os
 
 from toolset.quality import reduce, site
+from toolset.utils.output_helper import log
 
 # R-1: with --suite, the pass runs only in this (numberOfFiles, contentSize) cell
 QUALITY_CELL = (50, 5.0)
@@ -47,9 +48,15 @@ def run_pass(docker_helper, test, results_dir):
         quality = reduce.build_quality(raw, site_dir, pages, output_glob)
     except Exception as e:
         quality = {'status': 'error', 'error': '%s: %s' % (type(e).__name__, e)}
-    os.makedirs(out_dir, exist_ok=True)
-    with open(os.path.join(out_dir, 'quality.json'), 'w') as f:
-        json.dump(quality, f, indent=2)
-    if os.path.exists(tar_path):
-        os.remove(tar_path)
+    try:
+        os.makedirs(out_dir, exist_ok=True)
+        with open(os.path.join(out_dir, 'quality.json'), 'w') as f:
+            json.dump(quality, f, indent=2)
+    except Exception as e:
+        log("quality: could not write quality.json: %s: %s" % (type(e).__name__, e))
+    try:
+        if os.path.exists(tar_path):
+            os.remove(tar_path)
+    except Exception as e:
+        log("quality: could not remove %s: %s: %s" % (tar_path, type(e).__name__, e))
     return quality
