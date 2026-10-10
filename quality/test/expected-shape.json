@@ -1,0 +1,208 @@
+{
+  "tools": {
+    "node": "string",
+    "lighthouse": "string",
+    "playwright": "string",
+    "chromium": "string",
+    "axeCore": "string",
+    "htmlValidate": "string",
+    "chromeLauncher": "string",
+    "lychee": "string"
+  },
+  "pages": "object",
+  "lighthouse": {
+    "mobile": {
+      "index": [
+        {
+          "scores": {
+            "performance": "number",
+            "accessibility": "number",
+            "best-practices": "number",
+            "seo": "number"
+          },
+          "metrics": {
+            "fcp": "number",
+            "lcp": "number",
+            "tbt": "number",
+            "cls": "number",
+            "si": "number"
+          },
+          "resources": {
+            "totalBytes": "number",
+            "jsBytes": "number",
+            "cssBytes": "number",
+            "requests": "number",
+            "domSize": "number|null"
+          },
+          "failedAudits": "array"
+        }
+      ],
+      "post": [
+        {
+          "scores": {
+            "performance": "number",
+            "accessibility": "number",
+            "best-practices": "number",
+            "seo": "number"
+          },
+          "metrics": {
+            "fcp": "number",
+            "lcp": "number",
+            "tbt": "number",
+            "cls": "number",
+            "si": "number"
+          },
+          "resources": {
+            "totalBytes": "number",
+            "jsBytes": "number",
+            "cssBytes": "number",
+            "requests": "number",
+            "domSize": "number|null"
+          },
+          "failedAudits": "array"
+        }
+      ],
+      "404": [
+        {
+          "scores": {
+            "performance": "number",
+            "accessibility": "number",
+            "best-practices": "number",
+            "seo": "number"
+          },
+          "metrics": {
+            "fcp": "number",
+            "lcp": "number",
+            "tbt": "number",
+            "cls": "number",
+            "si": "number"
+          },
+          "resources": {
+            "totalBytes": "number",
+            "jsBytes": "number",
+            "cssBytes": "number",
+            "requests": "number",
+            "domSize": "number|null"
+          },
+          "failedAudits": "array"
+        }
+      ]
+    },
+    "desktop": {
+      "index": [
+        {
+          "scores": {
+            "performance": "number",
+            "accessibility": "number",
+            "best-practices": "number",
+            "seo": "number"
+          },
+          "metrics": {
+            "fcp": "number",
+            "lcp": "number",
+            "tbt": "number",
+            "cls": "number",
+            "si": "number"
+          },
+          "resources": {
+            "totalBytes": "number",
+            "jsBytes": "number",
+            "cssBytes": "number",
+            "requests": "number",
+            "domSize": "number|null"
+          },
+          "failedAudits": "array"
+        }
+      ],
+      "post": [
+        {
+          "scores": {
+            "performance": "number",
+            "accessibility": "number",
+            "best-practices": "number",
+            "seo": "number"
+          },
+          "metrics": {
+            "fcp": "number",
+            "lcp": "number",
+            "tbt": "number",
+            "cls": "number",
+            "si": "number"
+          },
+          "resources": {
+            "totalBytes": "number",
+            "jsBytes": "number",
+            "cssBytes": "number",
+            "requests": "number",
+            "domSize": "number|null"
+          },
+          "failedAudits": "array"
+        }
+      ],
+      "404": [
+        {
+          "scores": {
+            "performance": "number",
+            "accessibility": "number",
+            "best-practices": "number",
+            "seo": "number"
+          },
+          "metrics": {
+            "fcp": "number",
+            "lcp": "number",
+            "tbt": "number",
+            "cls": "number",
+            "si": "number"
+          },
+          "resources": {
+            "totalBytes": "number",
+            "jsBytes": "number",
+            "cssBytes": "number",
+            "requests": "number",
+            "domSize": "number|null"
+          },
+          "failedAudits": "array"
+        }
+      ]
+    }
+  },
+  "axe": {
+    "index": {
+      "violations": "array"
+    },
+    "post": {
+      "violations": "array"
+    },
+    "404": {
+      "violations": "array"
+    }
+  },
+  "rendered": {
+    "post": {
+      "title": "string",
+      "firstParagraph": "string"
+    }
+  },
+  "html": {
+    "index": {
+      "messages": "array"
+    },
+    "post": {
+      "messages": "array"
+    },
+    "404": {
+      "messages": "array"
+    }
+  },
+  "links": {
+    "report": "object"
+  },
+  "files": [
+    {
+      "path": "string",
+      "bytes": "number",
+      "gzip": "number",
+      "br": "number"
+    }
+  ]
+}
