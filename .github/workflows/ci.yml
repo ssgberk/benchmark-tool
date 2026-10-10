@@ -61,17 +61,17 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: true
-      - run: ./ssgberk --test hugo -nf 50 -cs 5 -mr 1 --quality
+      - run: ./ssgberk --test mdbook -nf 50 -cs 5 -mr 1 --quality
       - run: |
           R=$(ls -td results/*/ | head -1)
-          jq -e '.rawData.datarate.hugo[0].mean > 0' "$R/results.json"
-          jq -e '.quality.hugo.status == "ok"' "$R/results.json"
+          jq -e '.rawData.datarate.mdbook[0].mean > 0' "$R/results.json"
+          jq -e '.quality.mdbook.status == "ok"' "$R/results.json"
           for s in lighthouse seo html a11y links weight js extra; do
-            jq -e --arg s "$s" '.quality.hugo[$s].status == "ok"' "$R/results.json"
+            jq -e --arg s "$s" '.quality.mdbook[$s].status == "ok"' "$R/results.json"
           done
-          jq -e '[.quality.hugo.lighthouse.mobile[], .quality.hugo.lighthouse.desktop[]]
+          jq -e '[.quality.mdbook.lighthouse.mobile[], .quality.mdbook.lighthouse.desktop[]]
                   | length == 6 and all(.status == "ok")' "$R/results.json"
-          jq -e '[.quality.hugo.lighthouse.mobile[], .quality.hugo.lighthouse.desktop[]
+          jq -e '[.quality.mdbook.lighthouse.mobile[], .quality.mdbook.lighthouse.desktop[]
                   | .scores[] | .median | select(. < 0 or . > 1)] | length == 0' "$R/results.json"
           jq -e '.environment.quality.lighthouse and .environment.quality.chromium' "$R/results.json"
           test -s "$R/quality-summary.csv"

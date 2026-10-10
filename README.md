@@ -103,7 +103,7 @@ After a `--suite` run, `results/<timestamp>/` also holds `suite.json` (cells, ge
 
 `--quality` audits the output of the last timed build of each generator, without timing it (spec `docs/specs/009-output-quality`):
 
-        $ ./ssgberk --test hugo -nf 50 -cs 5 --quality
+        $ ./ssgberk --test mdbook -nf 50 -cs 5 --quality
 
 With `--suite`, the pass runs only in the cell `nf50-cs5` (suite P, cell 0). The toolset's tests need Python 3.12 (the toolset image and CI use it). It builds the `ssgberk/quality` image from `quality/` once. That image pins Lighthouse, Playwright's Chromium, axe-core, html-validate and lychee. The image runs with no network and with the site copied in, and it audits the index, the first post and `404.html`:
 - Lighthouse, mobile and desktop presets, median of 3 runs;
@@ -113,7 +113,7 @@ With `--suite`, the pass runs only in the cell `nf50-cs5` (suite P, cell 0). The
 - JS bytes, and whether the post works without JS;
 - files outside the reference page set.
 
-Results go to `results/<ts>/quality/<generator>/quality.json`, to `quality` in `results.json`, to the "Qualidade" section of `summary.md` and to `quality-summary.csv`. They have no combined score and no ranking. A failing check is a result and never fails the run.
+Results go to `results/<ts>/quality/<generator>/quality.json`, to `quality` in `results.json`, to the "Qualidade" section of `summary.md` and to `quality-summary.csv`. They have no combined score and no ranking. A failing check is a result and never fails the run. Generators that do not use the SF 005 reference site yet (the post link is not inside `.post-item` on the index) record `quality.<generator>.status = "error"`.
 
 ## Content size
 
