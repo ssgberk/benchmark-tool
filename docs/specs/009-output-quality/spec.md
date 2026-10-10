@@ -21,9 +21,9 @@ This spec adds an **untimed quality pass** over the output of one build per gene
 - **R-1** `--quality` enables the pass. Without `--suite`, it runs in the cell given by `-nf`/`-cs`. With `--suite`, it runs only in the cell `numberOfFiles=50, contentSize=5` (suite P, cell 0), and in every other cell it only logs that the pass was skipped.
 - **R-2** The pass runs after the timed runs of a generator succeed (status `ok`). It never runs for `failed`, `timeout`, `oom`, `nonconformant` or `unsupported` results, and it never changes a timing, a status or a ranking.
 - **R-3** Before the build container is removed, `DockerHelper` copies `<WorkingDir>/<output_folder>` out of it with `container.get_archive()` into `results/<ts>/quality/<generator>/site/`. `WorkingDir` comes from the container config, and `output_folder` comes from `benchmark_config.json`. That folder holds the output of the last timed build.
-- **R-4** The checks run in a BT-owned image built from `quality/Dockerfile`, with pinned versions of Node, Chrome for Testing, Lighthouse, axe-core, html-validate and lychee. Its container runs with `--network none`, with the site mounted read-only and an output directory mounted read-write.
+- **R-4** The checks run in a BT-owned image built from `quality/Dockerfile`, with pinned versions of Node, Playwright's Chromium build, Lighthouse, axe-core, html-validate and lychee. Chrome for Testing has no Linux arm64 build, but Playwright ships Chromium for both architectures. Its container runs with `network_mode="none"`. The site goes in with `put_archive` and `raw.json` comes out with `get_archive`. Nothing is bind-mounted, because the toolset itself runs in a container and host paths differ.
 - **R-5** Inside that container, one static server serves the site on `127.0.0.1` with gzip on and fixed headers. `quality/run.mjs` runs every check against it and writes `quality.json`.
-- **R-6** The pinned tool versions (Lighthouse, Chrome, axe-core, html-validate, lychee, Node) and the quality image id are recorded in `results.json` `environment.quality`.
+- **R-6** The pinned tool versions (Lighthouse, Chromium, axe-core, html-validate, lychee, Node) and the quality image id are recorded in `results.json` `environment.quality`.
 
 ### URLs
 
@@ -76,7 +76,7 @@ This spec adds an **untimed quality pass** over the output of one build per gene
 ## Goals and success criteria
 
 1. **One command audits the output.** *Measured by:* `./ssgberk --test hugo -nf 50 -cs 5 --quality` writes `results/<ts>/quality/hugo/quality.json` with all 8 sections and `status: ok`. A unit test asserts that `rawData`, `succeeded`, `failed` and the rankings in `summary.md` are identical with and without a `quality` section for the same parsed build output.
-2. **The pass is isolated.** *Measured by:* a unit test asserts that the quality container runs with `network_mode="none"` and the site mount `ro`. Another asserts that a raised error in the pass leaves the build result unchanged and records `quality.<fw>.status = "error"`.
+2. **The pass is isolated.** *Measured by:* a unit test asserts that the quality container runs with `network_mode="none"` and no volumes or mounts. Another asserts that a raised error in the pass leaves the build result unchanged and records `quality.<fw>.status = "error"`.
 3. **Checks are pinned and recorded.** *Measured by:* `environment.quality` lists every tool version from R-6, and `quality/Dockerfile` names an exact version for each one.
 4. **The matrix runs in CI.** *Measured by:* a BT CI job runs the pass on hugo for `ubuntu-24.04` and `ubuntu-24.04-arm`, and checks that every section is present and every score is between 0 and 1. A `workflow_dispatch` input runs it on every generator, one job each, and the job succeeds even when a check reports failures.
 
