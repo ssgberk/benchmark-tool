@@ -28,7 +28,7 @@ PROTOCOL_REASON = 'protocol: verification markers missing before STARTTIME'
 # Run-level keys a --parse keeps from the stored results.json: they describe
 # how the run was made, which raw.txt cannot tell.
 STORED_RUN_KEYS = ('suite', 'profile', 'resources', 'protocol', 'environment',
-                   'generators', 'imageBuild')
+                   'generators', 'imageBuild', 'quality')
 # Per-result keys a --parse keeps from the stored result.
 STORED_RESULT_KEYS = ('noisy', 'attempts', 'resources')
 # Failure reasons decided by the container outcome, not by raw.txt.
@@ -214,10 +214,20 @@ class Results:
         self.unsupported = dict()
         self.unsupported['datarate'] = []
         self.failureReasons = dict()
+        self.quality = {}
+        self.quality_environment = None
 
     #############################################################################
     # PUBLIC FUNCTIONS
     #############################################################################
+
+    def add_quality(self, name, quality, image_id=None):
+        '''results.json quality.<name> and environment.quality (spec 009 R-6, R-17).'''
+        self.quality[name] = quality
+        tools = quality.get('tools')
+        if self.quality_environment is None and isinstance(tools, dict) \
+                and not tools.get('error'):
+            self.quality_environment = dict(tools, image=image_id)
 
     def parse(self, tests):
         '''
@@ -502,9 +512,14 @@ class Results:
         toRet['failureReasons'] = self.failureReasons
         toRet['resources'] = getattr(self.config, 'resources', None)
         toRet['protocol'] = self.__protocol()
-        toRet['environment'] = self.__environment()
+        env = self.__environment()
+        if env is not None and self.quality_environment:
+            env = dict(env, quality=self.quality_environment)
+        toRet['environment'] = env
         toRet['generators'] = self.__generators()
         toRet['imageBuild'] = self.__image_build()
+        if getattr(self, 'quality', None):
+            toRet['quality'] = self.quality
         # --parse: what the stored run recorded wins over this process's config
         toRet.update(getattr(self, '_stored_run', None) or {})
 

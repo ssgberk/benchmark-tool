@@ -16,6 +16,8 @@ from toolset.utils.results import Results
 from toolset.utils.audit import Audit
 from toolset.utils import resources
 from toolset.benchmark import noise
+from toolset.quality import runner as quality_runner
+from toolset.quality import site as quality_site
 
 
 class Benchmarker:
@@ -242,6 +244,8 @@ class Benchmarker:
                 with open(raw_file, 'w'):
                     pass
 
+            export = self.__quality_export(framework_test)
+            self._quality_kwargs = {'export': export} if export else {}
             if not test.failed:
                 script = self.config.types[test_type].get_script_name()
                 script_variables = self.config.types[test_type].get_script_variables()
@@ -251,7 +255,8 @@ class Benchmarker:
                 try:
                     outcome = self.docker_helper.benchmark(
                         framework_test, script, script_variables, raw_file,
-                        self.resolve_resources(), self.config.run_test_timeout_seconds)
+                        self.resolve_resources(), self.config.run_test_timeout_seconds,
+                        **self._quality_kwargs)
                 finally:
                     self.__end_logging()
 
@@ -272,6 +277,9 @@ class Benchmarker:
             self.results.report_benchmark_results(framework_test, test_type, results['results'],
                                                   results.get('unsupported', False),
                                                   results.get('failureReason'))
+            if export and results['results'] and not results.get('failureReason') \
+                    and not results.get('unsupported'):
+                self.__quality_pass(framework_test, benchmark_log)
             log("Complete", file=benchmark_log)
             return bool(results['results']) or bool(results.get('unsupported', False))
 
@@ -280,6 +288,29 @@ class Benchmarker:
             if not benchmark_type(test_type):
                 ok = False
         return ok
+
+    def __quality_export(self, framework_test):
+        '''(output_folder, dest_tar) when the quality pass runs in this cell (spec 009 R-1).'''
+        if quality_runner.skipped(self.config):
+            log("quality: skipped (only cell nf50-cs5 of a suite)")
+            return None
+        if not quality_runner.eligible(self.config):
+            return None
+        try:
+            output_folder, _glob = quality_site.generator_config(framework_test.directory)
+        except Exception as e:
+            log("quality: cannot read output_folder: %s" % e)
+            return None
+        return (output_folder,
+                quality_runner.archive_path(self.results.directory, framework_test.name))
+
+    def __quality_pass(self, framework_test, benchmark_log):
+        '''Untimed; never changes the build result (spec 009 R-2).'''
+        log("QUALITY PASS %s (untimed)" % framework_test.name, file=benchmark_log, border='*')
+        quality = quality_runner.run_pass(self.docker_helper, framework_test, self.results.directory)
+        self.results.add_quality(framework_test.name, quality,
+                                 getattr(self.docker_helper, '_quality_image', None))
+        log("quality: %s" % quality.get('status'), file=benchmark_log)
 
     def __noise_control(self, framework_test, test_type, script,
                         script_variables, raw_file, results, benchmark_log):
@@ -304,7 +335,8 @@ class Benchmarker:
         try:
             outcome = self.docker_helper.benchmark(
                 framework_test, script, variables, raw_file,
-                self.resolve_resources(), self.config.run_test_timeout_seconds)
+                self.resolve_resources(), self.config.run_test_timeout_seconds,
+                **getattr(self, '_quality_kwargs', {}))
         finally:
             self.__end_logging()
         second = self.results.parse_test(framework_test, test_type)

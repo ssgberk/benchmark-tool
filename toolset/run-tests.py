@@ -221,6 +221,13 @@ def build_parser():
         action='store_true',
         default=False,
         help='Build generator images without the Docker layer cache')
+    parser.add_argument(
+        '--quality',
+        action='store_true',
+        default=False,
+        help='After the timed runs, audit the output of the last build (Lighthouse, SEO '
+             'signals, HTML, accessibility, links, weight); untimed. With --suite, only in '
+             'the cell nf50-cs5 (spec 009)')
     # Resource limits applied to every generator container of the run
     parser.add_argument(
         '--cpus',
