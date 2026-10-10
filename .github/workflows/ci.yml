@@ -32,3 +32,44 @@ jobs:
       - run: |
           R=$(ls -td results/*/ | head -1)
           jq -e '.rawData.datarate.hugo[0].mean > 0' "$R/results.json"
+
+  quality-image:
+    needs: toolset
+    strategy:
+      matrix:
+        runner: [ubuntu-24.04, ubuntu-24.04-arm]
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t ssgberk/quality quality
+      - name: Collector on the fixture site
+        run: |
+          docker run --rm --network none \
+            -v "$PWD/tests/fixtures/quality/site:/fixture:ro" -v "$PWD/quality/test:/test:ro" \
+            ssgberk/quality sh -c 'node /quality/run.mjs --site /fixture --pages "$(cat /test/pages.json)" --out /tmp/out \
+              && node /test/check-shape.mjs /tmp/out/raw.json /test/expected-shape.json'
+
+  quality:
+    needs: quality-image
+    strategy:
+      matrix:
+        runner: [ubuntu-24.04, ubuntu-24.04-arm]
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - run: ./ssgberk --test hugo -nf 50 -cs 5 -mr 1 --quality
+      - run: |
+          R=$(ls -td results/*/ | head -1)
+          jq -e '.rawData.datarate.hugo[0].mean > 0' "$R/results.json"
+          jq -e '.quality.hugo.status == "ok"' "$R/results.json"
+          for s in lighthouse seo html a11y links weight js extra; do
+            jq -e --arg s "$s" '.quality.hugo[$s].status == "ok"' "$R/results.json"
+          done
+          jq -e '[.quality.hugo.lighthouse.mobile[], .quality.hugo.lighthouse.desktop[]
+                  | .scores[] | .median | select(. < 0 or . > 1)] | length == 0' "$R/results.json"
+          jq -e '.environment.quality.lighthouse and .environment.quality.chromium' "$R/results.json"
+          test -s "$R/quality-summary.csv"
+          grep -q '^## Qualidade' "$R/summary.md"

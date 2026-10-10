@@ -8,6 +8,10 @@ on:
         type: choice
         default: ""
         options: ["", smoke, standard, stress, P, M, G, GG]
+      quality:
+        description: Run the untimed quality pass (spec 009); with a suite, only in cell nf50-cs5
+        type: boolean
+        default: false
       number_of_files:
         description: Number of posts per build (-nf)
         type: string
@@ -102,11 +106,14 @@ jobs:
           NF: ${{ matrix.number_of_files }}
           CS: ${{ matrix.content_size }}
           MR: ${{ matrix.min_runs }}
+          QUALITY: ${{ inputs.quality }}
         run: |
+          Q=""
+          if [ "$QUALITY" = "true" ]; then Q="--quality"; fi
           if [ -n "$SUITE" ]; then
-            ./ssgberk --test "$TEST" --suite "$SUITE" --cell "$CELL"
+            ./ssgberk --test "$TEST" --suite "$SUITE" --cell "$CELL" $Q
           else
-            ./ssgberk --test "$TEST" -nf "$NF" -cs "$CS" -mr "$MR"
+            ./ssgberk --test "$TEST" -nf "$NF" -cs "$CS" -mr "$MR" $Q
           fi
       - name: Record runner environment
         if: always()
