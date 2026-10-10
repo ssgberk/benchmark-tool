@@ -339,7 +339,114 @@ def to_markdown(rows, meta):
     lines += _ranking_section(rows, ranking.not_ranked_reason(meta))
     lines += _caveats(rows, meta)
     lines += _failed_section(rows)
+    if meta.get('quality'):
+        lines += [''] + quality_markdown(quality_rows(meta))
     return '\n'.join(lines) + '\n'
+
+
+QUALITY_COLUMNS = ['framework', 'status', 'performance', 'accessibility', 'bestPractices', 'seo',
+                   'lcpMs', 'postJsBytes', 'jsClass', 'gzipBytes', 'htmlErrors',
+                   'a11yViolations', 'brokenLinks', 'seoPresent', 'seoTotal']
+QUALITY_NOTE = ('The SF 005 templates carry no meta description and no viewport, so every '
+                'generator loses the same Lighthouse SEO points; that is not a difference '
+                'between generators.')
+
+
+def _get(data, *path):
+    for key in path:
+        if not isinstance(data, dict):
+            return None
+        data = data.get(key)
+    return data
+
+
+def _sum_pages(q, section, key):
+    pages = _get(q, section, 'pages') or {}
+    values = [p.get(key) for p in pages.values() if isinstance(p, dict) and p.get(key) is not None]
+    return sum(values) if values else None
+
+
+def _flatten(data, prefix=''):
+    for key, value in (data or {}).items():
+        name = prefix + str(key)
+        if isinstance(value, dict):
+            yield from _flatten(value, name + '.')
+        elif isinstance(value, (int, float)) and not isinstance(value, bool):
+            yield name, value
+
+
+def quality_rows(results):
+    '''One row per generator with a quality pass (spec 009 R-18), sorted by name.'''
+    rows = []
+    for name in sorted(results.get('quality') or {}):
+        q = results['quality'][name]
+        post = _get(q, 'lighthouse', 'mobile', 'post') or {}
+        rows.append({
+            'framework': name,
+            'status': q.get('status'),
+            'error': q.get('error'),
+            'performance': _get(post, 'scores', 'performance', 'median'),
+            'accessibility': _get(post, 'scores', 'accessibility', 'median'),
+            'bestPractices': _get(post, 'scores', 'best-practices', 'median'),
+            'seo': _get(post, 'scores', 'seo', 'median'),
+            'lcpMs': _get(post, 'metrics', 'lcp', 'median'),
+            'postJsBytes': _get(q, 'js', 'pages', 'post'),
+            'jsClass': _get(q, 'js', 'jsClass'),
+            'gzipBytes': _get(q, 'weight', 'gzipBytes'),
+            'htmlErrors': _sum_pages(q, 'html', 'errors'),
+            'a11yViolations': _sum_pages(q, 'a11y', 'total'),
+            'brokenLinks': _get(q, 'links', 'broken'),
+            'seoPresent': _get(q, 'seo', 'present', 'post'),
+            'seoTotal': _get(q, 'seo', 'total'),
+            'numeric': dict(_flatten({k: v for k, v in q.items() if k != 'tools'})),
+        })
+    return rows
+
+
+def quality_csv(rows):
+    extra = sorted({k for r in rows for k in r['numeric']})
+    out = io.StringIO()
+    writer = csv.writer(out, lineterminator='\n')
+    writer.writerow(QUALITY_COLUMNS + extra)
+    for r in rows:
+        writer.writerow([_blank(r[c]) for c in QUALITY_COLUMNS]
+                        + [_blank(r['numeric'].get(k)) for k in extra])
+    return out.getvalue()
+
+
+def _score(value):
+    return '—' if value is None else '%d' % round(value * 100)
+
+
+def _kb(value):
+    return '—' if value is None else '%.1f' % (value / 1024)
+
+
+def _int(value):
+    return '—' if value is None else '%d' % round(value)
+
+
+def quality_markdown(rows):
+    lines = ['## Qualidade', '',
+             'Untimed pass over the output of the last build (spec 009). Scores and LCP: '
+             'Lighthouse mobile preset on the post page, median of 3 runs. No combined score '
+             'and no ranking.', '',
+             '| Framework | Performance | Accessibility | Best practices | SEO | LCP (ms) '
+             '| Post JS (KB) | JS | Gzip (KB) | HTML errors | axe violations | Broken links '
+             '| SEO signals |',
+             '|' + '---|' * 13]
+    for r in rows:
+        signals = '—' if r['seoPresent'] is None else '%s/%s' % (r['seoPresent'], r['seoTotal'])
+        cells = [r['framework'], _score(r['performance']), _score(r['accessibility']),
+                 _score(r['bestPractices']), _score(r['seo']), _int(r['lcpMs']),
+                 _kb(r['postJsBytes']), r['jsClass'] or '—', _kb(r['gzipBytes']),
+                 _int(r['htmlErrors']), _int(r['a11yViolations']), _int(r['brokenLinks']), signals]
+        lines.append('| ' + ' | '.join(str(c) for c in cells) + ' |')
+    lines += ['', '- ' + QUALITY_NOTE]
+    for r in rows:
+        if r['status'] == 'error':
+            lines.append('- %s: %s' % (r['framework'], r['error']))
+    return lines
 
 
 def _read_json(path):

@@ -262,6 +262,9 @@ class Results:
                 f.write(summary.to_csv(rows))
             with open(os.path.join(self.directory, 'summary.md'), 'w') as f:
                 f.write(markdown)
+            if data.get('quality'):
+                with open(os.path.join(self.directory, 'quality-summary.csv'), 'w', newline='') as f:
+                    f.write(summary.quality_csv(summary.quality_rows(data)))
             return markdown
         except Exception as e:
             log("Error writing summary: %s" % e)
