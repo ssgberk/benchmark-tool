@@ -1,0 +1,606 @@
+{
+  "tools": {
+    "node": "v24.21.0",
+    "lighthouse": "1.0.0",
+    "playwright": "1.0.0",
+    "chromium": "1.0",
+    "axeCore": "1.0.0",
+    "htmlValidate": "1.0.0",
+    "chromeLauncher": "1.0.0",
+    "lychee": "1.0.0"
+  },
+  "pages": {
+    "index": {
+      "url": "/",
+      "file": "index.html"
+    },
+    "post": {
+      "url": "/post/hello/",
+      "file": "post/hello/index.html"
+    },
+    "404": {
+      "url": "/404.html",
+      "file": "404.html"
+    }
+  },
+  "lighthouse": {
+    "mobile": {
+      "index": [
+        {
+          "scores": {
+            "performance": 0.97,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 0.82
+          },
+          "metrics": {
+            "fcp": 900,
+            "lcp": 900,
+            "tbt": 0,
+            "cls": 0,
+            "si": 900
+          },
+          "resources": {
+            "totalBytes": 2400,
+            "jsBytes": 0,
+            "cssBytes": 300,
+            "requests": 2,
+            "domSize": 40
+          },
+          "failedAudits": [
+            "a"
+          ]
+        },
+        {
+          "scores": {
+            "performance": 0.99,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 0.82
+          },
+          "metrics": {
+            "fcp": 700,
+            "lcp": 700,
+            "tbt": 0,
+            "cls": 0,
+            "si": 700
+          },
+          "resources": {
+            "totalBytes": 2400,
+            "jsBytes": 0,
+            "cssBytes": 300,
+            "requests": 2,
+            "domSize": 40
+          },
+          "failedAudits": [
+            "c"
+          ]
+        },
+        {
+          "scores": {
+            "performance": 0.98,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 0.82
+          },
+          "metrics": {
+            "fcp": 800,
+            "lcp": 800,
+            "tbt": 0,
+            "cls": 0,
+            "si": 800
+          },
+          "resources": {
+            "totalBytes": 2400,
+            "jsBytes": 0,
+            "cssBytes": 300,
+            "requests": 2,
+            "domSize": 40
+          },
+          "failedAudits": [
+            "b"
+          ]
+        }
+      ],
+      "post": [
+        {
+          "scores": {
+            "performance": 0.97,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 0.82
+          },
+          "metrics": {
+            "fcp": 900,
+            "lcp": 900,
+            "tbt": 0,
+            "cls": 0,
+            "si": 900
+          },
+          "resources": {
+            "totalBytes": 2400,
+            "jsBytes": 0,
+            "cssBytes": 300,
+            "requests": 2,
+            "domSize": 40
+          },
+          "failedAudits": [
+            "a"
+          ]
+        },
+        {
+          "scores": {
+            "performance": 0.99,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 0.82
+          },
+          "metrics": {
+            "fcp": 700,
+            "lcp": 700,
+            "tbt": 0,
+            "cls": 0,
+            "si": 700
+          },
+          "resources": {
+            "totalBytes": 2400,
+            "jsBytes": 0,
+            "cssBytes": 300,
+            "requests": 2,
+            "domSize": 40
+          },
+          "failedAudits": [
+            "c"
+          ]
+        },
+        {
+          "scores": {
+            "performance": 0.98,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 0.82
+          },
+          "metrics": {
+            "fcp": 800,
+            "lcp": 800,
+            "tbt": 0,
+            "cls": 0,
+            "si": 800
+          },
+          "resources": {
+            "totalBytes": 2400,
+            "jsBytes": 0,
+            "cssBytes": 300,
+            "requests": 2,
+            "domSize": 40
+          },
+          "failedAudits": [
+            "b"
+          ]
+        }
+      ],
+      "404": [
+        {
+          "scores": {
+            "performance": 0.97,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 0.82
+          },
+          "metrics": {
+            "fcp": 900,
+            "lcp": 900,
+            "tbt": 0,
+            "cls": 0,
+            "si": 900
+          },
+          "resources": {
+            "totalBytes": 2400,
+            "jsBytes": 0,
+            "cssBytes": 300,
+            "requests": 2,
+            "domSize": 40
+          },
+          "failedAudits": [
+            "a"
+          ]
+        },
+        {
+          "scores": {
+            "performance": 0.99,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 0.82
+          },
+          "metrics": {
+            "fcp": 700,
+            "lcp": 700,
+            "tbt": 0,
+            "cls": 0,
+            "si": 700
+          },
+          "resources": {
+            "totalBytes": 2400,
+            "jsBytes": 0,
+            "cssBytes": 300,
+            "requests": 2,
+            "domSize": 40
+          },
+          "failedAudits": [
+            "c"
+          ]
+        },
+        {
+          "scores": {
+            "performance": 0.98,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 0.82
+          },
+          "metrics": {
+            "fcp": 800,
+            "lcp": 800,
+            "tbt": 0,
+            "cls": 0,
+            "si": 800
+          },
+          "resources": {
+            "totalBytes": 2400,
+            "jsBytes": 0,
+            "cssBytes": 300,
+            "requests": 2,
+            "domSize": 40
+          },
+          "failedAudits": [
+            "b"
+          ]
+        }
+      ]
+    },
+    "desktop": {
+      "index": [
+        {
+          "scores": {
+            "performance": 0.97,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 0.82
+          },
+          "metrics": {
+            "fcp": 900,
+            "lcp": 900,
+            "tbt": 0,
+            "cls": 0,
+            "si": 900
+          },
+          "resources": {
+            "totalBytes": 2400,
+            "jsBytes": 0,
+            "cssBytes": 300,
+            "requests": 2,
+            "domSize": 40
+          },
+          "failedAudits": [
+            "a"
+          ]
+        },
+        {
+          "scores": {
+            "performance": 0.99,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 0.82
+          },
+          "metrics": {
+            "fcp": 700,
+            "lcp": 700,
+            "tbt": 0,
+            "cls": 0,
+            "si": 700
+          },
+          "resources": {
+            "totalBytes": 2400,
+            "jsBytes": 0,
+            "cssBytes": 300,
+            "requests": 2,
+            "domSize": 40
+          },
+          "failedAudits": [
+            "c"
+          ]
+        },
+        {
+          "scores": {
+            "performance": 0.98,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 0.82
+          },
+          "metrics": {
+            "fcp": 800,
+            "lcp": 800,
+            "tbt": 0,
+            "cls": 0,
+            "si": 800
+          },
+          "resources": {
+            "totalBytes": 2400,
+            "jsBytes": 0,
+            "cssBytes": 300,
+            "requests": 2,
+            "domSize": 40
+          },
+          "failedAudits": [
+            "b"
+          ]
+        }
+      ],
+      "post": [
+        {
+          "scores": {
+            "performance": 0.97,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 0.82
+          },
+          "metrics": {
+            "fcp": 900,
+            "lcp": 900,
+            "tbt": 0,
+            "cls": 0,
+            "si": 900
+          },
+          "resources": {
+            "totalBytes": 2400,
+            "jsBytes": 0,
+            "cssBytes": 300,
+            "requests": 2,
+            "domSize": 40
+          },
+          "failedAudits": [
+            "a"
+          ]
+        },
+        {
+          "scores": {
+            "performance": 0.99,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 0.82
+          },
+          "metrics": {
+            "fcp": 700,
+            "lcp": 700,
+            "tbt": 0,
+            "cls": 0,
+            "si": 700
+          },
+          "resources": {
+            "totalBytes": 2400,
+            "jsBytes": 0,
+            "cssBytes": 300,
+            "requests": 2,
+            "domSize": 40
+          },
+          "failedAudits": [
+            "c"
+          ]
+        },
+        {
+          "scores": {
+            "performance": 0.98,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 0.82
+          },
+          "metrics": {
+            "fcp": 800,
+            "lcp": 800,
+            "tbt": 0,
+            "cls": 0,
+            "si": 800
+          },
+          "resources": {
+            "totalBytes": 2400,
+            "jsBytes": 0,
+            "cssBytes": 300,
+            "requests": 2,
+            "domSize": 40
+          },
+          "failedAudits": [
+            "b"
+          ]
+        }
+      ],
+      "404": [
+        {
+          "scores": {
+            "performance": 0.97,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 0.82
+          },
+          "metrics": {
+            "fcp": 900,
+            "lcp": 900,
+            "tbt": 0,
+            "cls": 0,
+            "si": 900
+          },
+          "resources": {
+            "totalBytes": 2400,
+            "jsBytes": 0,
+            "cssBytes": 300,
+            "requests": 2,
+            "domSize": 40
+          },
+          "failedAudits": [
+            "a"
+          ]
+        },
+        {
+          "scores": {
+            "performance": 0.99,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 0.82
+          },
+          "metrics": {
+            "fcp": 700,
+            "lcp": 700,
+            "tbt": 0,
+            "cls": 0,
+            "si": 700
+          },
+          "resources": {
+            "totalBytes": 2400,
+            "jsBytes": 0,
+            "cssBytes": 300,
+            "requests": 2,
+            "domSize": 40
+          },
+          "failedAudits": [
+            "c"
+          ]
+        },
+        {
+          "scores": {
+            "performance": 0.98,
+            "accessibility": 1,
+            "best-practices": 1,
+            "seo": 0.82
+          },
+          "metrics": {
+            "fcp": 800,
+            "lcp": 800,
+            "tbt": 0,
+            "cls": 0,
+            "si": 800
+          },
+          "resources": {
+            "totalBytes": 2400,
+            "jsBytes": 0,
+            "cssBytes": 300,
+            "requests": 2,
+            "domSize": 40
+          },
+          "failedAudits": [
+            "b"
+          ]
+        }
+      ]
+    }
+  },
+  "axe": {
+    "index": {
+      "violations": []
+    },
+    "post": {
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": 3
+        },
+        {
+          "id": "region",
+          "impact": "moderate",
+          "nodes": 1
+        }
+      ]
+    },
+    "404": {
+      "violations": []
+    }
+  },
+  "rendered": {
+    "post": {
+      "title": "Hello",
+      "firstParagraph": "First paragraph of the post."
+    }
+  },
+  "html": {
+    "index": {
+      "messages": []
+    },
+    "post": {
+      "messages": [
+        {
+          "ruleId": "no-inline-style",
+          "severity": 2
+        },
+        {
+          "ruleId": "prefer-native-element",
+          "severity": 1
+        }
+      ]
+    },
+    "404": {
+      "messages": []
+    }
+  },
+  "links": {
+    "report": {
+      "fail_map": {
+        "tests/fixtures/quality/site/index.html": [
+          {
+            "url": "file:///x/missing.css",
+            "status": {
+              "text": "Cannot find file"
+            }
+          },
+          {
+            "url": "file:///x/post/hello/#nope",
+            "status": {
+              "text": "Cannot find fragment"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "files": [
+    {
+      "path": "404.html",
+      "bytes": 559,
+      "gzip": 319,
+      "br": 318
+    },
+    {
+      "path": "assets/ssgberk.css",
+      "bytes": 68,
+      "gzip": 85,
+      "br": 84
+    },
+    {
+      "path": "assets/ssgberk.png",
+      "bytes": 69,
+      "gzip": 82,
+      "br": 81
+    },
+    {
+      "path": "feed.xml",
+      "bytes": 116,
+      "gzip": 114,
+      "br": 113
+    },
+    {
+      "path": "index.html",
+      "bytes": 705,
+      "gzip": 365,
+      "br": 364
+    },
+    {
+      "path": "post/hello/index.html",
+      "bytes": 927,
+      "gzip": 448,
+      "br": 447
+    },
+    {
+      "path": "tags/a/index.html",
+      "bytes": 116,
+      "gzip": 111,
+      "br": 110
+    }
+  ]
+}
