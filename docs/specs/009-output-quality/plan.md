@@ -114,6 +114,7 @@ Metric units are Lighthouse's `numericValue`: milliseconds for FCP, LCP, TBT and
 {
   "status": "ok",
   "pages": {"index": "/", "post": "/post/hello/", "404": "/404.html"},
+  "postSource": "index",
   "tools": {...copied from raw.json...},
   "lighthouse": {"status": "ok",
     "mobile": {"post": {"status": "ok", "runs": 3,

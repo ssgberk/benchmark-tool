@@ -155,6 +155,7 @@ def _section(fn):
 def build_quality(raw, site_dir, pages, output_glob):
     '''quality.json (R-16): one section per check, each ok or error.'''
     q = {'status': 'ok', 'pages': {k: v['url'] for k, v in pages.items()},
+         'postSource': pages['post'].get('source'),
          'tools': raw.get('tools')}
     q['lighthouse'] = _section(lambda: reduce_lighthouse(_raw(raw, 'lighthouse')))
     q['seo'] = _section(lambda: seo.seo_section(site_dir, pages))

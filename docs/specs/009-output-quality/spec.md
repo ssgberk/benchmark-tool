@@ -27,7 +27,7 @@ This spec adds an **untimed quality pass** over the output of one build per gene
 
 ### URLs
 
-- **R-7** Three URLs are audited: the index `/`, one post page and `/404.html`. The post page is the first `a[href]` inside `.post-item`, the same link SF 006 resolves.
+- **R-7** Up to three URLs are audited: the index `/`, one post page and `/404.html` when that file exists. The post page is the first `a[href]` inside `.post-item`, the same link SF 006 resolves. When the index has no such link (generators that do not use the SF 005 layout yet), it is the first file, in sorted order, that matches `output_glob`. `quality.json` records which rule chose it in `postSource` (`index` or `glob`).
 
 ### Checks
 

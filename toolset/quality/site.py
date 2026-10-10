@@ -74,24 +74,47 @@ def _read(path):
         return f.read()
 
 
-def resolve_pages(site_dir):
-    '''The three audited pages (R-7): index, first post link, 404.'''
+def _glob_post(site_dir, output_glob):
+    '''(url, file) of the first sorted file matching output_glob, or None.'''
+    for f in list_files(site_dir):
+        if fnmatch.fnmatch(f, output_glob):
+            url = '/' + f
+            if posixpath.basename(f) == 'index.html':
+                url = url[:-len('index.html')]
+            return url, f
+    return None
+
+
+def resolve_pages(site_dir, output_glob=None):
+    '''
+    The audited pages (R-7): index, the post (first .post-item link, else the
+    first file matching output_glob) and 404 when 404.html exists.
+    '''
+    index_path = os.path.join(site_dir, 'index.html')
+    if not os.path.isfile(index_path):
+        raise ValueError('no index.html at the site root')
     parser = _PostLink()
-    parser.feed(_read(os.path.join(site_dir, 'index.html')))
-    if not parser.href:
-        raise ValueError('no a[href] inside .post-item on the index')
-    path = urlsplit(parser.href).path
-    url = posixpath.normpath(posixpath.join('/', path))
-    if path.endswith('/') and url != '/':
-        url += '/'
-    post_file = url_to_file(site_dir, url)
-    if post_file is None:
-        raise ValueError('post link %s matches no file' % parser.href)
-    return {
-        'index': {'url': '/', 'file': 'index.html'},
-        'post': {'url': url, 'file': post_file},
-        '404': {'url': '/404.html', 'file': '404.html'},
-    }
+    parser.feed(_read(index_path))
+    post = None
+    if parser.href:
+        path = urlsplit(parser.href).path
+        url = posixpath.normpath(posixpath.join('/', path))
+        if path.endswith('/') and url != '/':
+            url += '/'
+        post_file = url_to_file(site_dir, url)
+        if post_file is not None:
+            post = {'url': url, 'file': post_file, 'source': 'index'}
+    if post is None and output_glob:
+        found = _glob_post(site_dir, output_glob)
+        if found:
+            post = {'url': found[0], 'file': found[1], 'source': 'glob'}
+    if post is None:
+        raise ValueError('no post page: no a[href] to an existing file inside '
+                         '.post-item on the index and no file matches %s' % output_glob)
+    pages = {'index': {'url': '/', 'file': 'index.html'}, 'post': post}
+    if os.path.isfile(os.path.join(site_dir, '404.html')):
+        pages['404'] = {'url': '/404.html', 'file': '404.html'}
+    return pages
 
 
 def list_files(site_dir):

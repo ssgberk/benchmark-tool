@@ -113,7 +113,7 @@ With `--suite`, the pass runs only in the cell `nf50-cs5` (suite P, cell 0). The
 - JS bytes, and whether the post works without JS;
 - files outside the reference page set.
 
-Results go to `results/<ts>/quality/<generator>/quality.json`, to `quality` in `results.json`, to the "Qualidade" section of `summary.md` and to `quality-summary.csv`. They have no combined score and no ranking. A failing check is a result and never fails the run. Generators that do not use the SF 005 reference site yet (the post link is not inside `.post-item` on the index) record `quality.<generator>.status = "error"`.
+Results go to `results/<ts>/quality/<generator>/quality.json`, to `quality` in `results.json`, to the "Qualidade" section of `summary.md` and to `quality-summary.csv`. They have no combined score and no ranking. A failing check is a result and never fails the run. For generators that do not use the SF 005 index layout yet, the audited post is the first file matching `output_glob` (`postSource: "glob"` in `quality.json`).
 
 ## Content size
 

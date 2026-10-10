@@ -51,7 +51,7 @@ def test_extract_rejects_path_traversal(tmp_path):
 def test_resolve_pages_fixture():
     assert site.resolve_pages(str(SITE)) == {
         "index": {"url": "/", "file": "index.html"},
-        "post": {"url": "/post/hello/", "file": "post/hello/index.html"},
+        "post": {"url": "/post/hello/", "file": "post/hello/index.html", "source": "index"},
         "404": {"url": "/404.html", "file": "404.html"},
     }
 
@@ -71,7 +71,7 @@ def test_resolve_pages_variants(tmp_path, href, url, file):
     (tmp_path / "index.html").write_text(
         '<ul><li class="post-item"><a href="%s">A</a></li></ul>' % href)
     pages = site.resolve_pages(str(tmp_path))
-    assert pages["post"] == {"url": url, "file": file}
+    assert pages["post"] == {"url": url, "file": file, "source": "index"}
 
 
 def test_resolve_pages_without_post_link(tmp_path):
@@ -80,10 +80,53 @@ def test_resolve_pages_without_post_link(tmp_path):
         site.resolve_pages(str(tmp_path))
 
 
-def test_resolve_pages_link_to_missing_file(tmp_path):
+def test_resolve_pages_link_to_missing_file_without_glob(tmp_path):
     (tmp_path / "index.html").write_text('<li class="post-item"><a href="/gone/">g</a></li>')
-    with pytest.raises(ValueError, match="no file"):
+    with pytest.raises(ValueError, match="post-item"):
         site.resolve_pages(str(tmp_path))
+
+
+def _site(tmp_path, index, files):
+    (tmp_path / "index.html").write_text(index)
+    for f in files:
+        (tmp_path / f).parent.mkdir(parents=True, exist_ok=True)
+        (tmp_path / f).write_text("x")
+
+
+def test_resolve_pages_glob_fallback_dir_style(tmp_path):
+    _site(tmp_path, '<a href="/x/">x</a>', ["post/b/index.html", "post/a/index.html", "404.html"])
+    pages = site.resolve_pages(str(tmp_path), "post/*/index.html")
+    assert pages["post"] == {"url": "/post/a/", "file": "post/a/index.html", "source": "glob"}
+    assert pages["404"] == {"url": "/404.html", "file": "404.html"}
+
+
+def test_resolve_pages_glob_fallback_html_style(tmp_path):
+    _site(tmp_path, "<p>none</p>", ["posts/b.html", "posts/a.html"])
+    pages = site.resolve_pages(str(tmp_path), "posts/*.html")
+    assert pages["post"] == {"url": "/posts/a.html", "file": "posts/a.html", "source": "glob"}
+
+
+def test_resolve_pages_missing_link_target_falls_back_to_glob(tmp_path):
+    _site(tmp_path, '<li class="post-item"><a href="/gone/">g</a></li>', ["post/a/index.html"])
+    pages = site.resolve_pages(str(tmp_path), "post/*/index.html")
+    assert pages["post"]["source"] == "glob" and pages["post"]["url"] == "/post/a/"
+
+
+def test_resolve_pages_no_404_file(tmp_path):
+    _site(tmp_path, '<li class="post-item"><a href="/post/a/">a</a></li>', ["post/a/index.html"])
+    pages = site.resolve_pages(str(tmp_path), "post/*/index.html")
+    assert set(pages) == {"index", "post"}
+
+
+def test_resolve_pages_nothing_found(tmp_path):
+    _site(tmp_path, "<p>none</p>", ["other/file.txt"])
+    with pytest.raises(ValueError, match=r"post-item.*post/\*/index\.html"):
+        site.resolve_pages(str(tmp_path), "post/*/index.html")
+
+
+def test_resolve_pages_requires_index(tmp_path):
+    with pytest.raises(ValueError, match="index.html"):
+        site.resolve_pages(str(tmp_path), "*.html")
 
 
 def test_list_files_is_sorted_posix():

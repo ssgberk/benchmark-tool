@@ -49,11 +49,30 @@ def test_run_pass_ok(tmp_path):
     assert q["status"] == "ok" and q["lighthouse"]["status"] == "ok"
     args = helper.run_quality.call_args[0]
     assert args[0] == str(tar_path) and args[1] == "public"
-    assert args[2]["post"] == {"url": "/post/hello/", "file": "post/hello/index.html"}
+    assert args[2]["post"] == {"url": "/post/hello/", "file": "post/hello/index.html", "source": "index"}
     out = results_dir / "quality" / "hugo"
     assert json.loads((out / "quality.json").read_text()) == q
     assert (out / "raw.json").exists() and (out / "site" / "index.html").exists()
     assert not tar_path.exists()
+
+
+def test_run_pass_uses_output_glob_when_index_has_no_post_link(tmp_path):
+    test, results_dir = _generator(tmp_path), tmp_path / "results"
+    src = tmp_path / "plain"
+    (src / "post" / "a").mkdir(parents=True)
+    (src / "index.html").write_text("<p>no layout</p>")
+    (src / "post" / "a" / "index.html").write_text("<p>a</p>")
+    tar_path = pathlib.Path(runner.archive_path(str(results_dir), "hugo"))
+    tar_path.parent.mkdir(parents=True)
+    with tarfile.open(tar_path, "w") as tar:
+        tar.add(src, arcname="public")
+    helper = mock.Mock()
+    helper.run_quality.return_value = json.loads((FIX / "raw.json").read_text())
+    q = runner.run_pass(helper, test, str(results_dir))
+    pages = helper.run_quality.call_args[0][2]
+    assert pages["post"] == {"url": "/post/a/", "file": "post/a/index.html", "source": "glob"}
+    assert "404" not in pages
+    assert q["postSource"] == "glob" and q["pages"] == {"index": "/", "post": "/post/a/"}
 
 
 def test_run_pass_missing_archive(tmp_path):

@@ -91,6 +91,7 @@ def test_build_quality_fixture_all_ok():
     q = reduce.build_quality(_raw(), str(SITE), pages, GLOB)
     assert q["status"] == "ok"
     assert q["pages"] == {"index": "/", "post": "/post/hello/", "404": "/404.html"}
+    assert q["postSource"] == "index"
     for section in reduce.SECTIONS:
         assert q[section]["status"] == "ok", (section, q[section])
     assert q["js"]["worksWithoutJs"] is True and q["js"]["jsClass"] == "none"

@@ -40,7 +40,7 @@ def run_pass(docker_helper, test, results_dir):
         if not os.path.exists(tar_path):
             raise RuntimeError('no exported output (%s)' % output_folder)
         site_dir = site.extract(tar_path, os.path.join(out_dir, 'site'))
-        pages = site.resolve_pages(site_dir)
+        pages = site.resolve_pages(site_dir, output_glob)
         site_name = os.path.basename(output_folder.rstrip('/'))
         raw = docker_helper.run_quality(tar_path, site_name, pages)
         with open(os.path.join(out_dir, 'raw.json'), 'w') as f:
