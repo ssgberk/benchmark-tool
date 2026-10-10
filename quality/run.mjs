@@ -48,7 +48,12 @@ async function isFile(p) {
 }
 
 async function resolveFile(root, pathname) {
-  const rel = decodeURIComponent(pathname).replace(/^\/+/, '');
+  let rel;
+  try {
+    rel = decodeURIComponent(pathname).replace(/^\/+/, '');
+  } catch {
+    return null;
+  }
   const base = path.resolve(root, rel);
   if (base !== root && !base.startsWith(root + path.sep)) return null;
   const candidates = rel === '' || rel.endsWith('/')
@@ -60,7 +65,7 @@ async function resolveFile(root, pathname) {
 
 // Fixed static server: gzip, no-cache, directory index, 404.html with status 404.
 function serve(root) {
-  const server = http.createServer(async (req, res) => {
+  const handle = async (req, res) => {
     const { pathname } = new URL(req.url, 'http://127.0.0.1');
     let file = await resolveFile(root, pathname);
     let status = 200;
@@ -80,6 +85,15 @@ function serve(root) {
     headers['content-length'] = body.length;
     res.writeHead(status, headers);
     res.end(req.method === 'HEAD' ? undefined : body);
+  };
+  // A failing request must never take the collector down (spec R-16).
+  const server = http.createServer(async (req, res) => {
+    try {
+      await handle(req, res);
+    } catch (e) {
+      if (!res.headersSent) res.writeHead(500, { 'content-type': 'text/plain; charset=utf-8' });
+      res.end('Internal error');
+    }
   });
   return new Promise((resolve) => server.listen(0, '127.0.0.1', () => resolve({
     server, origin: `http://127.0.0.1:${server.address().port}`,
