@@ -1,5 +1,9 @@
+import io
+import json
 import os
+import posixpath
 import socket
+import tarfile
 import time
 import re
 import traceback
@@ -18,6 +22,9 @@ mem_limit = int(round(virtual_memory().total * .95))
 
 TEST_IMAGE_PREFIX = 'ssgberk/test.'
 RUN_LABEL = 'ssgberk.run'
+QUALITY_IMAGE = 'ssgberk/quality'
+QUALITY_TIMEOUT_SECONDS = 1800
+QUALITY_MEMORY = '4g'
 
 
 class DockerHelper:
@@ -33,6 +40,7 @@ class DockerHelper:
             base_url=self.benchmarker.config.server_docker_host)
 
     last_build = None
+    _quality_image = None
 
     def _run_labels(self):
         return {RUN_LABEL: str(self.benchmarker.config.run_id)}
@@ -330,11 +338,13 @@ class DockerHelper:
             return False
 
     def benchmark(self, framework_test, script, variables, raw_file,
-                  resources, timeout_seconds):
+                  resources, timeout_seconds, export=None):
         '''
         Runs the generator container with fixed resource limits and returns
         {"status": "ok"|"timeout"|"oom", "exitCode": int}. The container is
-        always stopped and removed before returning.
+        always stopped and removed before returning. With export
+        (output_folder, dest_tar), a successful build's output is copied to
+        dest_tar first (spec 009 R-3).
         '''
 
         def watch_container(container):
@@ -408,9 +418,73 @@ class DockerHelper:
             # stopping the container after a timeout
             if status == 'ok' and (state.get('OOMKilled') or exit_code == 137):
                 status = 'oom'
+            if export and status == 'ok' and exit_code == 0:
+                DockerHelper.__export_output(container, *export)
         finally:
             try:
                 container.remove(force=True)
             except docker.errors.NotFound:
                 pass
         return {'status': status, 'exitCode': exit_code}
+
+    @staticmethod
+    def __export_output(container, output_folder, dest):
+        '''Copies <WorkingDir>/<output_folder> to dest as a tar. Never raises.'''
+        try:
+            workdir = (container.attrs.get('Config') or {}).get('WorkingDir') or '/'
+            bits, _ = container.get_archive(posixpath.join(workdir, output_folder))
+            os.makedirs(os.path.dirname(dest), exist_ok=True)
+            with open(dest, 'wb') as f:
+                for chunk in bits:
+                    f.write(chunk)
+        except Exception as e:
+            log("quality: could not export %s: %s" % (output_folder, e), color=Fore.YELLOW)
+
+    def build_quality_image(self):
+        '''
+        Builds ssgberk/quality from <fw_root>/quality once per process
+        (spec 009 R-4), outside the generator build-time accounting.
+        '''
+        if self._quality_image:
+            return self._quality_image
+        client = docker.APIClient(base_url=self.benchmarker.config.server_docker_host)
+        for token in client.build(path=os.path.join(self.benchmarker.config.fw_root, 'quality'),
+                                  dockerfile='Dockerfile', tag=QUALITY_IMAGE, forcerm=True,
+                                  pull=True, timeout=3600, decode=True):
+            if 'errorDetail' in token:
+                raise RuntimeError(token['errorDetail']['message'])
+            if token.get('stream', '').strip():
+                log(token['stream'].rstrip(), prefix='quality: ')
+        self._quality_image = self.server.images.get(QUALITY_IMAGE).id
+        return self._quality_image
+
+    def run_quality(self, tar_path, site_name, pages,
+                    timeout_seconds=QUALITY_TIMEOUT_SECONDS):
+        '''
+        Runs quality/run.mjs on the exported site with no network and no
+        mounts (spec 009 R-4, R-5) and returns its raw.json.
+        '''
+        image = self.build_quality_image()
+        command = ['node', '/quality/run.mjs', '--site', '/work/' + site_name,
+                   '--pages', json.dumps(pages), '--out', '/work/out']
+        container = self.server.containers.create(
+            image, command=command, labels=self._run_labels(), network_mode='none',
+            mem_limit=QUALITY_MEMORY, working_dir='/work')
+        try:
+            with open(tar_path, 'rb') as f:
+                container.put_archive('/work', f.read())
+            container.start()
+            result = container.wait(timeout=timeout_seconds)
+            try:
+                bits, _ = container.get_archive('/work/out/raw.json')
+            except docker.errors.NotFound:
+                logs = container.logs().decode('utf-8', 'replace')
+                raise RuntimeError('collector wrote no raw.json (exit %s): %s' % (
+                    result.get('StatusCode'), logs[-2000:]))
+            with tarfile.open(fileobj=io.BytesIO(b''.join(bits))) as tar:
+                return json.load(tar.extractfile(tar.getmembers()[0]))
+        finally:
+            try:
+                container.remove(force=True)
+            except docker.errors.NotFound:
+                pass
