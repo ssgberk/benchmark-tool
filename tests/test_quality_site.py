@@ -110,3 +110,16 @@ def test_works_without_js():
 
 def test_text_of_collapses_whitespace():
     assert site.text_of("<p>a\n  <b>b</b></p><script>x()</script>") == "a b"
+
+
+def test_text_of_keeps_inline_punctuation():
+    assert site.text_of("<p>See <a>x</a>.</p>") == "See x."
+
+
+def test_works_without_js_inline_markup(tmp_path):
+    (tmp_path / "post.html").write_text(
+        '<!doctype html><html><head><title>T</title></head><body>'
+        '<h1 class="post-title">T</h1><div class="post-body"><p>See <a href="/">x</a>.</p></div>'
+        '</body></html>')
+    rendered = {"title": "T", "firstParagraph": "See x."}
+    assert site.works_without_js(str(tmp_path), "post.html", rendered) is True

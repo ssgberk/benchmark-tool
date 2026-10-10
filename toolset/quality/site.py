@@ -145,7 +145,9 @@ def text_of(html):
     parser = _Text()
     parser.feed(html)
     parser.close()
-    return re.sub(r'\s+', ' ', ' '.join(parser.parts)).strip()
+    # join without a separator, as textContent does, so inline markup does not
+    # insert spaces ("See <a>x</a>." -> "See x."); whitespace is collapsed after
+    return re.sub(r'\s+', ' ', ''.join(parser.parts)).strip()
 
 
 def works_without_js(site_dir, post_file, rendered):
