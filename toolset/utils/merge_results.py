@@ -44,7 +44,7 @@ def merge(results):
     })
     # Spec 008 sections: per-framework dicts are unioned across inputs, run-level
     # keys keep the first non-null value, schemaVersion is 2 if any input is 2.
-    for key in ('failureReasons', 'imageBuild', 'generators'):
+    for key in ('failureReasons', 'imageBuild', 'generators', 'quality'):
         if any(key in r for r in results):
             combined = {}
             for r in results:
@@ -56,6 +56,13 @@ def merge(results):
     for key in ('resources', 'protocol', 'environment', 'suite', 'profile'):
         if key in merged and merged[key] is None:
             merged[key] = next((r[key] for r in results if r.get(key) is not None), None)
+    # spec 009: the tool versions live in environment.quality; an input whose
+    # environment lacks them must not hide them from the other inputs
+    if isinstance(merged.get('environment'), dict) and 'quality' not in merged['environment']:
+        tools = next((r['environment']['quality'] for r in results
+                      if isinstance((r.get('environment') or {}).get('quality'), dict)), None)
+        if tools is not None:
+            merged['environment'] = dict(merged['environment'], quality=tools)
     if any(r.get('schemaVersion') == 2 for r in results):
         # each CI input is one generator on one runner: remember its fingerprint
         merged['fingerprints'] = {}
@@ -141,6 +148,9 @@ def write_outputs(merged, languages, environments, out):
         f.write(summary.to_csv(rows))
     with open(os.path.join(out, 'summary.md'), 'w') as f:
         f.write(summary.to_markdown(rows, merged))
+    if merged.get('quality'):
+        with open(os.path.join(out, 'quality-summary.csv'), 'w', newline='') as f:
+            f.write(summary.quality_csv(summary.quality_rows(merged)))
 
 
 def write_suite_summary(rows, out):

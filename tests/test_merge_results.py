@@ -149,3 +149,47 @@ def test_by_cell_groups_same_cell_and_ignores_unrelated(tmp_path):
     out = tmp_path / "out"
     assert merge_results.main(["--out", str(out), "--by-cell"] + paths) == 0
     assert (out / "nf10-cs0.500" / "results.json").exists()
+
+
+def _quality(name, status="ok"):
+    return {name: {"status": status, "js": {"pages": {"post": 10}, "jsClass": "small"}}}
+
+
+def test_merge_unions_quality_across_inputs():
+    a, b = _result("a", 1, 2), _result("b", 1, 2)
+    a["quality"] = _quality("a")
+    b["quality"] = _quality("b", status="failed")
+    merged = merge_results.merge([a, b])
+    assert set(merged["quality"]) == {"a", "b"}
+    assert merged["quality"]["a"]["status"] == "ok"
+    assert merged["quality"]["b"]["status"] == "failed"
+
+
+def test_merge_omits_quality_when_no_input_has_it():
+    merged = merge_results.merge([_result("a", 1, 2), _result("b", 1, 2)])
+    assert "quality" not in merged
+
+
+def test_environment_quality_filled_from_second_input():
+    a, b = _result("a", 1, 2), _result("b", 1, 2)
+    a["environment"] = {"fingerprint": "fp-a"}
+    b["environment"] = {"fingerprint": "fp-b",
+                        "quality": {"node": "22.1.0", "lighthouse": "12.0.0"}}
+    merged = merge_results.merge([a, b])
+    assert merged["environment"]["fingerprint"] == "fp-a"
+    assert merged["environment"]["quality"] == {"node": "22.1.0", "lighthouse": "12.0.0"}
+    assert "quality" not in a["environment"]
+
+
+def test_write_outputs_writes_quality_summary_only_with_quality(tmp_path):
+    merged = merge_results.merge([_result("a", 1, 2)])
+    merged["quality"] = _quality("a")
+    out = tmp_path / "with"
+    merge_results.write_outputs(merged, {}, {}, str(out))
+    csv_text = (out / "quality-summary.csv").read_text()
+    assert csv_text.startswith("framework,status")
+    assert csv_text.splitlines()[1].startswith("a,ok")
+
+    plain = tmp_path / "without"
+    merge_results.write_outputs(merge_results.merge([_result("a", 1, 2)]), {}, {}, str(plain))
+    assert not (plain / "quality-summary.csv").exists()
